@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+
 @RestController
 public class TestController {
 	
@@ -25,8 +27,9 @@ public class TestController {
 	
 	@PostMapping("/postTest2")
 	public String postTest2(@RequestBody TestData testData) {
-		//TODO
-		return String.format("Hello, %s! You sent a post request with a requestbody!", testData.getMessage());
+		String tempString = String.format("Hello, %s! You sent a post request with a requestbody containing ID %d!", testData.getName(), testData.getReqID());
+		tempString += "\nYour array of integers is: " + Arrays.toString(testData.getIntArray());
+		return tempString;
 	}
 	
 	@DeleteMapping("/deleteTest")
