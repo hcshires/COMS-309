@@ -3,9 +3,12 @@ package com.cs309.tutorial.tests;
 public class TestData {
 
 	/*
-	When performing a POST with a RequestBody, the RequestBody data JSON should contain references to class data members.
-	For example, to send a POST with RequestBody containing info for intArray, you would have the following raw Body:
+	When performing a POST with a RequestBody, the RequestBody data JSON should contain references to class data members
+	in the object specified after the @RequestBody annotation.
+	For example, to handle a POST with @RequestBody expectinggit  object TestData, you would have the following raw Body:
 		{
+		"name":"Sample name",
+		"reqID":"12345",
 		"intArray":[1, 2, 6, 8, 10]
 		}
 	*/
