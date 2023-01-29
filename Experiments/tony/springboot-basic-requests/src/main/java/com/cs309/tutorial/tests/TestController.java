@@ -1,18 +1,15 @@
 package com.cs309.tutorial.tests;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 
 @RestController
 public class TestController {
-	
+
+	private TestData putDeleteData = new TestData();
 	
 	@GetMapping("/getTest")
 	public String getTest(@RequestParam(value = "username", defaultValue = "World") String message) {
@@ -33,12 +30,33 @@ public class TestController {
 	}
 	
 	@DeleteMapping("/deleteTest")
-	public void deleteTest() {
-		//TODO
+	public String deleteTest() {
+		putDeleteData = null;
+		return "Deleted data.";
 	}
 	
 	@PutMapping("/putTest")
-	public void putTest() {
-		//TODO
+	public String putTest(@RequestBody TestData putData) {
+		putDeleteData = putData;
+		return "---- Put data ----\n" + putData.toString();
+	}
+
+	//Use a RequestBody instead of a parameter for better security
+	//@ResponseBody indicates that the return object should be serialized into JSON for the HTTP Response
+	@GetMapping("/getData")
+	@ResponseBody
+	public TestData getData(@RequestBody AccessLevel privilege) {
+		//Check for empty object
+		if (putDeleteData == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Attempted to return null object data");
+		}
+
+		//Only return if we are an admin request it
+		if (privilege.isAdmin() && putDeleteData != null) {
+			return putDeleteData;
+		}
+		else {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Insufficient user access level for resource");
+		}
 	}
 }
