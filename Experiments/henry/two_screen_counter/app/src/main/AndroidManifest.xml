@@ -9,6 +9,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AS1">
         <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".CounterActivity"
             android:exported="true" />
         <activity
@@ -20,6 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

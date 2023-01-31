@@ -30,7 +30,7 @@ public class CounterActivity extends AppCompatActivity {
         decreaseBtn.setOnClickListener(view -> numberTxt.setText(String.valueOf(--counter)));
 
         backBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(CounterActivity.this, MainActivity.class);
+            Intent intent = new Intent(CounterActivity.this, LoginActivity.class);
             intent.putExtra("counter", String.valueOf(counter)); // Send Main the counter value to display in a toast
 
             startActivity(intent);
