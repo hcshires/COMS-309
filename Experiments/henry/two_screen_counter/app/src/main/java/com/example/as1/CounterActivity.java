@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 public class CounterActivity extends AppCompatActivity {
 
-    Button increaseBtn;
+    Button increaseBtn, decreaseBtn;
     Button backBtn;
     TextView numberTxt;
 
@@ -22,27 +22,18 @@ public class CounterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_counter);
 
         increaseBtn = findViewById(R.id.increaseBtn);
+        decreaseBtn = findViewById(R.id.decreaseBtn);
         backBtn = findViewById(R.id.backBtn);
         numberTxt = findViewById(R.id.number);
 
-        increaseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                numberTxt.setText(String.valueOf(++counter));
-            }
+        increaseBtn.setOnClickListener(v -> numberTxt.setText(String.valueOf(++counter)));
+        decreaseBtn.setOnClickListener(view -> numberTxt.setText(String.valueOf(--counter)));
+
+        backBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(CounterActivity.this, MainActivity.class);
+            intent.putExtra("counter", String.valueOf(counter)); // Send Main the counter value to display in a toast
+
+            startActivity(intent);
         });
-
-
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent = new Intent(CounterActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
     }
 }

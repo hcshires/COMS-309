@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,15 +16,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = getIntent();
+        String counter = intent.getStringExtra("counter");
+
+        // Did we return from CounterActivity?
+        if (counter != null) {
+            Toast.makeText(this, "Counter value is: " + counter, Toast.LENGTH_SHORT).show();
+        }
+
         button = findViewById(R.id.toCounterBtn);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent = new Intent(MainActivity.this, CounterActivity.class);
-                startActivity(intent);
-            }
+        button.setOnClickListener(v -> {
+            Intent intent1 = new Intent(MainActivity.this, CounterActivity.class);
+            startActivity(intent1);
         });
     }
 }
