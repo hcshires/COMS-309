@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 if (extras != null) {
                     counter = extras.getInt("count");
                 }
-                out.setText(counter);
+                out.setText(String.valueOf(counter));
             }
         });
 

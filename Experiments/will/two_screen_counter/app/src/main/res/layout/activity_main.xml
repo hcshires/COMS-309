@@ -33,10 +33,10 @@
 
     <TextView
         android:id="@+id/countOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="124dp"
-        android:layout_marginTop="72dp"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="188dp"
+        android:layout_marginTop="68dp"
         android:ems="10"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/countRet" />
