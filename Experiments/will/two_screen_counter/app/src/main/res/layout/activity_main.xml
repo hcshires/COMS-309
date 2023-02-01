@@ -10,10 +10,9 @@
         android:id="@+id/buttonToCounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="268dp"
+        android:layout_marginBottom="128dp"
         android:text="To Counter"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
@@ -22,10 +21,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="158dp"
-        android:layout_marginTop="164dp"
+        android:layout_marginTop="120dp"
         android:layout_marginEnd="159dp"
-        android:text="You counted to"
+        android:layout_marginBottom="156dp"
+        android:text="You counted to:"
         android:textSize="21sp"
+        app:layout_constraintBottom_toTopOf="@+id/countOut"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,11 +35,27 @@
         android:id="@+id/countOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="83dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="72dp"
         android:ems="10"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/countRet" />
+
+    <Button
+        android:id="@+id/show"
+        android:layout_width="109dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="154dp"
+        android:layout_marginBottom="214dp"
+        android:text="Display"
+        app:layout_constraintBottom_toTopOf="@+id/buttonToCounter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countOut"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
