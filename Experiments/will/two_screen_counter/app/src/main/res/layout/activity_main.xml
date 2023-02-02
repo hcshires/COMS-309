@@ -33,11 +33,14 @@
 
     <TextView
         android:id="@+id/countOut"
-        android:layout_width="30dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="188dp"
+        android:layout_width="29dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="190dp"
         android:layout_marginTop="68dp"
+        android:layout_marginEnd="191dp"
         android:ems="10"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/countRet" />
 
@@ -49,6 +52,7 @@
         android:layout_marginTop="76dp"
         android:layout_marginEnd="154dp"
         android:layout_marginBottom="214dp"
+        android:foregroundTint="#673AB7"
         android:text="Display"
         app:layout_constraintBottom_toTopOf="@+id/buttonToCounter"
         app:layout_constraintEnd_toEndOf="parent"
