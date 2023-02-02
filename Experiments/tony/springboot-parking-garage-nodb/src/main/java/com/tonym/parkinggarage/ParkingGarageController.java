@@ -22,6 +22,12 @@ public class ParkingGarageController {
         garage = new ParkingGarage();
     }
 
+    @GetMapping("/vehicles/get")
+    @ResponseBody
+    public Vehicle getVehicle(@RequestParam(value = "plate") String plate) {
+        return garage.getVehicleByPlate(plate);
+    }
+
     @PostMapping("/vehicles/add")
     public String addVehicle(@RequestBody Vehicle vehicle) {
         if (vehicle != null && garage.count() < prefs.getCapacity()) {
