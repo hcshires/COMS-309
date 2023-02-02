@@ -36,7 +36,7 @@ public class ParkingGarageController {
         if (!garage.updateVehicle(plate, request)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Attempted to update nonexistent entry");
         }
-        return "Updated " + request;
+        return "Updated " + garage.getVehicleByPlate(plate);
     }
 
     @DeleteMapping("vehicles/delete/{plate}")

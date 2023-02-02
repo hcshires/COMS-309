@@ -1,9 +1,6 @@
 package com.tonym.parkinggarage;
 
 import com.tonym.parkinggarage.vehicle.Vehicle;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,9 +31,16 @@ public class ParkingGarage {
 
         garage.forEach((plate, vehicle) -> {
             if (!vehicle.hasPermit()) carsTowed.add(vehicle);
-            garage.remove(plate);
         });
+
+        for (Vehicle illegal : carsTowed) {
+            garage.remove(illegal.getPlate());
+        }
         return carsTowed;
+    }
+
+    public Vehicle getVehicleByPlate (String plate) {
+        return garage.get(plate);
     }
 
     public int count() {

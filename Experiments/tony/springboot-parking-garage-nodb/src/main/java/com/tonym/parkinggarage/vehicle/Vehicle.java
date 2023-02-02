@@ -2,26 +2,15 @@ package com.tonym.parkinggarage.vehicle;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "Vehicles")
 public class Vehicle {
 
-    @Column(name = "Make")
     private String make;
 
-    @Column(name = "Model")
     private String model;
 
-    @Id
-    @Column(name = "Plate")
     private String plate;
 
-    @Column(name = "Has Permit")
+
     private boolean hasPermit;
 
     @JsonCreator
