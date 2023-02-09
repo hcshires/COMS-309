@@ -1,4 +1,4 @@
-package edu.iastate.cs309.hb6.FoodTime.FoodTime;
+package edu.iastate.cs309.hb6.FoodTime;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

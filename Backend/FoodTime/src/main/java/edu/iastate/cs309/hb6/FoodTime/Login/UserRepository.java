@@ -1,4 +1,4 @@
-package edu.iastate.cs309.hb6.FoodTime.FoodTime.Login;
+package edu.iastate.cs309.hb6.FoodTime.Login;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
