@@ -52,7 +52,7 @@
         android:layout_marginTop="76dp"
         android:layout_marginEnd="154dp"
         android:layout_marginBottom="214dp"
-        android:foregroundTint="#673AB7"
+        android:backgroundTint="#5A00FA"
         android:text="Display"
         app:layout_constraintBottom_toTopOf="@+id/buttonToCounter"
         app:layout_constraintEnd_toEndOf="parent"

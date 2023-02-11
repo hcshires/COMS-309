@@ -8,12 +8,12 @@
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:icon="@drawable/screen_shot_2023_02_10_at_3_00_33_pm"
+        android:title="Pantry" />
 
     <item
         android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:icon="@drawable/screen_shot_2023_02_10_at_2_57_11_pm"
+        android:title="Cook Book" />
 
 </menu>
