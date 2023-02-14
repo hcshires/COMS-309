@@ -4,15 +4,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.ArrayList;
+
 import edu.iastate.cs309.hb6.foodtime.databinding.FragmentDashboardBinding;
 
 public class DashboardFragment extends Fragment {
+
+
 
     private FragmentDashboardBinding binding;
 
@@ -24,14 +31,24 @@ public class DashboardFragment extends Fragment {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textDashboard;
+        final TextView textView = binding.textPantryheader;
         dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
+
     }
+
+
+
+
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void addItem(View view) {
+
+
     }
 }
