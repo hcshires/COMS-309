@@ -19,8 +19,6 @@ public class UserPreferencesController {
     @ResponseBody
     @Transactional
     public ResponseEntity<Object> updatePreferences(@RequestBody UserPreferences prefs) {
-        //Need to update this to manipulate the UUID string received by the requestbody
-        //At the moment it will not properly find the user since the way the UUID is stored in the DB does not match the request
         if (prefsDB.existsById(prefs.getUID())) {
             UserPreferences prefsToUpdate = prefsDB.findByUID(prefs.getUID());
             //User preferences update without a .save() since method is transactional

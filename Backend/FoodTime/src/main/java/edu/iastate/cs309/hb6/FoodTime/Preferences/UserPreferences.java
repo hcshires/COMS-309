@@ -14,9 +14,9 @@ public class UserPreferences {
 
     @Id
     @Column(unique = true)
-    private UUID UID;
+    private String UID;
 
-    @Column
+    @Column(name = "darkMode")
     private boolean darkMode;
 
     //TODO: Add more preferences fields here as necessary
@@ -25,14 +25,14 @@ public class UserPreferences {
 
     //Default constructor will be used when a user is created
     public UserPreferences (UUID UID) {
-        this.UID = UID;
+        this.UID = UID.toString();
         darkMode = false;
     }
 
     //TODO: Update constructor as more prefs are added
     @JsonCreator
     public UserPreferences (UUID UID, boolean darkMode) {
-        this.UID = UID;
+        this.UID = UID.toString();
         this.darkMode = darkMode;
     }
 
@@ -41,7 +41,12 @@ public class UserPreferences {
         this.darkMode = newPrefs.darkMode;
     }
 
-    public UUID getUID() {
+    //All private fields need a getter in order to properly return the object as JSON in a response body
+    public String getUID() {
         return UID;
+    }
+
+    public boolean getDarkMode() {
+        return darkMode;
     }
 }

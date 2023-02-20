@@ -57,7 +57,7 @@ public class LoginController {
         if (userDB.existsByUsername(user.getUsername()) && userDB.findByUsername(user.getUsername()).getPassword().equals(user.getPassword())) {
             User deletedUser = userDB.findByUsername(user.getUsername());
             userDB.deleteById(user.getUsername());
-            prefsDB.deleteById(deletedUser.getUID());
+            prefsDB.deleteById(deletedUser.getUID().toString());
             return new ResponseEntity<>(deletedUser, HttpStatus.OK);
         }
         else return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
