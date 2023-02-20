@@ -44,24 +44,40 @@
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+    <LinearLayout
+        android:layout_width="415dp"
+        android:layout_height="437dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ListView
+            android:id="@+id/pantryItems"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/editTextTextPersonName"
+        android:layout_width="223dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginBottom="5dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="(e.i. Butter)"
+        app:layout_constraintBottom_toTopOf="@+id/pantry_btmnav"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="13dp"
-        android:clickable="true"
-        android:src="@android:drawable/ic_menu_add"
-        app:backgroundTint="#FBCA18"
+        android:text="Add Ingrediant"
         app:layout_constraintBottom_toTopOf="@+id/pantry_btmnav"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <ListView
-        android:layout_width="409dp"
-        android:layout_height="537dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_pantryheader" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
