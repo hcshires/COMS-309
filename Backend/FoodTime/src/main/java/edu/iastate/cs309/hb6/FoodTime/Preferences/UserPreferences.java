@@ -10,6 +10,22 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "preferences")
+/*
+  Adding preference options to this class is straightforward. Add the following:
+
+  At the top in class members:
+  @Column
+  private [type] [newPreferenceName]
+
+  To the default constructor (second constructor, labeled), initialize the value that will be used when the user is first created
+  e.g:
+  [newPreferenceName] = [defaultValueForPref]
+
+  And to the last constructor (labeled @JsonCreator), add a parameter to the declaration, and assign its value to the class member in the body.
+
+  Then, to the update() method, add your new preference option:
+  this.[newPreferenceName] = newPrefs.[newPreferenceName]
+ */
 public class UserPreferences {
 
     @Id
