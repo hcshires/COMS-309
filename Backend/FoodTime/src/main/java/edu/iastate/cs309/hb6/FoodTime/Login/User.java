@@ -4,6 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 import javax.persistence.*;
 import java.util.UUID;
+import edu.iastate.cs309.hb6.FoodTime.Pantry.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table(name = "users")
@@ -19,6 +24,9 @@ public class User {
     @Column (unique = true)
     private UUID UID;
 
+    @OneToMany
+    private List<Pantry> pantries;
+
     public User () {
 
     }
@@ -27,6 +35,8 @@ public class User {
     public User (String username, String password) {
         this.username = username;
         this.password = password;
+
+        pantries = new ArrayList<>();
 
     }
 
@@ -52,5 +62,16 @@ public class User {
 
     public UUID getUID() {
         return UID;
+    }
+
+    public List<Pantry> getPantries(){
+        return pantries;
+    }
+    public void setPantries(List<Pantry> Pantry){
+        this.pantries = pantries;
+    }
+
+    public void addPantries(Pantry pantry){
+        this.pantries.add(pantry);
     }
 }
