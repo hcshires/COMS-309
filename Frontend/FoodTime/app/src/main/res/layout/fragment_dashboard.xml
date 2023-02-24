@@ -49,7 +49,7 @@
         android:layout_height="437dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/editTextAddPantry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
@@ -61,14 +61,14 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/editTextAddPantry"
         android:layout_width="223dp"
         android:layout_height="54dp"
         android:layout_marginStart="1dp"
         android:layout_marginBottom="5dp"
         android:ems="10"
+        android:hint="(i.e. Butter)"
         android:inputType="textPersonName"
-        android:text="(e.i. Butter)"
         app:layout_constraintBottom_toTopOf="@+id/pantry_btmnav"
         app:layout_constraintStart_toStartOf="parent" />
 

@@ -21,36 +21,18 @@ import androidx.navigation.ui.NavigationUI;
 import java.util.ArrayList;
 
 import edu.iastate.cs309.hb6.foodtime.databinding.ActivityDashboardBinding;
+import edu.iastate.cs309.hb6.foodtime.ui.dashboard.Listener;
+
 
 public class DashboardActivity extends AppCompatActivity {
 
 
-    private ArrayList<String> items;
-    private ArrayAdapter<String> itemAdapter;
-    private ListView listView;
-    private Button addButton;
 
     private ActivityDashboardBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        listView = findViewById(R.id.pantryItems);
-        addButton = findViewById(R.id.addButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addItem(view);
-            }
-        });
-
-        items = new ArrayList<>();
-        itemAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
-        listView.setAdapter(itemAdapter);
-        setUpListViewListener();
-
-
 
         binding = ActivityDashboardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -66,33 +48,5 @@ public class DashboardActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
-    private void setUpListViewListener() {
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Context context = getApplicationContext();
-                Toast.makeText(context, "Item Removed", Toast.LENGTH_LONG).show();
-
-                items.remove(i);
-                itemAdapter.notifyDataSetChanged();
-                return true;
-            }
-        });
-
-    }
-
-    private void addItem(View view) {
-        EditText input = findViewById(R.id.editTextTextPersonName);
-        String itemText = input.getText().toString();
-
-        if(!(itemText.equals(""))) {
-            itemAdapter.add(itemText);
-            input.setText("");
-        }
-        else {
-            Toast.makeText(getApplicationContext(), "Please enter text", Toast.LENGTH_LONG).show();
-        }
-
-    }
 
 }
