@@ -10,12 +10,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.iastate.cs309.hb6.foodtime.utils.AppController;
 import edu.iastate.cs309.hb6.foodtime.utils.Const;
@@ -86,7 +90,12 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void loginUser() throws JSONException {
         /* Get UID */
-        JSONObject reqBody = new JSONObject("{\"username\":\"" + email.getText().toString() + "\",\"password\":\"" + pwd.getText().toString() + "\"}");
+        Map<String, String> params = new HashMap<>();
+        params.put("username", email.getText().toString());
+        params.put("password", pwd.getText().toString());
+
+        JSONObject reqBody = new JSONObject(params);
+        Log.d(TAG, reqBody.toString());
 
         JsonObjectRequest loginRequest = new JsonObjectRequest
                 (Request.Method.GET, Const.URL_LOGIN_USER, reqBody, response -> {
@@ -94,9 +103,24 @@ public class LoginActivity extends AppCompatActivity {
                     loginIntent.putExtra("userID", response.toString());
                     startActivity(loginIntent);
                 }, error -> {
-                    VolleyLog.d(TAG, "Error: " + error.getMessage() + " " + reqBody); // TODO: Currently returns a 400
+                    Log.d(TAG, "Error: " + error.networkResponse.statusCode + " " + error.getMessage());
                     Toast.makeText(this, "Email and/or password is incorrect. Please try again.", Toast.LENGTH_SHORT).show();
-                });
+                }) {
+            /**
+             * Passing some request headers
+             * */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+
+                return headers;
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
 
         AppController.getInstance().addToRequestQueue(loginRequest, tag_login_req);
     }
@@ -111,7 +135,11 @@ public class LoginActivity extends AppCompatActivity {
             "password":"pass"
             }
          */
-        JSONObject reqBody = new JSONObject("{\"username\":\"" + email.getText() + "\",\"password\":\"" + pwd.getText() + "}");
+        Map<String, String> params = new HashMap<>();
+        params.put("username", email.getText().toString());
+        params.put("password", pwd.getText().toString());
+
+        JSONObject reqBody = new JSONObject(params);
 
         /*
             {
@@ -123,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
         JsonObjectRequest createUserRequest = new JsonObjectRequest(Request.Method.POST,
                 Const.URL_CREATE_USER, reqBody,
                 response -> {
-                    Log.d(TAG, response.toString());
+                    Log.d(TAG, "Success: " + response.toString());
                     try {
                         // Get the UID from the response body
                         loginIntent.putExtra("userID", response.get("uid").toString());
