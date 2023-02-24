@@ -73,8 +73,8 @@ public class DashboardFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Context context = view.getContext().getApplicationContext();
                 Toast.makeText(context,"Item Removed", Toast.LENGTH_LONG).show();
-
                 items.remove(i);
+                itemAdapter.notifyDataSetChanged();
                 return true;
             }
         });
