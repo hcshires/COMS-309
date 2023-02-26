@@ -41,10 +41,10 @@ public class LoginController {
 
     @GetMapping("/users/login")
     @ResponseBody
-    public ResponseEntity<Object> loginUser(@RequestBody User user) {
-        User lookup = userDB.findByUsername(user.getUsername());
+    public ResponseEntity<Object> loginUser(@RequestParam String username, @RequestParam String password) {
+        User lookup = userDB.findByUsername(username);
 
-        if (lookup.getPassword().equals(user.getPassword())) {
+        if (lookup.getPassword().equals(password)) {
             return new ResponseEntity<>(lookup.getUID(), HttpStatus.OK);
         }
         else return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
