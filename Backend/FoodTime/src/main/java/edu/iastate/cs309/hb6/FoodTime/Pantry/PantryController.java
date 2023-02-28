@@ -40,7 +40,7 @@ public class PantryController {
     }
 
     @PostMapping(path = "/pantries")
-    String createLaptop(@RequestBody Pantry Pantry){
+    String createPantry(@RequestBody Pantry Pantry){
         if (Pantry == null)
             return failure;
         pantryRepository.save(Pantry);

@@ -67,6 +67,7 @@ public class User {
     public List<Pantry> getPantries(){
         return pantries;
     }
+
     public void setPantries(List<Pantry> Pantry){
         this.pantries = pantries;
     }
