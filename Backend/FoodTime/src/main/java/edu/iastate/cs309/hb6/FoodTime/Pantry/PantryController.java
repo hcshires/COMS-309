@@ -28,7 +28,6 @@ public class PantryController {
     private String failure = "{\"message\":\"failure\"}";
 
 
-    //same as the other one, why is it saying I'm overriding the CRUDL thing? idk if I shoul dbe overriding it
     @GetMapping(path = "/pantries")
     List<Pantry> getAllPantries(){
         return pantryRepository.findAll();
@@ -61,4 +60,8 @@ public class PantryController {
         pantryRepository.deleteById(id);
         return success;
     }
+
+    //might need to add a method to both create a new pantry object given that info plus a user object to associate it with
+    //might simplify things a lot. or I could implement it as a controller ig? idk
+
 }
