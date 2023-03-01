@@ -14,6 +14,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,13 +27,11 @@ import edu.iastate.cs309.hb6.foodtime.utils.Const;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Button loginBtn, registerBtn;
     private EditText email, pwd;
     private Intent loginIntent;
 
     private final String TAG = LoginActivity.class.getSimpleName();
     private final String tag_login_req = "login_req";
-
 
     /**
      * Create the LoginActivity and manage its widgets
@@ -44,8 +43,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginBtn = findViewById(R.id.loginBtn);
-        registerBtn = findViewById(R.id.registerBtn);
+        Button loginBtn = findViewById(R.id.loginBtn);
+        Button registerBtn = findViewById(R.id.registerBtn);
         email = findViewById(R.id.email);
         pwd = findViewById(R.id.password);
 
@@ -90,35 +89,28 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void loginUser() throws JSONException {
         /* Get UID */
-        Map<String, String> params = new HashMap<>();
-        params.put("username", email.getText().toString());
-        params.put("password", pwd.getText().toString());
 
-        JSONObject reqBody = new JSONObject(params);
-        Log.d(TAG, reqBody.toString());
-
-        JsonObjectRequest loginRequest = new JsonObjectRequest
-                (Request.Method.GET, Const.URL_LOGIN_USER, reqBody, response -> {
-                    Log.d(TAG, response.toString());
-                    loginIntent.putExtra("userID", response.toString());
-                    startActivity(loginIntent);
-                }, error -> {
-                    Log.d(TAG, "Error: " + error.networkResponse.statusCode + " " + error.getMessage());
-                    Toast.makeText(this, "Email and/or password is incorrect. Please try again.", Toast.LENGTH_SHORT).show();
-                }) {
+        StringRequest loginRequest = new StringRequest(
+                Request.Method.GET, Const.URL_LOGIN_USER + "?username=" + email.getText().toString() + "&password=" + pwd.getText().toString(), response -> {
+            Log.d(TAG, response);
+            loginIntent.putExtra("userID", response);
+            startActivity(loginIntent);
+        }, error -> {
+            Log.d(TAG, "Error: " + error.getMessage());
+            if (error.networkResponse.statusCode == 404) {
+                Toast.makeText(this, "Email and/or password is incorrect. Please try again.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "An unexpected error occurred. Please try again.", Toast.LENGTH_SHORT).show();
+            }
+        }) {
             /**
              * Passing some request headers
              * */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-
+                headers.put("Content-Type", "application/json");
                 return headers;
-            }
-
-            @Override
-            public String getBodyContentType() {
-                return "application/json";
             }
         };
 
@@ -160,6 +152,11 @@ public class LoginActivity extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
                 }, error -> {
+            if (error.networkResponse.statusCode == 409) {
+                Toast.makeText(this, "There is already a user with that email. Please use another email address.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "An unexpected error occurred. Please try again.", Toast.LENGTH_SHORT).show();
+            }
             VolleyLog.d(TAG, "Error: " + error.getMessage());
         });
 
