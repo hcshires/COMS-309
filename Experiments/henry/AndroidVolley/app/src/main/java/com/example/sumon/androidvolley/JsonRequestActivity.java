@@ -66,10 +66,8 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
      */
     private void makeJsonObjReq() throws JSONException {
         showProgressDialog();
-
-        JSONObject reqBody = new JSONObject("{\"username\":\"" + "hcsgeek@gmail.com" + "\",\"password\":\"" + "h" + "\"}");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.GET,
-                Const.URL_JSON_OBJECT, reqBody,
+                Const.URL_JSON_OBJECT, null,
                 response -> {
                     Log.d(TAG, response.toString());
                     msgResponse.setText(response.toString());
@@ -92,8 +90,8 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("username", "hcsgeek@gmail.com");
-                params.put("password", "h");
+                params.put("username", "hcshires@iastate.edu");
+                params.put("password", "test");
 
                 return params;
             }
