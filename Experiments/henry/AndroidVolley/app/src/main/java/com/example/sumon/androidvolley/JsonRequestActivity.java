@@ -11,13 +11,15 @@ import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request.Method;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.sumon.androidvolley.app.AppController;
 import com.example.sumon.androidvolley.utils.Const;
 
-import org.json.JSONException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -63,20 +65,26 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
 
     /**
      * Making json object request
-     */
-    private void makeJsonObjReq() throws JSONException {
+     * */
+    private void makeJsonObjReq() {
         showProgressDialog();
-
-        JSONObject reqBody = new JSONObject("{\"username\":\"" + "hcsgeek@gmail.com" + "\",\"password\":\"" + "h" + "\"}");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.GET,
-                Const.URL_JSON_OBJECT, reqBody,
-                response -> {
-                    Log.d(TAG, response.toString());
-                    msgResponse.setText(response.toString());
-                    hideProgressDialog();
-                }, error -> {
-            VolleyLog.d(TAG, "Error: " + error.getMessage());
-            hideProgressDialog();
+                Const.URL_JSON_OBJECT, null,
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, response.toString());
+                        msgResponse.setText(response.toString());
+                        hideProgressDialog();
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                hideProgressDialog();
+            }
         }) {
 
             /**
@@ -92,11 +100,13 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("username", "hcsgeek@gmail.com");
-                params.put("password", "h");
+//                params.put("name", "Androidhive");
+//                params.put("email", "abc@androidhive.info");
+//                params.put("pass", "password123");
 
                 return params;
             }
+
         };
 
         // Adding request to request queue
@@ -109,17 +119,23 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
 
     /**
      * Making json array request
-     */
+     * */
     private void makeJsonArryReq() {
         showProgressDialog();
         JsonArrayRequest req = new JsonArrayRequest(Const.URL_JSON_ARRAY,
-                response -> {
-                    Log.d(TAG, response.toString());
-                    msgResponse.setText(response.toString());
-                    hideProgressDialog();
-                }, error -> {
-            VolleyLog.d(TAG, "Error: " + error.getMessage());
-            hideProgressDialog();
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+                        msgResponse.setText(response.toString());
+                        hideProgressDialog();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                hideProgressDialog();
+            }
         });
 
         // Adding request to request queue
@@ -134,11 +150,7 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnJsonObj:
-                try {
-                    makeJsonObjReq();
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
+                makeJsonObjReq();
                 break;
             case R.id.btnJsonArray:
                 makeJsonArryReq();
