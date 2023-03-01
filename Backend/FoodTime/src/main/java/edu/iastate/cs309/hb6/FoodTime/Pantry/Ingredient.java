@@ -4,12 +4,15 @@ package edu.iastate.cs309.hb6.FoodTime.Pantry;
     @author Blake Hardy
  */
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.iastate.cs309.hb6.FoodTime.Login.User;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
+import java.io.Serializable;
 
-public class Ingredient { //no identifier for ingredient?
+@Component
+public class Ingredient implements Serializable { //no identifier for ingredient?
 
     private String name;
 

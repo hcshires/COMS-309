@@ -25,9 +25,6 @@ public class User {
     @Column (unique = true)
     private String UID;
 
-    @Embedded
-    @Column
-    private Pantry pantry;
 
     public User () {
 
@@ -37,8 +34,6 @@ public class User {
     public User (String username, String password) {
         this.username = username;
         this.password = password;
-
-        pantry = new Pantry(); //TODO idk if this should be here
 
     }
 
@@ -66,11 +61,4 @@ public class User {
         return java.util.UUID.fromString(UID);
     }
 
-    public Pantry getPantry(){
-        return this.pantry;
-    }
-
-    public void setPantries(Pantry pantry){
-        this.pantry = pantry;
-    }
 }

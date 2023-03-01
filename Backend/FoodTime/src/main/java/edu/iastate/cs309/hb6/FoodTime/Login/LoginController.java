@@ -1,6 +1,8 @@
 package edu.iastate.cs309.hb6.FoodTime.Login;
 
 
+import edu.iastate.cs309.hb6.FoodTime.Pantry.Pantry;
+import edu.iastate.cs309.hb6.FoodTime.Pantry.PantryRepository;
 import edu.iastate.cs309.hb6.FoodTime.Preferences.UserPreferencesRepository;
 import edu.iastate.cs309.hb6.FoodTime.Preferences.UserPreferences;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
+import edu.iastate.cs309.hb6.FoodTime.Pantry.*;
 
 @RestController
 public class LoginController {
@@ -18,6 +20,9 @@ public class LoginController {
 
     @Autowired
     UserPreferencesRepository prefsDB;
+
+    @Autowired
+    PantryRepository pantryDB;
 
     @PostMapping("/users/create")
     @ResponseBody
@@ -31,6 +36,9 @@ public class LoginController {
             //Assign them default preferences
             UserPreferences prefs = new UserPreferences(user.getUID());
             prefsDB.save(prefs);
+
+            Pantry userPantry = new Pantry (user.getUID().toString());
+            pantryDB.save(userPantry);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
         else {
@@ -58,6 +66,7 @@ public class LoginController {
             User deletedUser = userDB.findByUsername(user.getUsername());
             userDB.deleteById(user.getUsername());
             prefsDB.deleteById(deletedUser.getUID().toString());
+            pantryDB.deleteById(deletedUser.getUID().toString());
             return new ResponseEntity<>(deletedUser, HttpStatus.OK);
         }
         else return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
