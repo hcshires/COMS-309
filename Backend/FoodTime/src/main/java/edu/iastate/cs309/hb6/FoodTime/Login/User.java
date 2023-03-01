@@ -4,6 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 import javax.persistence.*;
 import java.util.UUID;
+import edu.iastate.cs309.hb6.FoodTime.Pantry.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table(name = "users")
@@ -19,6 +24,7 @@ public class User {
     //This is a string because UUIDs do not play super nicely in the DB
     @Column (unique = true)
     private String UID;
+
 
     public User () {
 
@@ -54,4 +60,5 @@ public class User {
     public UUID getUID() {
         return java.util.UUID.fromString(UID);
     }
+
 }
