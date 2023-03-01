@@ -24,8 +24,9 @@ public class User {
     @Column (unique = true)
     private UUID UID;
 
-    @OneToMany
-    private List<Pantry> pantries;
+    @Embedded
+    @Column
+    private Pantry pantry;
 
     public User () {
 
@@ -36,7 +37,7 @@ public class User {
         this.username = username;
         this.password = password;
 
-        pantries = new ArrayList<>();
+        pantry = new Pantry(); //TODO idk if this should be here
 
     }
 
@@ -64,15 +65,11 @@ public class User {
         return UID;
     }
 
-    public List<Pantry> getPantries(){
-        return pantries;
+    public Pantry getPantry(){
+        return this.pantry;
     }
 
-    public void setPantries(List<Pantry> Pantry){
-        this.pantries = pantries;
-    }
-
-    public void addPantries(Pantry pantry){
-        this.pantries.add(pantry);
+    public void setPantries(Pantry pantry){
+        this.pantry = pantry;
     }
 }

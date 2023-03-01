@@ -1,9 +1,10 @@
 package edu.iastate.cs309.hb6.FoodTime.Pantry;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import java.util.ArrayList;
 
-@Entity
+@Embeddable
 public class Pantry {
 
     //wrapper class to make associating list of ingredients with a user easier
