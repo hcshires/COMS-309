@@ -1,6 +1,8 @@
 package edu.iastate.cs309.hb6.FoodTime.Login;
 
 
+import edu.iastate.cs309.hb6.FoodTime.Preferences.UserPreferencesRepository;
+import edu.iastate.cs309.hb6.FoodTime.Preferences.UserPreferences;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,9 @@ public class LoginController {
     @Autowired
     UserRepository userDB;
 
+    @Autowired
+    UserPreferencesRepository prefsDB;
+
     @PostMapping("/users/create")
     @ResponseBody
     //We can return an HTTP response as well as a UID after creating the user
@@ -22,6 +27,10 @@ public class LoginController {
             //Create a user if they do not exist in the system
             user.assignUID();
             userDB.save(user);
+
+            //Assign them default preferences
+            UserPreferences prefs = new UserPreferences(user.getUID());
+            prefsDB.save(prefs);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
         else {
@@ -32,10 +41,10 @@ public class LoginController {
 
     @GetMapping("/users/login")
     @ResponseBody
-    public ResponseEntity<Object> loginUser(@RequestBody User user) {
-        User lookup = userDB.findByUsername(user.getUsername());
+    public ResponseEntity<Object> loginUser(@RequestParam String username, @RequestParam String password) {
+        User lookup = userDB.findByUsername(username);
 
-        if (lookup.getPassword().equals(user.getPassword())) {
+        if (lookup.getPassword().equals(password)) {
             return new ResponseEntity<>(lookup.getUID(), HttpStatus.OK);
         }
         else return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -48,6 +57,7 @@ public class LoginController {
         if (userDB.existsByUsername(user.getUsername()) && userDB.findByUsername(user.getUsername()).getPassword().equals(user.getPassword())) {
             User deletedUser = userDB.findByUsername(user.getUsername());
             userDB.deleteById(user.getUsername());
+            prefsDB.deleteById(deletedUser.getUID().toString());
             return new ResponseEntity<>(deletedUser, HttpStatus.OK);
         }
         else return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

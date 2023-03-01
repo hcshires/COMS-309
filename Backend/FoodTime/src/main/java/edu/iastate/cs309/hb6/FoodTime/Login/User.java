@@ -21,8 +21,9 @@ public class User {
     @Column
     private String password;
 
+    //This is a string because UUIDs do not play super nicely in the DB
     @Column (unique = true)
-    private UUID UID;
+    private String UID;
 
     @Embedded
     @Column
@@ -42,7 +43,7 @@ public class User {
     }
 
     public void assignUID() {
-        UID = UUID.randomUUID();
+        UID = UUID.randomUUID().toString();
     }
 
     public String getUsername() {
@@ -62,7 +63,7 @@ public class User {
     }
 
     public UUID getUID() {
-        return UID;
+        return java.util.UUID.fromString(UID);
     }
 
     public Pantry getPantry(){
