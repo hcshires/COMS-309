@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -107,6 +108,7 @@ public class DashboardFragment extends Fragment {
         String itemText = input.getText().toString();
         
         if (!(itemText.equals(""))) {
+            /*addItemToServer(itemText); Maybe we shouldn't call it here*/
             items.add(itemText);
             input.setText("");
             itemAdapter.notifyDataSetChanged();
@@ -117,50 +119,87 @@ public class DashboardFragment extends Fragment {
 
     }
 
-    /*
-
-     COMMENTED THIS METHOD OUT B/C DID NOT WANT TO PUSH WITH ERRORS.
+    /**
+     *
+     * For a given UID and ingredient, sends req to add that ingredient to the Users pantry
+     * response is string of all items in the pantry of the user
+     * request returns
+     * @param item
+     * @throws JSONException
+     */
 
     private void addItemToServer (String item) throws JSONException {
         /*
         {
         "name":"butter""
         }
+         */
+
 
         Map<String, String> params = new HashMap<>();
-        params.put("UID", input.getText().toString());  /* how do you get USER ID ?
+        params.put("UID", input.getText().toString());  /* how do you get USER ID ? */
         params.put("name", input.getText().toString());
 
         JSONObject reqBody = new JSONObject(params);
 
-        JSONObject addToPantry = new JsonObjectRequest(Request.Method.PUT, Const.URL_PANTRY_ADDITEM, reqBody,
+        JsonObjectRequest addToPantry = new JsonObjectRequest(Request.Method.PUT, Const.URL_PANTRY_ADDITEM, reqBody,
                response -> {
-
+                    try {
                         Log.d(TAG, "item added: " + response.toString());
-                    /*
-                    addItem();
-
-
-
-
-
-                }, error -> {
-
-
+                        String resp = new String(response.toString());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+               }, error -> {
 
 
                 });
 
-
-
-
     }
 
+    /**
+     * Get Pantry obj given a specific UID
+     * @throws JSONException
      */
+    private void getUserPantry() throws JSONException {
+
+        /*
+        {
+        "Butter"
+        "Flour"
+        "Sugar"
+         */
+
+        Map<String, String> params = new HashMap<>();
+        params.put( "UID", input.getText().toString()); /* User ID ????*/
+
+        StringRequest pantryRequest = new StringRequest(
+                Request.Method.GET, Const.URL_PANTRY_GETPANTRY, response -> {
+
+        }, error -> {
+
+        }
+        );
 
 
-    private void getPantry() throws JSONException {
 
 
     }
+    private void getUserPantryString() throws JSONException{
+
+
+
+        Map<String, String> params = new HashMap<>();
+        params.put( "UID", input.getText().toString()); /* User ID ????*/
+
+        StringRequest pantryStringRequest = new StringRequest(
+                Request.Method.GET, Const.URL_PANTRY_GETPANTRY, response -> {
+
+        }, error -> {
+
+        }
+        );
+
+    }
+
 }
