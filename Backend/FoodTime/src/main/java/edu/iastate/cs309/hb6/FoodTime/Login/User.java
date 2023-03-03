@@ -4,6 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 import javax.persistence.*;
 import java.util.UUID;
+import edu.iastate.cs309.hb6.FoodTime.Pantry.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table(name = "users")
@@ -16,8 +21,10 @@ public class User {
     @Column
     private String password;
 
+    //This is a string because UUIDs do not play super nicely in the DB
     @Column (unique = true)
-    private UUID UID;
+    private String UID;
+
 
     public User () {
 
@@ -31,7 +38,7 @@ public class User {
     }
 
     public void assignUID() {
-        UID = UUID.randomUUID();
+        UID = UUID.randomUUID().toString();
     }
 
     public String getUsername() {
@@ -51,6 +58,7 @@ public class User {
     }
 
     public UUID getUID() {
-        return UID;
+        return java.util.UUID.fromString(UID);
     }
+
 }
