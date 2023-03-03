@@ -37,7 +37,7 @@ public class Pantry {
     }
 
     public String[] getIngredientListString(){
-        //converts ingredientlist into an array of strings of the ingredient's names
+        // converts ingredientlist into an array of strings of the ingredient's names
         String[] nameArr = new String[ingredientList.size()];
         for(int i = 0; i< ingredientList.size(); i++){
             nameArr[i] = ingredientList.get(i).getName();

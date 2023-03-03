@@ -1,4 +1,4 @@
-package edu.iastate.cs309.hb6.foodtime.ui.dashboard;
+package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import edu.iastate.cs309.hb6.foodtime.databinding.FragmentDashboardBinding;
+import edu.iastate.cs309.hb6.foodtime.databinding.FragmentCookbookBinding;
 
-public class DashboardFragment extends Fragment {
+public class CookBookFragment extends Fragment {
 
-    private FragmentDashboardBinding binding;
+    private FragmentCookbookBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        DashboardViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
+        CookBookViewModel cookBookViewModel =
+                new ViewModelProvider(this).get(CookBookViewModel.class);
 
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        binding = FragmentCookbookBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textPantryheader;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textCookBook;
+        cookBookViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

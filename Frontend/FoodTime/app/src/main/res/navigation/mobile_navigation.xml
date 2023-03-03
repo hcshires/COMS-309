@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="edu.iastate.cs309.hb6.foodtime.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_pantry"
+        android:name="edu.iastate.cs309.hb6.foodtime.ui.pantry.PantryFragment"
+        android:label="@string/title_pantry"
+        tools:layout="@layout/fragment_pantry" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="edu.iastate.cs309.hb6.foodtime.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_cookbook"
+        android:name="edu.iastate.cs309.hb6.foodtime.ui.cookbook.CookBookFragment"
+        android:label="@string/title_cookbook"
+        tools:layout="@layout/fragment_cookbook" />
 </navigation>

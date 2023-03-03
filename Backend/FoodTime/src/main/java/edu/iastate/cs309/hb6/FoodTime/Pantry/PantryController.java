@@ -30,32 +30,30 @@ public class PantryController {
     @ResponseBody
     public ResponseEntity<Object> getUserPantry(@RequestParam String userID) { //requires that body contain a User object?
 
-        if(pantryRepository.existsById(userID)) {
+        if (pantryRepository.existsById(userID)) {
             return new ResponseEntity<>(pantryRepository.findById(userID), HttpStatus.OK); //returns pantry object and
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
 
-    @GetMapping(path = "/pantry/getPantryString") //specifies path to get to this controller I think?
+    @GetMapping(path = "/pantry/getUserPantryString") //specifies path to get to this controller I think?
     @ResponseBody
     public ResponseEntity<Object> getUserPantryString(@RequestParam String userID) { //requires that json body contain a User object?
 
-        if(pantryRepository.existsById(userID)) {
+        if (pantryRepository.existsById(userID)) {
             return new ResponseEntity<>(pantryRepository.findByUID(userID).getIngredientListString(), HttpStatus.OK);
         }
         return new ResponseEntity<>("no such user", HttpStatus.NOT_FOUND);
     }
 
 
-
     @PutMapping(path = "/pantry/addToPantry")
     @ResponseBody
     @Transactional
-    public ResponseEntity<Object> addToPantry(@RequestParam String userID, @RequestBody Ingredient ingredient) { //requires that json body contain a User object?
-
-        if(pantryRepository.existsById(userID)) { //check to make sure user exists
-
+    public ResponseEntity<Object> addToPantry(@RequestParam String userID, @RequestParam String ingredientName) { //requires that json body contain a User object?
+        Ingredient ingredient = new Ingredient(ingredientName);
+        if (pantryRepository.existsById(userID)) { //check to make sure user exists
             Pantry userPantry = pantryRepository.findByUID(userID);
             userPantry.addIngredient(ingredient);
 
@@ -69,10 +67,10 @@ public class PantryController {
     @Transactional
     public ResponseEntity<Object> removeFromPantry(@RequestParam String userID, @RequestParam String ingredientName) {
 
-        if(pantryRepository.existsById(userID)) { //check to make sure user exists
+        if (pantryRepository.existsById(userID)) { //check to make sure user exists
 
             //delete function can handle nonexistant Ingredients, returns boolean
-            if(pantryRepository.findByUID(userID).deleteIngredientByName(ingredientName)){ //returns true
+            if (pantryRepository.findByUID(userID).deleteIngredientByName(ingredientName)) { //returns true
                 return new ResponseEntity<>(null, HttpStatus.OK);
 
             } else {
