@@ -196,19 +196,33 @@ public class DashboardFragment extends Fragment {
     }
     private void getUserPantryString() throws JSONException{
 
-
-
         Map<String, String> params = new HashMap<>();
         params.put( "UID", input.getText().toString()); /* User ID ????*/
 
         StringRequest pantryStringRequest = new StringRequest(
                 Request.Method.GET, Const.URL_PANTRY_GETPANTRY, response -> {
 
+
         }, error -> {
 
         }
         );
 
+    }
+
+    private void removeFromPantry(String ingredient) throws JSONException{
+
+        Map<String, String> params = new HashMap<>();
+        params.put("UID", input.getText().toString());
+        params.put("ingredientName", ingredient);
+
+        StringRequest pantryRemove = new StringRequest(
+                Request.Method.DELETE, Const.URL_PANTRY_REMOVEITEM, response -> {
+
+        }, error -> {
+
+        }
+        );
     }
 
 }
