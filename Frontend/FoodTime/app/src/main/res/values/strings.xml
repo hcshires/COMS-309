@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">FoodTime</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="title_pantry">Pantry</string>
-    <string name="tile_cookbook">CookBook</string>
+    <string name="title_cookbook">CookBook</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="cook_book">Cook Book</string>
+    <string name="pantry">Pantry</string>
 </resources>

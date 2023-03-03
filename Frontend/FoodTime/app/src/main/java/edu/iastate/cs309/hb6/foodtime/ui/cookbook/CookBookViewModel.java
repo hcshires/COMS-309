@@ -1,14 +1,14 @@
-package edu.iastate.cs309.hb6.foodtime.ui.notifications;
+package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class NotificationsViewModel extends ViewModel {
+public class CookBookViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public NotificationsViewModel() {
+    public CookBookViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is notifications fragment");
     }

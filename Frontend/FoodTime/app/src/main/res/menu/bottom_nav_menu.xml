@@ -7,13 +7,13 @@
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/screen_shot_2023_02_10_at_3_00_33_pm"
-        android:title="Pantry" />
+        android:id="@+id/navigation_pantry"
+        android:icon="@drawable/baseline_view_list_24"
+        android:title="@string/pantry" />
 
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/screen_shot_2023_02_10_at_2_57_11_pm"
-        android:title="Cook Book" />
+        android:id="@+id/navigation_cookbook"
+        android:icon="@drawable/baseline_menu_book_24"
+        android:title="@string/cook_book" />
 
 </menu>
