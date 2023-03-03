@@ -69,6 +69,17 @@ public class DashboardFragment extends Fragment {
 
 
         addButton.setOnClickListener(this::addItem);
+        if (!(input.getText().toString().equals(""))) {
+            try {
+                addItemToServer();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else {
+            Toast.makeText(root.getContext().getApplicationContext(), "Please enter text", Toast.LENGTH_LONG).show();
+        }
+
 
         items = new ArrayList<>();
         itemAdapter = new ArrayAdapter<String>(root.getContext(),
@@ -108,7 +119,6 @@ public class DashboardFragment extends Fragment {
         String itemText = input.getText().toString();
         
         if (!(itemText.equals(""))) {
-            /*addItemToServer(itemText); Maybe we shouldn't call it here*/
             items.add(itemText);
             input.setText("");
             itemAdapter.notifyDataSetChanged();
@@ -124,11 +134,10 @@ public class DashboardFragment extends Fragment {
      * For a given UID and ingredient, sends req to add that ingredient to the Users pantry
      * response is string of all items in the pantry of the user
      * request returns
-     * @param item
      * @throws JSONException
      */
 
-    private void addItemToServer (String item) throws JSONException {
+    private void addItemToServer () throws JSONException {
         /*
         {
         "name":"butter""
