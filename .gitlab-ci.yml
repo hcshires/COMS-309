@@ -33,7 +33,7 @@ android-build:
     - ./gradlew build
   artifacts:
     paths:
-    - FoodTime/app/build/outputs/
+    - Frontend/FoodTime/app/build/outputs/
 
 android-test:
   image: gjandres/android-ci:latest
