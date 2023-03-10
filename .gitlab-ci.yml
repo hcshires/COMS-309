@@ -17,15 +17,21 @@
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
 stages:          # List of stages for jobs, and their order of execution
-  - build
+  - buildandroid
   - test
   - deploy
 
-build-job:       # This job runs in the build stage, which runs first.
-  stage: build
+android-build: # Job: Build Android application
+  image:  gjandres/android-ci:latest      		# this is a directive to DOCKER
+  stage: buildandroid
+  tags:
+   - android_test_tag         					      # this is LINK to the docker runner on the remote-server        
+  before_script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - chmod +x ./Frontend/FoodTime/gradlew			        # change directory to where you have ‘gradlew’ in your android directory
   script:
-    - echo "Compiling the code..."
-    - echo "Compile complete."
+    - cd Frontend/FoodTime					#change directory to where you have your android application
+    - ./gradlew assemble
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
