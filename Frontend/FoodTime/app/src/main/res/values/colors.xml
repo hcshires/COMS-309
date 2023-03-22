@@ -10,12 +10,13 @@
 
     <!-- Colors for Theme -->
 
-    <!-- Primary -->
-    <color name="colorPrimary">#98EFED</color>
-    <!-- Secondary -->
-    <color name="colorSecondary">#FBCA1B</color>
+    <!-- Primary (Top Theme) -->
+    <color name="colorPrimary">#B3DEE5</color>
+    <!-- Secondary (Bottom Nav-->
+    <color name="colorSecondary">#31525B</color>
 
-    <!-- Tertiary -->
-    <color name="colorTertiary">#2ACCBB</color>
+    <!-- Tertiary (HeaderText and Buttons)-->
+
+    <color name="colorTertiary">#FFA101</color>
 
 </resources>
