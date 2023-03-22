@@ -80,5 +80,40 @@ public class PantryController {
         return new ResponseEntity<>("no such user", HttpStatus.NOT_FOUND); //user not found
 
     }
+
+
+    //get and put quantity and quantity type. not implementing any sort of protections from end user stupid
+    //going to just case-insensitive string match. mistakes will be annoying for user but shouldn't break anything
+
+
+    @GetMapping(path = "/pantry/getQuantity")
+    @ResponseBody
+    public ResponseEntity<Object> getQuantity(@RequestParam String userID, @RequestParam String ingredientName){
+
+        if(pantryRepository.existsById(userID)){ //stupid check
+            if(pantryRepository.findByUID(userID).hasIngredient(ingredientName)){ //check that ingredient exists in pantry
+                return new ResponseEntity<>(pantryRepository.findByUID(userID).getQuantity(ingredientName), HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>("no such ingredient", HttpStatus.NOT_FOUND);
+            }
+        }
+        return new ResponseEntity<>("no such user", HttpStatus.NOT_FOUND); //user not found
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 

@@ -69,6 +69,16 @@ public class Pantry {
         return false;
     }
 
+    //for convienence sake
+    public boolean hasIngredient(String name){
+        for(int i = 0; i< ingredientList.size(); i++){
+            if(ingredientList.get(i).getName().equals(name)){ //to prevent any problems
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public void addIngredient(Ingredient ingredient){
         ingredientList.add(ingredient);
@@ -78,5 +88,10 @@ public class Pantry {
         ingredientList.add(new Ingredient(name));
     }
 
+    public int getQuantity(String name){
+
+        return getIngredientByName(name).getQuantity();
+
+    }
 
 }
