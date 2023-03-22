@@ -7,20 +7,6 @@
     tools:context=".ui.cookbook.CookBookFragment">
 
 
-    <TextView
-        android:id="@+id/textCookBook"
-        android:layout_width="wrap_content"
-        android:layout_height="51dp"
-        android:layout_marginStart="94dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="95dp"
-        android:text="@string/cook_book"
-        android:textColor="@color/colorTertiary"
-        android:textSize="40sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:layout_width="409dp"
         android:layout_height="622dp"
