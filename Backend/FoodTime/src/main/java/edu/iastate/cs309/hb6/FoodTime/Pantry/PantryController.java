@@ -85,6 +85,7 @@ public class PantryController {
     //get and put quantity and quantity type. not implementing any sort of protections from end user stupid
     //going to just case-insensitive string match. mistakes will be annoying for user but shouldn't break anything
 
+    //TODO refactor controllers and pantry to use new utility methods
 
     @GetMapping(path = "/pantry/getQuantity")
     @ResponseBody
@@ -100,20 +101,54 @@ public class PantryController {
         return new ResponseEntity<>("no such user", HttpStatus.NOT_FOUND); //user not found
     }
 
+    @PutMapping(path = "/pantry/setQuantity")
+    @ResponseBody
+    @Transactional
+    public ResponseEntity<Object> setQuantity(@RequestParam String userID, @RequestParam String ingredientName, @RequestParam int quantity){
 
+        if(pantryRepository.existsById(userID)){ //stupid check
+            if(pantryRepository.findByUID(userID).hasIngredient(ingredientName)){ //check that ingredient exists in pantry
+                pantryRepository.findByUID(userID).setQuantity(ingredientName, quantity);
+                return new ResponseEntity<>(pantryRepository.findByUID(userID).getQuantity(ingredientName), HttpStatus.OK);
 
+            }else{
+                return new ResponseEntity<>("no such ingredient", HttpStatus.NOT_FOUND);
+            }
+        }
+        return new ResponseEntity<>("no such user", HttpStatus.NOT_FOUND); //user not found
+    }
 
+    //get and put for quantity Type
 
+    @GetMapping(path = "/pantry/getQuantityType")
+    @ResponseBody
+    public ResponseEntity<Object> getQuantityType(@RequestParam String userID, @RequestParam String ingredientName){
 
+        if(pantryRepository.existsById(userID)) { //stupid check
+            if(pantryRepository.findByUID(userID).hasIngredient(ingredientName)){
+                return new ResponseEntity<>(pantryRepository.findByUID(userID).getQuantityType(ingredientName), HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>("no such ingredient", HttpStatus.NOT_FOUND);
+            }
+        }
+        return new ResponseEntity<>("no such user", HttpStatus.NOT_FOUND);
+    }
 
+    @PutMapping(path = "/pantry/setQuantityType")
+    @ResponseBody
+    @Transactional
+    public ResponseEntity<Object> setQuantityType(@RequestParam String userID, @RequestParam String ingredientName, @RequestParam String quantityType){
 
-
-
-
-
-
-
+        if(pantryRepository.existsById(userID)) { //stupid check
+            if(pantryRepository.findByUID(userID).hasIngredient(ingredientName)){
+                pantryRepository.findByUID(userID).setQuantityType(ingredientName, quantityType);
+                return new ResponseEntity<>(pantryRepository.findByUID(userID).getQuantityType(ingredientName), HttpStatus.OK); //TODO might remove return information later
+            }else {
+                return new ResponseEntity<>("no such ingredient", HttpStatus.NOT_FOUND);
+            }
+        }
+        return new ResponseEntity<>("no such user", HttpStatus.NOT_FOUND);
+    }
 
 
 }
-

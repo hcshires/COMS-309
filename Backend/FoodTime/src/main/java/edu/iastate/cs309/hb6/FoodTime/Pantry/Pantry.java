@@ -69,16 +69,6 @@ public class Pantry {
         return false;
     }
 
-    //for convienence sake
-    public boolean hasIngredient(String name){
-        for(int i = 0; i< ingredientList.size(); i++){
-            if(ingredientList.get(i).getName().equals(name)){ //to prevent any problems
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     public void addIngredient(Ingredient ingredient){
         ingredientList.add(ingredient);
@@ -92,6 +82,38 @@ public class Pantry {
 
         return getIngredientByName(name).getQuantity();
 
+    }
+
+    public void setQuantity(String name, int num){
+        ingredientList.get(findIngredientIndex(name)).setQuantity(num);
+    }
+
+    public String getQuantityType(String name){
+        return ingredientList.get(findIngredientIndex(name)).getQuantityType();
+    }
+
+    public void setQuantityType(String name, String quantityType){
+        ingredientList.get(findIngredientIndex(name)).setQuantityType(quantityType);
+    }
+
+    //utility. might make private
+    public boolean hasIngredient(String name){
+        for(int i = 0; i< ingredientList.size(); i++){
+            if(ingredientList.get(i).getName().equals(name)){ //to prevent any problems
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //utility. might make private
+    public int findIngredientIndex(String name) {
+        for (int i = 0; i < ingredientList.size(); i++) {
+            if (ingredientList.get(i).getName().equals(name)) { //to prevent any problems
+                return i;
+            }
+        }
+        return -1; //will throw error down the line
     }
 
 }
