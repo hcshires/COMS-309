@@ -17,9 +17,9 @@ import edu.iastate.cs309.hb6.foodtime.R;
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder>{
 
-    List<Integer> recipes;
+    List<Recipe> recipes;
 
-    public CardAdapter(List<Integer> recipes){
+    public CardAdapter(List<Recipe> recipes){
         this.recipes = recipes;
     }
 
@@ -33,8 +33,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
-        //holder.stockName.setText(recipes.get(position).getName());
-        //holder.stockPrice.setText(recipes.get(position).getPrice());
+        holder.text1.setText(recipes.get(position).getTextTest1());
+        holder.text2.setText(recipes.get(position).getTextTest2());
         //Ion.with(holder.stockPhoto).error(R.mipmap.ic_launcher).load(recipes.get(position).getPhotoId());
     }
 
