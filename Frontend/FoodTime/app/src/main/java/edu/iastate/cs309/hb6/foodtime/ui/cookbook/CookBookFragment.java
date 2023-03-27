@@ -24,8 +24,6 @@ public class CookBookFragment extends Fragment {
         binding = FragmentCookbookBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textCookBook;
-        cookBookViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
