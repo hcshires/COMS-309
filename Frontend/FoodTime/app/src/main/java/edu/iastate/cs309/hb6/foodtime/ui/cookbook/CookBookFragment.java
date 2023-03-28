@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -32,12 +33,14 @@ public class CookBookFragment extends Fragment {
 
         /* Widgets */
         RecyclerView rvRecipes = (RecyclerView) root.findViewById(R.id.recyclerList);
-
         /* Initialize Tests */
         recipes = Recipe.createRecipeList(5);
-
         /* Adapter */
         CardAdapter adapter = new CardAdapter(recipes);
+        /* Attach adapter to recycler view */
+        rvRecipes.setAdapter(adapter);
+        /* Set layout manager to position items */
+        rvRecipes.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
         return root;
 
