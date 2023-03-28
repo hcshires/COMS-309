@@ -18,6 +18,7 @@
 
 stages:          # List of stages for jobs, and their order of execution
   - build
+  - deploy
   - test
 
 android-build:
@@ -34,6 +35,25 @@ android-build:
   artifacts:
     paths:
     - Frontend/FoodTime/app/build/outputs/
+
+maven-build:
+  stage: build
+  tags:
+    - springboot_tag
+  script:
+    - cd Backend/FoodTime
+    - mvn package
+
+maven-deploy:
+  stage: deploy
+  tags:
+    - springboot_tag
+  script:
+    - cd Backend/FoodTime
+    - mvn package
+    - sudo mv target/*.jar /target/FoodTime.jar
+    - sudo systemctl stop FoodTime
+    - sudo systemctl start FoodTime
 
 android-test:
   image: gjandres/android-ci:latest
