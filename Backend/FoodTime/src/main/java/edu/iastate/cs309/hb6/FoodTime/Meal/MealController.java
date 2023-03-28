@@ -18,11 +18,34 @@ public class MealController {
     @PutMapping("/meals/add")
     @Transactional
     public ResponseEntity<Object> addMeal(@RequestParam String UID, @RequestParam String day, @RequestBody Meal meal) {
-        MealList mealsForUser = mealDB.findByUID(UID);
-        HashMap<String, Meal> mealsForDay = mealsForUser.getMealsForDay(day);
+        HashMap<String, Meal> mealsForDay = getUserMealsForDay(UID, day);
         mealsForDay.put(meal.getName(), meal);
 
         return new ResponseEntity<>(mealsForDay + day, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/meals/remove")
+    @Transactional
+    public ResponseEntity<Object> removeMeal(@RequestParam String UID, @RequestParam String day, @RequestParam String mealName) {
+        HashMap<String, Meal> mealsForDay = getUserMealsForDay(UID, day);
+
+        if (mealsForDay.remove(mealName) == null) {
+            return new ResponseEntity<>("Meal name not found for UID on given day", HttpStatus.NOT_FOUND);
+        }
+        else {
+           return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/meals/update")
+    @Transactional
+    public ResponseEntity<Object> updateMeal(@RequestParam String UID, @RequestParam String day, @RequestParam String mealName, @RequestBody Meal newMeal) {
+        HashMap<String, Meal> mealsForDay = getUserMealsForDay(UID, day);
+
+        if (mealsForDay.containsKey(mealName)) {
+            mealsForDay.replace(mealName, newMeal);
+            return new ResponseEntity<>(mealsForDay.get(mealName), HttpStatus.OK);
+        }
     }
 
     @PutMapping("/meals/add/test")
@@ -37,5 +60,10 @@ public class MealController {
         System.out.println(addMe.getIngredients().toString());
 
         return addMe;
+    }
+
+    private HashMap<String, Meal> getUserMealsForDay (String UID, String day) {
+        MealList mealsForUser = mealDB.findByUID(UID);
+        return mealsForUser.getMealsForDay(day);
     }
 }
