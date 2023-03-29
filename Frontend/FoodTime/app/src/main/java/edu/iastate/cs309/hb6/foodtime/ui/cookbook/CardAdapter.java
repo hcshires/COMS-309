@@ -17,7 +17,7 @@ import edu.iastate.cs309.hb6.foodtime.R;
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder>{
 
-    List<Recipe> recipes;
+    private List<Recipe> recipes;
 
     /**
      * Constructor for Card Adapter
@@ -50,13 +50,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
      */
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
-        holder.text1.setText(recipes.get(position).getTextTest1());
-        holder.text2.setText(recipes.get(position).getTextTest2());
-        //Ion.with(holder.stockPhoto).error(R.mipmap.ic_launcher).load(recipes.get(position).getPhotoId());
+        Recipe recipe = recipes.get(position);
+        TextView tt1 = holder.text1;
+        tt1.setText(recipe.getTextTest1());
+        TextView tt2 = holder.text2;
+        tt2.setText(recipe.getTextTest2());
+//        Ion.with(holder.stockPhoto).error(R.mipmap.ic_launcher).load(recipes.get(position).getPhotoId());
     }
-
     /**
-     *
+     *getter method to get the number of recipes in the cook book.
      * @return
      */
     @Override

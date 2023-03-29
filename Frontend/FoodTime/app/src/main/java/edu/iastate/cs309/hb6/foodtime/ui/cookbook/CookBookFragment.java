@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,10 @@ public class CookBookFragment extends Fragment {
 
         /* Widgets */
         RecyclerView rvRecipes = (RecyclerView) root.findViewById(R.id.recyclerList);
+        Button addRecipe = (Button) root.findViewById(R.id.addRecipeButt);
+        TextView iRecipeTitle = (TextView) root.findViewById(R.id.editTextTextPersonName);
+        TextView iRecipeTime = (TextView) root.findViewById(R.id.editTextTextPersonName);
+        TextView iRecipeDiff = (TextView) root.findViewById(R.id.editTextTextPersonName);
         /* Initialize Tests */
         recipes = Recipe.createRecipeList(5);
         /* Adapter */
@@ -41,6 +46,13 @@ public class CookBookFragment extends Fragment {
         rvRecipes.setAdapter(adapter);
         /* Set layout manager to position items */
         rvRecipes.setLayoutManager(new LinearLayoutManager(root.getContext()));
+
+        /*Add Recipe when button clicked*/
+        addRecipe.setOnClickListener(view -> {
+//            String recipeTitle =
+        });
+
+
 
         return root;
 
