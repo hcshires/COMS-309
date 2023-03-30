@@ -60,6 +60,11 @@ public class MealController {
         }
     }
 
+    @GetMapping("meals/get/by-day")
+    public ResponseEntity<Object> returnMealsForDay(@RequestParam String UID, @RequestParam String day) {
+        return new ResponseEntity<>(getUserMealsForDay(UID, day), HttpStatus.OK);
+    }
+
     private HashMap<String, Meal> getUserMealsForDay (String UID, String day) {
         MealList mealsForUser = mealDB.findByUID(UID);
         return mealsForUser.getMealsForDay(day);
