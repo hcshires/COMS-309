@@ -1,0 +1,139 @@
+package edu.iastate.cs309.hb6.FoodTime.Meal;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import edu.iastate.cs309.hb6.FoodTime.Pantry.Ingredient;
+import org.hibernate.annotations.Type;
+import org.springframework.stereotype.Component;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.UUID;
+
+
+class Meal implements Serializable {
+    private String name;
+    //HashMap so that we can easily add and remove ingredients
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
+    private HashMap<String, Ingredient> necessaryIngredients;
+
+    public Meal () {
+
+    }
+
+    public Meal (String name) {
+        this.name = name;
+        necessaryIngredients = new HashMap<>();
+    }
+
+    @JsonCreator
+    public Meal (String name, HashMap<String, Ingredient> necessaryIngredients) {
+        this.name = name;
+        this.necessaryIngredients = necessaryIngredients;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public HashMap<String, Ingredient> getIngredients() {
+        return necessaryIngredients;
+    }
+
+    public void setIngredients(HashMap<String, Ingredient> ingredients) {
+        necessaryIngredients = ingredients;
+    }
+
+    public void addIngredient(Ingredient ingredient) {
+        necessaryIngredients.putIfAbsent(ingredient.getName(), ingredient);
+    }
+
+    public void setQuantityRequired(String ingredientName, int quantity) {
+        Ingredient itemToUpdate = necessaryIngredients.get(ingredientName);
+        //TODO Blake should implement a quantity metric in Ingredient
+        //itemToUpdate.setQuantity(quantity);
+    }
+
+    public void removeIngredient(String ingredientName) {
+        necessaryIngredients.remove(ingredientName);
+    }
+}
+
+@Entity
+@Table(name = "meal_list")
+public class MealList {
+
+    @Id
+    @Column(unique = true)
+    private String UID;
+
+    //Each hash map will contain a number of meals that the user wishes to make on that day
+    @Column (name = "sunday")
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
+    private HashMap<String, Meal> sunday;
+    @Column (name = "monday", columnDefinition = "json")
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
+    private HashMap<String, Meal> monday;
+    @Column (name = "tuesday", columnDefinition = "json")
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
+    private HashMap<String, Meal> tuesday;
+    @Column (name = "wednesday", columnDefinition = "json")
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
+    private HashMap<String, Meal> wednesday;
+    @Column (name = "thursday", columnDefinition = "json")
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
+    private HashMap<String, Meal> thursday;
+    @Column (name = "friday", columnDefinition = "json")
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
+    private HashMap<String, Meal> friday;
+    @Column (name = "saturday", columnDefinition = "json")
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
+    private HashMap<String, Meal> saturday;
+
+    public MealList () {
+
+    }
+
+    public MealList (UUID UID) {
+        this.UID = UID.toString();
+        sunday = new HashMap<>();
+        monday = new HashMap<>();
+        tuesday = new HashMap<>();
+        wednesday = new HashMap<>();
+        thursday = new HashMap<>();
+        friday = new HashMap<>();
+        saturday = new HashMap<>();
+    }
+
+    public HashMap<String, Meal> getMealsForDay(String day) {
+        switch (day) {
+            case "sunday": return sunday;
+            case "monday": return monday;
+            case "tuesday": return tuesday;
+            case "wednesday": return wednesday;
+            case "thursday": return thursday;
+            case "friday": return friday;
+            case "saturday": return saturday;
+            default: return null;
+        }
+    }
+
+    public void setMealsForDay(String day, HashMap<String, Meal> newList) {
+        switch (day) {
+            case "sunday": sunday = newList;
+            case "monday": monday = newList;
+            case "tuesday": tuesday = newList;
+            case "wednesday": wednesday = newList;
+            case "thursday": thursday = newList;
+            case "friday": friday = newList;
+            case "saturday": saturday = newList;
+        }
+    }
+}
