@@ -30,7 +30,7 @@ public class MealController {
         HashMap<String, Meal> mealsForDay = getUserMealsForDay(UID, day);
 
         if (mealsForDay.remove(mealName) == null) {
-            return new ResponseEntity<>("Meal name not found for UID on given day", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(String.format("Meal not found on day %s for user %s", day, UID), HttpStatus.NOT_FOUND);
         }
         else {
            return new ResponseEntity<>(null, HttpStatus.OK);
@@ -45,6 +45,9 @@ public class MealController {
         if (mealsForDay.containsKey(mealName)) {
             mealsForDay.replace(mealName, newMeal);
             return new ResponseEntity<>(mealsForDay.get(mealName), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(String.format("Meal not found on day %s for user %s", day, UID), HttpStatus.NOT_FOUND);
         }
     }
 
