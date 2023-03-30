@@ -26,11 +26,18 @@ public class MealController {
 
     @DeleteMapping("/meals/remove")
     @Transactional
-    public ResponseEntity<Object> removeMeal(@RequestParam String UID, @RequestParam String day, @RequestParam String mealName) {
+    public ResponseEntity<Object> removeMeal(@RequestParam String UID, @RequestParam String day, @RequestParam String mealName, @RequestParam boolean removeAll) {
         HashMap<String, Meal> mealsForDay = getUserMealsForDay(UID, day);
 
-        if (mealsForDay.remove(mealName) == null) {
+        //Remove just one meal for a day
+        if (mealsForDay.remove(mealName) == null && !removeAll) {
             return new ResponseEntity<>(String.format("Meal not found on day %s for user %s", day, UID), HttpStatus.NOT_FOUND);
+        }
+        //Clear out all of user's meals for a day
+        else if (removeAll) {
+            MealList mealsForUser = mealDB.findByUID(UID);
+            HashMap<String, Meal> emptyList = new HashMap<>();
+            mealsForUser.setMealsForDay(day, emptyList);
         }
         else {
            return new ResponseEntity<>(null, HttpStatus.OK);
@@ -42,6 +49,7 @@ public class MealController {
     public ResponseEntity<Object> updateMeal(@RequestParam String UID, @RequestParam String day, @RequestParam String mealName, @RequestBody Meal newMeal) {
         HashMap<String, Meal> mealsForDay = getUserMealsForDay(UID, day);
 
+        //We will just replace one meal of a given day for a given user
         if (mealsForDay.containsKey(mealName)) {
             mealsForDay.replace(mealName, newMeal);
             return new ResponseEntity<>(mealsForDay.get(mealName), HttpStatus.OK);
@@ -49,20 +57,6 @@ public class MealController {
         else {
             return new ResponseEntity<>(String.format("Meal not found on day %s for user %s", day, UID), HttpStatus.NOT_FOUND);
         }
-    }
-
-    @PutMapping("/meals/add/test")
-    @ResponseBody
-    public Meal addMeal() {
-        Meal addMe = new Meal("test meal");
-        Ingredient ingredient = new Ingredient("beans");
-        addMe.addIngredient(ingredient);
-        ingredient = new Ingredient("lettuce");
-        addMe.addIngredient(ingredient);
-
-        System.out.println(addMe.getIngredients().toString());
-
-        return addMe;
     }
 
     private HashMap<String, Meal> getUserMealsForDay (String UID, String day) {
