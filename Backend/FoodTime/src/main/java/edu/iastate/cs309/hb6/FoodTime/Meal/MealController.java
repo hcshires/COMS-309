@@ -38,6 +38,7 @@ public class MealController {
             MealList mealsForUser = mealDB.findByUID(UID);
             HashMap<String, Meal> emptyList = new HashMap<>();
             mealsForUser.setMealsForDay(day, emptyList);
+            return new ResponseEntity<>(null, HttpStatus.OK);
         }
         else {
            return new ResponseEntity<>(null, HttpStatus.OK);
