@@ -136,4 +136,32 @@ public class MealList {
             case "saturday": saturday = newList;
         }
     }
+
+    public HashMap<String, Meal> getSunday() {
+        return sunday;
+    }
+
+    public HashMap<String, Meal> getMonday() {
+        return monday;
+    }
+
+    public HashMap<String, Meal> getTuesday() {
+        return tuesday;
+    }
+
+    public HashMap<String, Meal> getWednesday() {
+        return wednesday;
+    }
+
+    public HashMap<String, Meal> getThursday() {
+        return thursday;
+    }
+
+    public HashMap<String, Meal> getFriday() {
+        return friday;
+    }
+
+    public HashMap<String, Meal> getSaturday() {
+        return saturday;
+    }
 }
