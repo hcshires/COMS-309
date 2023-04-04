@@ -1,14 +1,12 @@
 package edu.iastate.cs309.hb6.FoodTime.Meal;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import edu.iastate.cs309.hb6.FoodTime.Login.User;
 import edu.iastate.cs309.hb6.FoodTime.Pantry.Ingredient;
 import org.hibernate.annotations.Type;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
@@ -73,6 +71,9 @@ public class MealList {
     @Id
     @Column(unique = true)
     private String UID;
+
+    @OneToOne(mappedBy = "userMeals")
+    private User user;
 
     //Each hash map will contain a number of meals that the user wishes to make on that day
     @Column (name = "sunday")
@@ -163,5 +164,9 @@ public class MealList {
 
     public HashMap<String, Meal> getSaturday() {
         return saturday;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

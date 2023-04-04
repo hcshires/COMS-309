@@ -1,10 +1,12 @@
 package edu.iastate.cs309.hb6.FoodTime.Pantry;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import edu.iastate.cs309.hb6.FoodTime.Login.User;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.util.ArrayList;
 
 @Entity
@@ -18,10 +20,11 @@ public class Pantry {
     @Column (unique = true)
     private String UID;
 
+    @OneToOne(mappedBy = "userPantry")
+    private User user;
+
     @Column
     private ArrayList<Ingredient> ingredientList;
-
-
     public Pantry(){
 
     }
@@ -79,4 +82,7 @@ public class Pantry {
     }
 
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
