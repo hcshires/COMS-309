@@ -82,4 +82,16 @@ public class User {
     public void setUserMeals(MealList userMeals) {
         this.userMeals = userMeals;
     }
+
+    public UserPreferences getUserPreferences() {
+        return userPreferences;
+    }
+
+    public Pantry getUserPantry() {
+        return userPantry;
+    }
+
+    public MealList getUserMeals() {
+        return userMeals;
+    }
 }
