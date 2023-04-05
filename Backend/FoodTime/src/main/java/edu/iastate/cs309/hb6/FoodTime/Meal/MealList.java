@@ -11,59 +11,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
 
-
-class Meal implements Serializable {
-    private String name;
-    //HashMap so that we can easily add and remove ingredients
-    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
-    private HashMap<String, Ingredient> necessaryIngredients;
-
-    public Meal () {
-
-    }
-
-    public Meal (String name) {
-        this.name = name;
-        necessaryIngredients = new HashMap<>();
-    }
-
-    @JsonCreator
-    public Meal (String name, HashMap<String, Ingredient> necessaryIngredients) {
-        this.name = name;
-        this.necessaryIngredients = necessaryIngredients;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public HashMap<String, Ingredient> getIngredients() {
-        return necessaryIngredients;
-    }
-
-    public void setIngredients(HashMap<String, Ingredient> ingredients) {
-        necessaryIngredients = ingredients;
-    }
-
-    public void addIngredient(Ingredient ingredient) {
-        necessaryIngredients.putIfAbsent(ingredient.getName(), ingredient);
-    }
-
-    public void setQuantityRequired(String ingredientName, int quantity) {
-        Ingredient itemToUpdate = necessaryIngredients.get(ingredientName);
-        //TODO Blake should implement a quantity metric in Ingredient
-        //itemToUpdate.setQuantity(quantity);
-    }
-
-    public void removeIngredient(String ingredientName) {
-        necessaryIngredients.remove(ingredientName);
-    }
-}
-
 @Entity
 @Table(name = "meal_list")
 public class MealList {
@@ -72,7 +19,7 @@ public class MealList {
     @Column(unique = true)
     private String UID;
 
-    @OneToOne(mappedBy = "userMeals")
+    @OneToOne(mappedBy = "userMealsWeekly")
     private User user;
 
     //Each hash map will contain a number of meals that the user wishes to make on that day

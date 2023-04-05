@@ -3,14 +3,12 @@ package edu.iastate.cs309.hb6.FoodTime.Login;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import javax.persistence.*;
-import java.util.UUID;
+import java.util.*;
 
+import edu.iastate.cs309.hb6.FoodTime.Meal.Meal;
 import edu.iastate.cs309.hb6.FoodTime.Meal.MealList;
 import edu.iastate.cs309.hb6.FoodTime.Pantry.*;
 import edu.iastate.cs309.hb6.FoodTime.Preferences.UserPreferences;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Entity
@@ -35,7 +33,10 @@ public class User {
     private Pantry userPantry;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private MealList userMeals;
+    private MealList userMealsWeekly;
+
+    @OneToMany(mappedBy = "meal_user", cascade = CascadeType.ALL)
+    private Map<String, Meal> userRecipes;
 
     public User () {
 
@@ -45,6 +46,7 @@ public class User {
     public User (String username, String password) {
         this.username = username;
         this.password = password;
+        userRecipes = new HashMap<>();
     }
 
     public void assignUID() {
@@ -80,7 +82,7 @@ public class User {
     }
 
     public void setUserMeals(MealList userMeals) {
-        this.userMeals = userMeals;
+        this.userMealsWeekly = userMeals;
     }
 
     public UserPreferences getUserPreferences() {
@@ -92,6 +94,14 @@ public class User {
     }
 
     public MealList getUserMeals() {
-        return userMeals;
+        return userMealsWeekly;
+    }
+
+    public Map<String, Meal> getUserRecipes() {
+        return userRecipes;
+    }
+
+    public void setUserRecipes(Map<String, Meal> userRecipes) {
+        this.userRecipes = userRecipes;
     }
 }

@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 public class MealController {
@@ -20,6 +22,8 @@ public class MealController {
     @Transactional
     public ResponseEntity<Object> addMeal(@RequestParam String UID, @RequestParam String day, @RequestBody Meal meal) {
         HashMap<String, Meal> mealsForDay = getUserMealsForDay(UID, day);
+        Map<String, Meal> recipes = userDB.findByUID(UID).getUserRecipes();
+        //Also add the meal to the recipe book if it doesn't already exist
         mealsForDay.put(meal.getName(), meal);
 
         return new ResponseEntity<>(mealsForDay + day, HttpStatus.OK);
@@ -69,6 +73,32 @@ public class MealController {
     @GetMapping("meals/get/all")
     public ResponseEntity<Object> returnAllMeals(@RequestParam String UID) {
         return new ResponseEntity<>(userDB.findByUID(UID).getUserMeals(), HttpStatus.OK);
+    }
+
+    @PutMapping("recipes/add")
+    @Transactional
+    public ResponseEntity<Object> addRecipe(@RequestParam String UID, @RequestBody Meal recipeToAdd) {
+        Map<String, Meal> userRecipes = userDB.findByUID(UID).getUserRecipes();
+        if (!userRecipes.containsKey(recipeToAdd.getName())) {
+            userRecipes.put(recipeToAdd.getName(), recipeToAdd);
+            return new ResponseEntity<>(userRecipes, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        }
+    }
+
+    @DeleteMapping("recipes/remove")
+    @Transactional
+    public ResponseEntity<Object> removeRecipe(@RequestParam String UID, @RequestParam String recipeName) {
+        Map<String, Meal> userRecipes = userDB.findByUID(UID).getUserRecipes();
+        if (userRecipes.containsKey(recipeName)) {
+            userRecipes.remove(recipeName);
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 
     private HashMap<String, Meal> getUserMealsForDay (String UID, String day) {
