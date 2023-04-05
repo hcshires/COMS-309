@@ -47,7 +47,8 @@ public class CookBookFragment extends Fragment {
 
         /*Go to AddRecipe when button clicked*/
         addRecipe.setOnClickListener(view -> {
-            Intent intent = new Intent(root.getContext(), RecipeActivity.class);
+            Intent cookbookIntent = new Intent(root.getContext(), RecipeActivity.class);
+            startActivity(cookbookIntent);
         });
 
 

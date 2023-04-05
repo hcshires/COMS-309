@@ -23,19 +23,10 @@
             android:layout_height="65dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="55dp"
-            android:layout_marginBottom="26dp"
-            android:text="TESTING2" />
+            android:layout_marginStart="138dp"
+            android:layout_marginBottom="47dp"
+            android:text="TITLE" />
 
-        <TextView
-            android:id="@+id/textTest1"
-            android:layout_width="125dp"
-            android:layout_height="54dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="54dp"
-            android:layout_marginBottom="36dp"
-            android:text="TESTING1" />
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

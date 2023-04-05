@@ -18,9 +18,7 @@ public class Recipe {
 
     public Recipe(String rTitle, ArrayList<String> rIngredients) {
         rTitle = title;
-        ingredients = new ArrayList<>(5);
-        ingredients.add(0,"Butter");
-        ingredients.add(1,"Eggs");
+        ingredients = new ArrayList<>(6);
         rIngredients = ingredients;
 
     }

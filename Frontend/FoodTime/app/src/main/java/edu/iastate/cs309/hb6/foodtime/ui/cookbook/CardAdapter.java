@@ -87,7 +87,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         CardViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
-            text1 = (TextView)itemView.findViewById(R.id.textTest1);
             text2 = (TextView)itemView.findViewById(R.id.textTest2);
 
         }

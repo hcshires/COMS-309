@@ -20,6 +20,10 @@
             android:exported="false"
             android:label="@string/title_dashboard" />
         <activity
+            android:name=".ui.cookbook.RecipeActivity"
+            android:exported="false"
+            android:label="Recipe"/>
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
