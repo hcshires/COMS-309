@@ -1,5 +1,6 @@
 package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,9 +36,6 @@ public class CookBookFragment extends Fragment {
         /* Widgets */
         RecyclerView rvRecipes = (RecyclerView) root.findViewById(R.id.recyclerList);
         Button addRecipe = (Button) root.findViewById(R.id.addRecipeButt);
-        TextView iRecipeTitle = (TextView) root.findViewById(R.id.editTextTextPersonName);
-        TextView iRecipeTime = (TextView) root.findViewById(R.id.editTextTextPersonName);
-        TextView iRecipeDiff = (TextView) root.findViewById(R.id.editTextTextPersonName);
         /* Initialize Tests */
         recipes = Recipe.createRecipeList(5);
         /* Adapter */
@@ -47,11 +45,10 @@ public class CookBookFragment extends Fragment {
         /* Set layout manager to position items */
         rvRecipes.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
-        /*Add Recipe when button clicked*/
+        /*Go to AddRecipe when button clicked*/
         addRecipe.setOnClickListener(view -> {
-//            String recipeTitle =
+            Intent intent = new Intent(root.getContext(), RecipeActivity.class);
         });
-
 
 
         return root;

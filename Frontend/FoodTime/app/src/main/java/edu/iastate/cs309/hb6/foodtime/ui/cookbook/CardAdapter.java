@@ -52,9 +52,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public void onBindViewHolder(CardViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
         TextView tt1 = holder.text1;
-        tt1.setText(recipe.getTextTest1());
+        //tt1.setText(recipe.getTextTest1());
         TextView tt2 = holder.text2;
-        tt2.setText(recipe.getTextTest2());
+        //tt2.setText(recipe.getTextTest2());
 //        Ion.with(holder.stockPhoto).error(R.mipmap.ic_launcher).load(recipes.get(position).getPhotoId());
     }
     /**

@@ -7,27 +7,24 @@ public class Recipe {
     private String title;
     private double cookTime;
     private int difficulty;
-    private String textTest1;
-    private String textTest2;
 
-    //public Recipe(String rTitle, double rCookTime, int rDifficulty) {
-        //rTitle = title;
-        //rCookTime = cookTime;
-        //rDifficulty = difficulty;
-    //}
+    private ArrayList<String> ingredients;
 
-    public Recipe(String test1, String test2){
-        test1 = textTest1;
-        test2 = textTest2;
+//    public Recipe(String rTitle, double rCookTime, int rDifficulty) {
+//        rTitle = title;
+//        rCookTime = cookTime;
+//        rDifficulty = difficulty;
+//    }
+
+    public Recipe(String rTitle, ArrayList<String> rIngredients) {
+        rTitle = title;
+        ingredients = new ArrayList<>(5);
+        ingredients.add(0,"Butter");
+        ingredients.add(1,"Eggs");
+        rIngredients = ingredients;
+
     }
 
-    public String getTextTest1() {
-        return textTest1;
-    }
-
-    public String getTextTest2() {
-        return textTest2;
-    }
 
     public String getTitle() {
         return title;
@@ -41,12 +38,17 @@ public class Recipe {
         return difficulty;
     }
 
+    public ArrayList<String> getIngredients() {
+        return ingredients;
+    }
+
 
     public static ArrayList<Recipe> createRecipeList(int numRecipes){
         ArrayList<Recipe> recipes = new ArrayList<Recipe>();
+        ArrayList<String> ingredients = new ArrayList<>(5);
 
         for (int i = 1; i <= numRecipes; i++) {
-            recipes.add(new Recipe("textTest1", "textTest2"));
+            recipes.add(new Recipe("textTest1",ingredients));
         }
 
         return recipes;
