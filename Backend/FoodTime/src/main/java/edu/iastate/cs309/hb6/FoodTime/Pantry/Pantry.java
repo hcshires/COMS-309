@@ -3,10 +3,7 @@ package edu.iastate.cs309.hb6.FoodTime.Pantry;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import edu.iastate.cs309.hb6.FoodTime.Login.User;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.ArrayList;
 
 @Entity
