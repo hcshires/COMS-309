@@ -36,18 +36,26 @@ public class LoginController {
         if (!userDB.existsByUsername(user.getUsername())) {
             //Create a user if they do not exist in the system
             user.assignUID();
-            userDB.save(user);
 
             //Assign them default preferences
             UserPreferences prefs = new UserPreferences(user.getUID());
-            prefsDB.save(prefs);
 
             //Assign them a pantry entry
             Pantry userPantry = new Pantry (user.getUID().toString());
-            pantryDB.save(userPantry);
 
             //Create their list of meals
             MealList userMeals = new MealList(user.getUID());
+
+            user.setUserPreferences(prefs);
+            user.setUserPantry(userPantry);
+            user.setUserMeals(userMeals);
+            userPantry.setUser(user);
+            prefs.setUser(user);
+            userMeals.setUser(user);
+
+            userDB.save(user);
+            prefsDB.save(prefs);
+            pantryDB.save(userPantry);
             mealDB.save(userMeals);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
@@ -75,9 +83,6 @@ public class LoginController {
         if (userDB.existsByUsername(user.getUsername()) && userDB.findByUsername(user.getUsername()).getPassword().equals(user.getPassword())) {
             User deletedUser = userDB.findByUsername(user.getUsername());
             userDB.deleteById(user.getUsername());
-            prefsDB.deleteById(deletedUser.getUID().toString());
-            pantryDB.deleteById(deletedUser.getUID().toString());
-            mealDB.deleteById(deletedUser.getUID().toString());
             return new ResponseEntity<>(deletedUser, HttpStatus.OK);
         }
         else return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

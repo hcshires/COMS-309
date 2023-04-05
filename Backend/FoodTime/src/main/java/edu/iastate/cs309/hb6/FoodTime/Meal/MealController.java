@@ -1,5 +1,6 @@
 package edu.iastate.cs309.hb6.FoodTime.Meal;
 
+import edu.iastate.cs309.hb6.FoodTime.Login.UserRepository;
 import edu.iastate.cs309.hb6.FoodTime.Pantry.Ingredient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 public class MealController {
 
     @Autowired
-    MealRepository mealDB;
+    UserRepository userDB;
 
     @PutMapping("/meals/add")
     @Transactional
@@ -35,7 +36,7 @@ public class MealController {
         }
         //Clear out all of user's meals for a day
         else if (removeAll) {
-            MealList mealsForUser = mealDB.findByUID(UID);
+            MealList mealsForUser = userDB.findByUID(UID).getUserMeals();
             HashMap<String, Meal> emptyList = new HashMap<>();
             mealsForUser.setMealsForDay(day, emptyList);
             return new ResponseEntity<>(null, HttpStatus.OK);
@@ -67,11 +68,11 @@ public class MealController {
 
     @GetMapping("meals/get/all")
     public ResponseEntity<Object> returnAllMeals(@RequestParam String UID) {
-        return new ResponseEntity<>(mealDB.findByUID(UID), HttpStatus.OK);
+        return new ResponseEntity<>(userDB.findByUID(UID).getUserMeals(), HttpStatus.OK);
     }
 
     private HashMap<String, Meal> getUserMealsForDay (String UID, String day) {
-        MealList mealsForUser = mealDB.findByUID(UID);
+        MealList mealsForUser = userDB.findByUID(UID).getUserMeals();
         return mealsForUser.getMealsForDay(day);
     }
 }
