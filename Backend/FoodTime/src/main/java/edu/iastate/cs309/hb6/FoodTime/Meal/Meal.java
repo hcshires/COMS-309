@@ -7,35 +7,18 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-@Entity
-@Table(name = "recipe_book")
 //TODO use this class for weekly meals (no user) then extend to Recipe class
 public class Meal implements Serializable {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "meal_id")
-    private Long id;
 
     private String name;
 
     //HashMap so that we can easily add and remove ingredients
     @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
-    private HashMap<String, Ingredient> necessaryIngredients;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "recipes_user_uid")
-    private User meal_user;
-
-    public User getUser() {
-        return meal_user;
-    }
-
-    public void setUser(User user) {
-        this.meal_user = user;
-    }
+    private ArrayList<Ingredient> necessaryIngredients;
 
     public Meal() {
 
@@ -43,11 +26,11 @@ public class Meal implements Serializable {
 
     public Meal(String name) {
         this.name = name;
-        necessaryIngredients = new HashMap<>();
+        necessaryIngredients = new ArrayList<>();
     }
 
     @JsonCreator
-    public Meal(String name, HashMap<String, Ingredient> necessaryIngredients) {
+    public Meal(String name, ArrayList<Ingredient> necessaryIngredients) {
         this.name = name;
         this.necessaryIngredients = necessaryIngredients;
     }
@@ -60,33 +43,44 @@ public class Meal implements Serializable {
         this.name = name;
     }
 
-    public HashMap<String, Ingredient> getIngredients() {
+    public ArrayList<Ingredient> getIngredients() {
         return necessaryIngredients;
     }
 
-    public void setIngredients(HashMap<String, Ingredient> ingredients) {
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
         necessaryIngredients = ingredients;
     }
 
     public void addIngredient(Ingredient ingredient) {
-        necessaryIngredients.putIfAbsent(ingredient.getName(), ingredient);
+        necessaryIngredients.add(ingredient);
     }
 
     public void setQuantityRequired(String ingredientName, int quantity) {
-        Ingredient itemToUpdate = necessaryIngredients.get(ingredientName);
+        Ingredient ing = findIngredient(ingredientName);
         //TODO Blake should implement a quantity metric in Ingredient
         //itemToUpdate.setQuantity(quantity);
     }
 
     public void removeIngredient(String ingredientName) {
         necessaryIngredients.remove(ingredientName);
+        necessaryIngredients.remove(findIngredientIndex(ingredientName));
     }
 
-    public User getMeal_user() {
-        return meal_user;
+    private Ingredient findIngredient(String ingredientName) {
+        for (Ingredient i : necessaryIngredients) {
+            if (i.getName().equals(ingredientName)) {
+                return i;
+            }
+        }
+        return null;
     }
 
-    public void setMeal_user(User meal_user) {
-        this.meal_user = meal_user;
+    private int findIngredientIndex (String ingredientName) {
+        for (Ingredient i : necessaryIngredients) {
+            if (i.getName().equals(ingredientName)) {
+                return necessaryIngredients.indexOf(i);
+            }
+        }
+        return -1;
     }
 }
