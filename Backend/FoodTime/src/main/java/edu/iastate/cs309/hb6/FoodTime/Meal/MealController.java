@@ -1,13 +1,11 @@
 package edu.iastate.cs309.hb6.FoodTime.Meal;
 
 import edu.iastate.cs309.hb6.FoodTime.Login.UserRepository;
-import edu.iastate.cs309.hb6.FoodTime.Pantry.Ingredient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 
 @RestController
@@ -22,7 +20,7 @@ public class MealController {
         HashMap<String, Meal> mealsForDay = getUserMealsForDay(UID, day);
         mealsForDay.put(meal.getName(), meal);
 
-        return new ResponseEntity<>(mealsForDay + day, HttpStatus.OK);
+        return new ResponseEntity<>(mealsForDay + day.toLowerCase(), HttpStatus.OK);
     }
 
     @DeleteMapping("/meals/remove")
@@ -32,13 +30,13 @@ public class MealController {
 
         //Remove just one meal for a day
         if (mealsForDay.remove(mealName) == null && !removeAll) {
-            return new ResponseEntity<>(String.format("Meal not found on day %s for user %s", day, UID), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(String.format("Meal not found on day %s for user %s", day.toLowerCase(), UID), HttpStatus.NOT_FOUND);
         }
         //Clear out all of user's meals for a day
         else if (removeAll) {
             MealList mealsForUser = userDB.findByUID(UID).getUserMeals();
             HashMap<String, Meal> emptyList = new HashMap<>();
-            mealsForUser.setMealsForDay(day, emptyList);
+            mealsForUser.setMealsForDay(day.toLowerCase(), emptyList);
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
         else {
@@ -73,6 +71,6 @@ public class MealController {
 
     private HashMap<String, Meal> getUserMealsForDay (String UID, String day) {
         MealList mealsForUser = userDB.findByUID(UID).getUserMeals();
-        return mealsForUser.getMealsForDay(day);
+        return mealsForUser.getMealsForDay(day.toLowerCase());
     }
 }

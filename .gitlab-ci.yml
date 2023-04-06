@@ -16,7 +16,9 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
-stages: # List of stages for jobs, and their order of execution
+# Make it so the deploy stage ONLY runs on commits to main and not on commits to other branches
+
+stages:          # List of stages for jobs, and their order of execution
   - build
   - test
   - deploy
@@ -28,13 +30,13 @@ android-build:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x ./Frontend/FoodTime/gradlew
   tags:
-    - android_tag
+   - android_tag
   script:
     - cd Frontend/FoodTime
     - ./gradlew build
   artifacts:
     paths:
-      - Frontend/FoodTime/app/build/outputs/
+    - Frontend/FoodTime/app/build/outputs/
 
 android-test:
   image: gjandres/android-ci:latest
@@ -43,33 +45,36 @@ android-test:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x ./Frontend/FoodTime/gradlew
   tags:
-    - android_tag
+   - android_tag
   script:
     - cd Frontend/FoodTime
     - ./gradlew test
-# maven-build:
-#   stage: build
+
+maven-build:
+  stage: build
+  tags:
+    - springboot_tag
+  script:
+    - cd Backend/FoodTime
+    - mvn package
+
+# TODO Add
+# maven-test: 
+#   stage: test
 #   tags:
 #     - springboot_tag
 #   script:
-#     - cd Backend/FoodTime
-#     - mvn package
 
-# # TODO Add
-# # maven-test:
-# #   stage: test
-# #   tags:
-# #     - springboot_tag
-# #   script:
-
-# maven-deploy:
-#   stage: deploy
-#   tags:
-#     - springboot_tag
-#   script:
-#     - cd Backend/FoodTime
-#     - mvn package
-#     - sudo mv target/*.jar /target/FoodTime.jar
-#     - sudo systemctl stop FoodTime
-#     - sudo systemctl start FoodTime
+maven-deploy:
+  stage: deploy
+  tags:
+    - springboot_tag
+  script:
+    - cd Backend/FoodTime
+    - mvn package
+    - sudo mv target/*.jar /target/FoodTime.jar
+    - sudo systemctl stop FoodTime
+    - sudo systemctl start FoodTime
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
