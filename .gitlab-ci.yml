@@ -16,13 +16,7 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
-# Make it so the pipeline ONLY runs on merge requests and commits to main and not on commits to other branches
-workflow:
-  rules:
-    - if: '$CI_COMMIT_BRANCH && $CI_DEFAULT_BRANCH'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
-    - if: "$CI_COMMIT_BRANCH"
-      when: never
+# Make it so the deploy stage ONLY runs on commits to main and not on commits to other branches
 
 stages:          # List of stages for jobs, and their order of execution
   - build
@@ -81,4 +75,6 @@ maven-deploy:
     - sudo mv target/*.jar /target/FoodTime.jar
     - sudo systemctl stop FoodTime
     - sudo systemctl start FoodTime
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
