@@ -19,6 +19,7 @@
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
+  - deploy
 
 android-build:
   image: gjandres/android-ci:latest
@@ -27,7 +28,7 @@ android-build:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x ./Frontend/FoodTime/gradlew
   tags:
-   - android_test_tag
+   - android_tag
   script:
     - cd Frontend/FoodTime
     - ./gradlew build
@@ -42,8 +43,34 @@ android-test:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x ./Frontend/FoodTime/gradlew
   tags:
-   - android_test_tag
+   - android_tag
   script:
     - cd Frontend/FoodTime
     - ./gradlew test
+
+maven-build:
+  stage: build
+  tags:
+    - springboot_tag
+  script:
+    - cd Backend/FoodTime
+    - mvn package
+
+# TODO Add
+# maven-test: 
+#   stage: test
+#   tags:
+#     - springboot_tag
+#   script:
+
+maven-deploy:
+  stage: deploy
+  tags:
+    - springboot_tag
+  script:
+    - cd Backend/FoodTime
+    - mvn package
+    - sudo mv target/*.jar /target/FoodTime.jar
+    - sudo systemctl stop FoodTime
+    - sudo systemctl start FoodTime
 

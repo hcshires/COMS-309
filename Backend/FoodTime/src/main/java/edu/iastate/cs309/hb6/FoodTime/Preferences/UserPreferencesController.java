@@ -1,5 +1,6 @@
 package edu.iastate.cs309.hb6.FoodTime.Preferences;
 
+import edu.iastate.cs309.hb6.FoodTime.Login.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserPreferencesController {
 
     @Autowired
-    UserPreferencesRepository prefsDB;
+    UserRepository userDB;
 
     @PutMapping("/preferences/update")
     @ResponseBody
     @Transactional
     public ResponseEntity<Object> updatePreferences(@RequestBody UserPreferences prefs) {
-        if (prefsDB.existsById(prefs.getUID())) {
-            UserPreferences prefsToUpdate = prefsDB.findByUID(prefs.getUID());
+        if (userDB.existsById(prefs.getUID())) {
+            UserPreferences prefsToUpdate = userDB.findByUID(prefs.getUID()).getUserPreferences();
             //User preferences update without a .save() since method is transactional
             prefsToUpdate.update(prefs);
             return new ResponseEntity<>(prefsToUpdate, HttpStatus.OK);
