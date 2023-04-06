@@ -1,7 +1,7 @@
 package edu.iastate.cs309.hb6.FoodTime.Pantry;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import edu.iastate.cs309.hb6.FoodTime.Login.User;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ public class Pantry {
     private User user;
 
     @Column
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
     private ArrayList<Ingredient> ingredientList;
     public Pantry(){
 
@@ -48,7 +49,8 @@ public class Pantry {
     public Ingredient getIngredientByName(String name){
 
     for(int i = 0; i< ingredientList.size(); i++){
-        if(ingredientList.get(i).getName().toLowerCase() == name.toLowerCase()){
+        
+        if(ingredientList.get(i).getName().toLowerCase().equals(name.toLowerCase() ) ){
             return ingredientList.get(i);
             }
         }
@@ -79,6 +81,9 @@ public class Pantry {
     }
 
     public int getQuantity(String name){
+
+        //TODO TESTING FOR NULL POINTER
+        String testForNull = getIngredientByName(name).getName();
 
         return getIngredientByName(name).getQuantity();
 

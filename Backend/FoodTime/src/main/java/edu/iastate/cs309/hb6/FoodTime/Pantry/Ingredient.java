@@ -4,9 +4,6 @@ package edu.iastate.cs309.hb6.FoodTime.Pantry;
     @author Blake Hardy
  */
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.iastate.cs309.hb6.FoodTime.Login.User;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -29,7 +26,7 @@ public class Ingredient implements Serializable { //no identifier for ingredient
         this.name = name;
         //this.ingredientType = IngredientType.NONE; //not using so I'll keep it out so it doesn't clutter database
         this.quantity = 0;
-        this.quantityType = "";
+        this.quantityType = "typeless";
     }
 
     public Ingredient(){}
@@ -57,7 +54,7 @@ public class Ingredient implements Serializable { //no identifier for ingredient
     }
 
     public void setQuantity(int newQuant){
-        quantity = newQuant;
+        this.quantity = newQuant;
     }
 
 }
