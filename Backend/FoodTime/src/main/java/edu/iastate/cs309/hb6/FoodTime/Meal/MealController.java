@@ -1,11 +1,14 @@
 package edu.iastate.cs309.hb6.FoodTime.Meal;
 
 import edu.iastate.cs309.hb6.FoodTime.Login.UserRepository;
+import edu.iastate.cs309.hb6.FoodTime.Pantry.Ingredient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @RestController
@@ -67,6 +70,48 @@ public class MealController {
     @GetMapping("meals/get/all")
     public ResponseEntity<Object> returnAllMeals(@RequestParam String UID) {
         return new ResponseEntity<>(userDB.findByUID(UID).getUserMeals(), HttpStatus.OK);
+    }
+
+    @GetMapping("meals/enoughForMeal") //behold der UberController
+    public ResponseEntity<Object> pantryHasIngredientsForMeal(@RequestParam String userID, @RequestParam Meal meal){
+
+        if(userDB.existsById(userID)){ //ensure user exists cause you can never be too careful
+
+            ArrayList<Ingredient> insufficientQuantity = null;
+
+            //this is gonna be ugly and inefficient
+            for(int i = 0; i < userDB.findByUID(userID).getUserPantry().getIngredientList().size(); i++){ //iterate through user's pantry
+                for(int j = 0; j < meal.getIngredients().size(); j++){
+
+                    //may need front end to handle type coversions, or at least not leave it up to the user cause that's dangerous
+                    //check if ingredient names match, amount required by meal is less than what is in the pantry, and if the quantity types match
+                    //this brings me joy
+                    if(meal.getIngredients().get(j).getName().equals(userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getName()) &
+                            meal.getIngredients().get(j).getQuantity() <= userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getQuantity() &
+                            meal.getIngredients().get(j).getQuantityType().equals(userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getQuantityType())
+                    ){
+
+                        //do nothing
+
+                    }else{
+
+                        insufficientQuantity.add(meal.getIngredients().get(j));
+                        //pantry doesn't have enough, add it to the list
+                        //hopefully no duplicates
+                    }
+                }
+            }
+
+            if(insufficientQuantity == null){ //pantry has enough ingredients for everyone
+                //return okay
+                return new ResponseEntity<>("enougn ingredients in user's pantry to make meal", HttpStatus.OK);
+
+            }else{
+                //return list of ingredients that pantry doesn't have enough
+                return new ResponseEntity<>(insufficientQuantity, HttpStatus.I_AM_A_TEAPOT); //no good HTTP status for "not enough thing"
+            }
+        }
+        return new ResponseEntity<>("user does not exist", HttpStatus.NOT_FOUND);
     }
 
     private HashMap<String, Meal> getUserMealsForDay (String UID, String day) {

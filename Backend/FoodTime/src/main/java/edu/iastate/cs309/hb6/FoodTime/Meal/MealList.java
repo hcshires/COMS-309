@@ -59,7 +59,7 @@ class Meal implements Serializable {
         //TODO Blake should implement a quantity metric in Ingredient
         //itemToUpdate.setQuantity(quantity);
 
-        
+
 
 
 
