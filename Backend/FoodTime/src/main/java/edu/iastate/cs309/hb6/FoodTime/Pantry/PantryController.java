@@ -23,15 +23,12 @@ public class PantryController {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    PantryRepository pantryRepository;
-
     @GetMapping(path = "/pantry/getUserPantry") //specifies path to get to this controller I think
     @ResponseBody
     public ResponseEntity<Object> getUserPantry(@RequestParam String userID) { //requires that body contain a User object?
 
-        if (pantryRepository.existsById(userID)) {
-            return new ResponseEntity<>(pantryRepository.findById(userID), HttpStatus.OK); //returns pantry object and
+        if (userRepository.existsById(userID)) {
+            return new ResponseEntity<>(userRepository.findByUID(userID).getUserPantry(), HttpStatus.OK); //returns pantry object and
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
@@ -41,8 +38,8 @@ public class PantryController {
     @ResponseBody
     public ResponseEntity<Object> getUserPantryString(@RequestParam String userID) { //requires that json body contain a User object?
 
-        if (pantryRepository.existsById(userID)) {
-            return new ResponseEntity<>(pantryRepository.findByUID(userID).getIngredientListString(), HttpStatus.OK);
+        if (userRepository.existsById(userID)) {
+            return new ResponseEntity<>(userRepository.findByUID(userID).getUserPantry().getIngredientListString(), HttpStatus.OK);
         }
         return new ResponseEntity<>("no such user", HttpStatus.NOT_FOUND);
     }
@@ -53,8 +50,8 @@ public class PantryController {
     @Transactional
     public ResponseEntity<Object> addToPantry(@RequestParam String userID, @RequestParam String ingredientName) { //requires that json body contain a User object?
         Ingredient ingredient = new Ingredient(ingredientName);
-        if (pantryRepository.existsById(userID)) { //check to make sure user exists
-            Pantry userPantry = pantryRepository.findByUID(userID);
+        if (userRepository.existsById(userID)) { //check to make sure user exists
+            Pantry userPantry = userRepository.findByUID(userID).getUserPantry();
             userPantry.addIngredient(ingredient);
 
             return new ResponseEntity<>(userPantry.getIngredientListString(), HttpStatus.OK);
@@ -67,10 +64,10 @@ public class PantryController {
     @Transactional
     public ResponseEntity<Object> removeFromPantry(@RequestParam String userID, @RequestParam String ingredientName) {
 
-        if (pantryRepository.existsById(userID)) { //check to make sure user exists
+        if (userRepository.existsById(userID)) { //check to make sure user exists
 
             //delete function can handle nonexistant Ingredients, returns boolean
-            if (pantryRepository.findByUID(userID).deleteIngredientByName(ingredientName)) { //returns true
+            if (userRepository.findByUID(userID).getUserPantry().deleteIngredientByName(ingredientName)) { //returns true
                 return new ResponseEntity<>(null, HttpStatus.OK);
 
             } else {

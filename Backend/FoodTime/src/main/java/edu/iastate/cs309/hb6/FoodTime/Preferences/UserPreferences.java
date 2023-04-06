@@ -1,11 +1,9 @@
 package edu.iastate.cs309.hb6.FoodTime.Preferences;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import edu.iastate.cs309.hb6.FoodTime.Login.User;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
@@ -31,6 +29,9 @@ public class UserPreferences {
     @Id
     @Column(unique = true)
     private String UID;
+
+    @OneToOne(mappedBy = "userPreferences")
+    private User user;
 
     @Column(name = "darkMode")
     private boolean darkMode;
@@ -64,5 +65,9 @@ public class UserPreferences {
 
     public boolean getDarkMode() {
         return darkMode;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -8,26 +8,27 @@
 
     <Button
         android:id="@+id/toLoginBtn"
-        android:layout_width="385dp"
-        android:layout_height="50dp"
+        android:layout_width="237dp"
+        android:layout_height="46dp"
+        android:backgroundTint="@color/colorSecondary"
         android:fontFamily="@font/capriola"
-        android:text="Get Started"
+        android:text="@string/get_started"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.423"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.888" />
+        app:layout_constraintVertical_bias="0.922" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/capriola"
-        android:text="It's FoodTime!"
+        android:text="@string/welcome_to_nfoodtime"
         android:textAlignment="center"
-        android:textColor="?colorPrimary"
+        android:textColor="@color/colorTertiary"
         android:textSize="48sp"
         android:textStyle="bold"
         android:typeface="normal"
@@ -40,12 +41,13 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="388dp"
-        android:layout_height="307dp"
+        android:layout_width="363dp"
+        android:layout_height="287dp"
         app:layout_constraintBottom_toTopOf="@+id/toLoginBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
         app:srcCompat="@drawable/kitchen1"
-        tools:layout_editor_absoluteX="11dp"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -54,9 +56,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:fontFamily="@font/capriola"
-        android:text="Helping people find their inner chef"
+        android:text="@string/helping_people_find_their_inner_chef"
         android:textAlignment="center"
-        android:textColor="?colorSecondary"
+        android:textColor="@color/colorSubtitle"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
