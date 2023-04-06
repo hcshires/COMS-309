@@ -6,4 +6,12 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="cook_book">Cook Book</string>
     <string name="pantry">Pantry</string>
+    <string name="create_an_account">Create an Account</string>
+    <string name="your_kitchen_awaits">Your Kitchen Awaits</string>
+    <string name="password">Password</string>
+    <string name="e_mail">E-mail</string>
+    <string name="login">Login</string>
+    <string name="get_started">Get Started</string>
+    <string name="welcome_to_nfoodtime">Welcome to\nFoodTime!</string>
+    <string name="helping_people_find_their_inner_chef">Helping people find their inner chef</string>
 </resources>

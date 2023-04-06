@@ -2,17 +2,20 @@
     <!-- Base application theme. -->
     <style name="Theme.FoodTime" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#98EFED</item>
-        <item name="colorPrimaryVariant">#B5F3F0</item>
-        <item name="colorOnPrimary">#676767</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#FBCA1B</item>
-        <item name="colorSecondaryVariant">#F1E7B0</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondary</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:titleTextColor">@color/gray</item>
+        <item name="android:actionMenuTextColor">@color/colorPrimary</item>
         <!-- Customize your theme here. -->
-        <item name="colorTertiary">#2ACCBB</item>
-        <item name="colorOnTertiary">#676767</item>
+        <item name="colorTertiary">@color/colorTertiary</item>
+        <item name="colorOnTertiaryContainer">@color/colorSubtitle</item>
+        <item name="colorOnTertiary">@color/white</item>
     </style>
 </resources>

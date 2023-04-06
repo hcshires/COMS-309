@@ -20,6 +20,7 @@ import java.util.Map;
 
 import edu.iastate.cs309.hb6.foodtime.R;
 import edu.iastate.cs309.hb6.foodtime.ui.pantry.PantryFragment;
+import edu.iastate.cs309.hb6.foodtime.utils.AppController;
 import edu.iastate.cs309.hb6.foodtime.utils.Const;
 
 public class RecipeActivity extends AppCompatActivity {
@@ -42,7 +43,6 @@ public class RecipeActivity extends AppCompatActivity {
     private HashMap<String,String> ingredientHash4 = new HashMap<>(6);
     private HashMap<String,String> ingredientHash5 = new HashMap<>(6);
     private HashMap<String,String> ingredientHash6 = new HashMap<>(6);
-
     private ArrayList<HashMap<String,String>> ingredientsHashList = new ArrayList<>(6);
     private HashMap<String, ArrayList<HashMap<String,String>>> meal = new HashMap<>(5);
 
@@ -66,8 +66,7 @@ public class RecipeActivity extends AppCompatActivity {
         submitRecipe = (Button) findViewById(R.id.submitRecipe);
         dayInput = (EditText) findViewById(R.id.dayInput);
 
-
-
+        /**/
         submitRecipe.setOnClickListener(view -> {
             /*Create Ingredients Hash Maps*/
             ingredientHash1.put("name", ingredient1.getText().toString());
@@ -91,15 +90,19 @@ public class RecipeActivity extends AppCompatActivity {
             String dayIn = dayInput.getText().toString();
 
             if(!ingredientsHashList.isEmpty()) {
-                //Recipe recipe = new Recipe(recipeTitl, ingredients);
+                Recipe recipe = new Recipe(recipeTitl, ingredientsHashList);
                 JsonObjectRequest addRecipeRequest = new JsonObjectRequest(Request.Method.PUT, Const.URL_MEALS_ADDMEAL + "?UID" + userID + "&day" + dayIn, jsonobj,
                         response ->{
                             Toast.makeText(view.getContext(), "Meal added", Toast.LENGTH_LONG).show();
+                            ingredient1.setText("");
+
                         }, error -> {
                             Toast.makeText(view.getContext(), "An Error Occurred.", Toast.LENGTH_LONG).show();
                 });
+                AppController.getInstance().addToRequestQueue(addRecipeRequest, tag_recipe_req);
+                Toast.makeText(view.getContext(), "Meal added", Toast.LENGTH_LONG).show();
+                Log.d(TAG, jsonobj.toString());
             }
-            Toast.makeText(view.getContext(), "Meal added", Toast.LENGTH_LONG).show();
         });
 
 

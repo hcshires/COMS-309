@@ -2,13 +2,14 @@ package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Recipe {
     private String title;
     private double cookTime;
     private int difficulty;
 
-    private ArrayList<String> ingredients;
+    private ArrayList<HashMap<String,String>> ingredients;
 
 //    public Recipe(String rTitle, double rCookTime, int rDifficulty) {
 //        rTitle = title;
@@ -16,7 +17,7 @@ public class Recipe {
 //        rDifficulty = difficulty;
 //    }
 
-    public Recipe(String rTitle, ArrayList<String> rIngredients) {
+    public Recipe(String rTitle, ArrayList<HashMap<String,String>> rIngredients) {
         rTitle = title;
         ingredients = new ArrayList<>(6);
         rIngredients = ingredients;
@@ -36,14 +37,14 @@ public class Recipe {
         return difficulty;
     }
 
-    public ArrayList<String> getIngredients() {
+    public ArrayList<HashMap<String,String>> getIngredients() {
         return ingredients;
     }
 
 
     public static ArrayList<Recipe> createRecipeList(int numRecipes){
-        ArrayList<Recipe> recipes = new ArrayList<Recipe>();
-        ArrayList<String> ingredients = new ArrayList<>(5);
+        ArrayList<Recipe> recipes = new ArrayList<Recipe>(numRecipes);
+        ArrayList<HashMap<String,String>> ingredients = new ArrayList<>(5);
 
         for (int i = 1; i <= numRecipes; i++) {
             recipes.add(new Recipe("textTest1",ingredients));
