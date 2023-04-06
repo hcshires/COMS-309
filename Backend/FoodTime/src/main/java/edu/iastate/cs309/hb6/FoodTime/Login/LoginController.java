@@ -90,7 +90,7 @@ public class LoginController {
     public ResponseEntity<Object> deleteUser(@RequestBody User user) {
         if (userDB.existsByUsername(user.getUsername()) && userDB.findByUsername(user.getUsername()).getPassword().equals(user.getPassword())) {
             User deletedUser = userDB.findByUsername(user.getUsername());
-            userDB.deleteById(user.getUsername());
+            userDB.deleteByUsername(user.getUsername());
             return new ResponseEntity<>(deletedUser, HttpStatus.OK);
         }
         else return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

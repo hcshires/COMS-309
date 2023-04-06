@@ -1,13 +1,8 @@
 package edu.iastate.cs309.hb6.FoodTime.Meal;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import edu.iastate.cs309.hb6.FoodTime.Login.User;
-import edu.iastate.cs309.hb6.FoodTime.Pantry.Ingredient;
 import org.hibernate.annotations.Type;
-import org.springframework.stereotype.Component;
-
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
 
