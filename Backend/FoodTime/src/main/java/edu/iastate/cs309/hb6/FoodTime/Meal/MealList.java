@@ -58,6 +58,11 @@ class Meal implements Serializable {
         Ingredient ing = findIngredient(ingredientName);
         //TODO Blake should implement a quantity metric in Ingredient
         //itemToUpdate.setQuantity(quantity);
+
+        
+
+
+
     }
 
     public void removeIngredient(String ingredientName) {

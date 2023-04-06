@@ -50,8 +50,12 @@ public class PantryController {
     @PutMapping(path = "/pantry/addToPantry")
     @ResponseBody
     @Transactional
-    public ResponseEntity<Object> addToPantry(@RequestParam String userID, @RequestParam String ingredientName) { //requires that json body contain a User object?
+    public ResponseEntity<Object> addToPantry(@RequestParam String userID, @RequestParam String ingredientName,@RequestParam int quantity, @RequestParam String quantityType) { //requires that json body contain a User object?
+
         Ingredient ingredient = new Ingredient(ingredientName);
+        ingredient.setQuantity(quantity);
+        ingredient.setQuantityType(quantityType);
+
         if (userRepository.existsById(userID)) { //check to make sure user exists
             Pantry userPantry = userRepository.findByUID(userID).getUserPantry();
             userPantry.addIngredient(ingredient);
