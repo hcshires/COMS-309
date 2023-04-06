@@ -11,12 +11,13 @@
         android:id="@+id/addRecipeButt"
         android:layout_width="401dp"
         android:layout_height="66dp"
+        android:backgroundTint="@color/colorTertiary"
         android:text="Add Recipe"
         app:layout_constraintBottom_toTopOf="@+id/swipe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.912" />
+        app:layout_constraintVertical_bias="0.89" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe"

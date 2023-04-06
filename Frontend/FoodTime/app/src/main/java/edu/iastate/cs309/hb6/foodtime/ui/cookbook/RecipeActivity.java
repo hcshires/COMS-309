@@ -2,13 +2,16 @@ package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.ArrayList;
 
 import edu.iastate.cs309.hb6.foodtime.R;
+import edu.iastate.cs309.hb6.foodtime.ui.pantry.PantryFragment;
 
 public class RecipeActivity extends AppCompatActivity {
 
@@ -21,12 +24,19 @@ public class RecipeActivity extends AppCompatActivity {
     private EditText ingredient6;
     private Button submitRecipe;
 
+    private final String TAG = RecipeActivity.class.getSimpleName();
+    private final String tag_recipe_req = "recipe_req";
+
     private ArrayList<String> ingredients = new ArrayList<>(6);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+
+        Intent recipeIntent = getIntent();
+        String userID = recipeIntent.getStringExtra("userID");
+        Log.d(TAG, userID);
 
         /*Widgets*/
         recipeTitle = (EditText) findViewById(R.id.recipeTitleInput);

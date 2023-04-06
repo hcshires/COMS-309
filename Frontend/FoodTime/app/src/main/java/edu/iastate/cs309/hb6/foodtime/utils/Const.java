@@ -20,4 +20,7 @@ public class Const {
     public static final String URL_PANTRY_GETPANTRYITEMS = URL_SERVER + "/pantry/getUserPantryString";
     public static final String URL_PANTRY_ADDITEM = URL_SERVER + "/pantry/addToPantry";
     public static final String URL_PANTRY_REMOVEITEM = URL_SERVER + "/pantry/removeFromPantry";
+
+    /*Meals*/
+    public static final String URL_MEALS_ADDMEAL =URL_SERVER + "/meals/meal";
 }

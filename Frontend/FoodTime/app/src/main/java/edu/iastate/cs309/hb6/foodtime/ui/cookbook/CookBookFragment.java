@@ -36,6 +36,11 @@ public class CookBookFragment extends Fragment {
         /* Widgets */
         RecyclerView rvRecipes = (RecyclerView) root.findViewById(R.id.recyclerList);
         Button addRecipe = (Button) root.findViewById(R.id.addRecipeButt);
+
+        /* Store user ID for requests */
+        Bundle userData = requireActivity().getIntent().getExtras();
+        String userID = userData.getString("userID").replaceAll("\"", "");
+
         /* Initialize Tests */
         recipes = Recipe.createRecipeList(5);
         /* Adapter */
@@ -48,6 +53,7 @@ public class CookBookFragment extends Fragment {
         /*Go to AddRecipe when button clicked*/
         addRecipe.setOnClickListener(view -> {
             Intent cookbookIntent = new Intent(root.getContext(), RecipeActivity.class);
+            cookbookIntent.putExtra("userID", userID);
             startActivity(cookbookIntent);
         });
 
