@@ -15,6 +15,13 @@ public class Const {
     // TODO: public static final String URL_DELETE_USER = URL_SERVER + "/users/delete";
     // TODO: public static final String URL_RESET_PWD = URL_SERVER + "/users/reset-password";
 
+    /* Meals */
+    public static final String URL_MEALS_ADD = URL_SERVER + "/meals/add";
+    public static final String URL_MEALS_REMOVE = URL_SERVER + "/meals/remove";
+    public static final String URL_MEALS_UPDATE = URL_SERVER + "/meals/update";
+    public static final String URL_MEALS_GET_BYDAY = URL_SERVER + "/meals/get/by-day";
+    public static final String URL_MEALS_GET_ALL = URL_SERVER + "/meals/get/all";
+
     /* Pantry */
     // NOT USED // public static final String URL_PANTRY_GETPANTRY = URL_SERVER + "/pantry/getUserPantry";
     public static final String URL_PANTRY_GETPANTRYITEMS = URL_SERVER + "/pantry/getUserPantryString";
