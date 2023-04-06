@@ -1,12 +1,16 @@
 package edu.iastate.cs309.hb6.FoodTime.Login;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import javax.persistence.*;
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import edu.iastate.cs309.hb6.FoodTime.Meal.Meal;
 import edu.iastate.cs309.hb6.FoodTime.Meal.MealList;
+import edu.iastate.cs309.hb6.FoodTime.Meal.Recipe;
 import edu.iastate.cs309.hb6.FoodTime.Pantry.*;
 import edu.iastate.cs309.hb6.FoodTime.Preferences.UserPreferences;
 
@@ -35,8 +39,9 @@ public class User {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private MealList userMealsWeekly;
 
-    @OneToMany(mappedBy = "meal_user", cascade = CascadeType.ALL)
-    private Map<String, Meal> userRecipes;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "recipe_book_uid")
+    private Map<String, Recipe> userRecipes;
 
     public User () {
 
@@ -97,11 +102,11 @@ public class User {
         return userMealsWeekly;
     }
 
-    public Map<String, Meal> getUserRecipes() {
+    public Map<String, Recipe> getUserRecipes() {
         return userRecipes;
     }
 
-    public void setUserRecipes(Map<String, Meal> userRecipes) {
+    public void setUserRecipes(Map<String, Recipe> userRecipes) {
         this.userRecipes = userRecipes;
     }
 }

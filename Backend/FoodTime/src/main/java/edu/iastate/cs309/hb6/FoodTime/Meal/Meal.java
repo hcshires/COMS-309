@@ -1,18 +1,24 @@
 package edu.iastate.cs309.hb6.FoodTime.Meal;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import edu.iastate.cs309.hb6.FoodTime.Login.User;
 import edu.iastate.cs309.hb6.FoodTime.Pantry.Ingredient;
 import org.hibernate.annotations.Type;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
+
 
 //TODO use this class for weekly meals (no user) then extend to Recipe class
+@Entity
+@Table(name = "DISREGARD_ME_IGNORE")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Meal implements Serializable {
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
     private String name;
 
@@ -62,7 +68,6 @@ public class Meal implements Serializable {
     }
 
     public void removeIngredient(String ingredientName) {
-        necessaryIngredients.remove(ingredientName);
         necessaryIngredients.remove(findIngredientIndex(ingredientName));
     }
 

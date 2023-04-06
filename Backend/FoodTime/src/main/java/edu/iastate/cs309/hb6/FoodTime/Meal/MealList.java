@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 @Entity
-@Table(name = "meal_list")
+@Table(name = "weekly_meal_list")
 public class MealList {
 
     @Id

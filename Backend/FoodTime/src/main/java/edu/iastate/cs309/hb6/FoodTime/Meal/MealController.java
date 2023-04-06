@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 public class MealController {
@@ -20,9 +19,12 @@ public class MealController {
     @Transactional
     public ResponseEntity<Object> addMeal(@RequestParam String UID, @RequestParam String day, @RequestBody Meal meal) {
         HashMap<String, Meal> mealsForDay = getUserMealsForDay(UID, day);
-        Map<String, Meal> recipes = userDB.findByUID(UID).getUserRecipes();
-        //Also add the meal to the recipe book if it doesn't already exist
         mealsForDay.put(meal.getName(), meal);
+
+        //Also add the meal to the recipe book if it doesn't already exist
+        Map<String, Recipe> recipes = userDB.findByUID(UID).getUserRecipes();
+        Recipe recipeToAdd = new Recipe (meal);
+        recipes.put(recipeToAdd.getName(), recipeToAdd);
 
         return new ResponseEntity<>(mealsForDay + day.toLowerCase(), HttpStatus.OK);
     }
@@ -75,21 +77,33 @@ public class MealController {
 
     @PutMapping("recipes/add")
     @Transactional
-    public ResponseEntity<Object> addRecipe(@RequestParam String UID, @RequestBody Meal recipeToAdd) {
-        Map<String, Meal> userRecipes = userDB.findByUID(UID).getUserRecipes();
-        if (!userRecipes.containsKey(recipeToAdd.getName())) {
-            userRecipes.put(recipeToAdd.getName(), recipeToAdd);
+    public ResponseEntity<Object> addRecipe(@RequestParam String UID, @RequestBody Meal mealToAdd) {
+        Map<String, Recipe> userRecipes = userDB.findByUID(UID).getUserRecipes();
+        if (!userRecipes.containsKey(mealToAdd.getName())) {
+            //We create a new Recipe with user information here so that frontend does not
+            //have to worry about passing us a whole user object
+            userRecipes.put(mealToAdd.getName(), new Recipe(mealToAdd));
             return new ResponseEntity<>(userRecipes, HttpStatus.OK);
         }
         else {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(String.format("User %s already has %s in recipe book", UID, mealToAdd.getName()), HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("recipes/get")
+    public ResponseEntity<Object> getRecipe(@RequestParam String UID, @RequestParam String mealName) {
+        if (userDB.findByUID(UID).getUserRecipes().containsKey(mealName)) {
+            return new ResponseEntity<>(userDB.findByUID(UID).getUserRecipes().get(mealName), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(String.format("Recipe for %s not found in database for UID %s", mealName, UID), HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("recipes/remove")
     @Transactional
     public ResponseEntity<Object> removeRecipe(@RequestParam String UID, @RequestParam String recipeName) {
-        Map<String, Meal> userRecipes = userDB.findByUID(UID).getUserRecipes();
+        Map<String, Recipe> userRecipes = userDB.findByUID(UID).getUserRecipes();
         if (userRecipes.containsKey(recipeName)) {
             userRecipes.remove(recipeName);
             return new ResponseEntity<>(null, HttpStatus.OK);
