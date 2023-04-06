@@ -81,12 +81,7 @@ public class Pantry {
     }
 
     public int getQuantity(String name){
-
-        //TODO TESTING FOR NULL POINTER
-        String testForNull = getIngredientByName(name).getName();
-
         return getIngredientByName(name).getQuantity();
-
     }
 
     public void setQuantity(String name, int num){

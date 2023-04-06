@@ -13,9 +13,6 @@ public class Ingredient implements Serializable { //no identifier for ingredient
 
     private String name;
 
-    //not sure yet if I want to do something with this
-    //private IngredientType ingredientType;
-
     private int quantity; //holds units the ingredient is measured in
 
     private String quantityType; //what unit ingredient is measured in. not going to do anything fancy with this, would cause a lot of extra pain for front end
@@ -24,7 +21,6 @@ public class Ingredient implements Serializable { //no identifier for ingredient
 
     public Ingredient(String name){
         this.name = name;
-        //this.ingredientType = IngredientType.NONE; //not using so I'll keep it out so it doesn't clutter database
         this.quantity = 0;
         this.quantityType = "typeless";
     }
