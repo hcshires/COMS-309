@@ -16,14 +16,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import edu.iastate.cs309.hb6.foodtime.R;
-import edu.iastate.cs309.hb6.foodtime.ui.pantry.PantryFragment;
 import edu.iastate.cs309.hb6.foodtime.utils.AppController;
 import edu.iastate.cs309.hb6.foodtime.utils.Const;
 
-public class RecipeActivity extends AppCompatActivity {
+public class AddRecipeActivity extends AppCompatActivity {
 
     private EditText recipeTitle;
     private EditText ingredient1;
@@ -35,7 +33,7 @@ public class RecipeActivity extends AppCompatActivity {
     private EditText dayInput;
     private Button submitRecipe;
 
-    private final String TAG = RecipeActivity.class.getSimpleName();
+    private final String TAG = AddRecipeActivity.class.getSimpleName();
     private final String tag_recipe_req = "recipe_req";
     private HashMap<String,String> ingredientHash1 = new HashMap<>(6);
     private HashMap<String,String> ingredientHash2 = new HashMap<>(6);
@@ -44,7 +42,8 @@ public class RecipeActivity extends AppCompatActivity {
     private HashMap<String,String> ingredientHash5 = new HashMap<>(6);
     private HashMap<String,String> ingredientHash6 = new HashMap<>(6);
     private ArrayList<HashMap<String,String>> ingredientsHashList = new ArrayList<>(6);
-    private HashMap<String, ArrayList<HashMap<String,String>>> meal = new HashMap<>(5);
+    private HashMap<String, ArrayList<HashMap<String,String>>> mealIngredients = new HashMap<>(5);
+    private HashMap<String, HashMap<String, ArrayList<HashMap<String,String>>>> meal = new HashMap<>(3);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +81,15 @@ public class RecipeActivity extends AppCompatActivity {
             ingredientHash6.put("name", ingredient6.getText().toString());
             ingredientsHashList.add(ingredientHash6);
 
-            meal.put("ingredients", ingredientsHashList);
-            JSONObject jsonobj = new JSONObject(meal);
-
-            /*Turn recipe title to string*/
+            /*Turn recipe title and day to string*/
             String recipeTitl = recipeTitle.getText().toString();
             String dayIn = dayInput.getText().toString();
+
+            /*Make JSon Obj*/
+            mealIngredients.put("ingredients", ingredientsHashList);
+            meal.put(recipeTitl, mealIngredients);
+            JSONObject jsonobj = new JSONObject(meal);
+
 
             if(!ingredientsHashList.isEmpty()) {
                 Recipe recipe = new Recipe(recipeTitl, ingredientsHashList);

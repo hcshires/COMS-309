@@ -16,13 +16,16 @@
         android:theme="@style/Theme.FoodTime"
         tools:targetApi="31">
         <activity
+            android:name=".ui.cookbook.ViewRecipeActivity"
+            android:exported="false" />
+        <activity
             android:name=".DashboardActivity"
             android:exported="false"
             android:label="@string/title_dashboard" />
         <activity
-            android:name=".ui.cookbook.RecipeActivity"
+            android:name=".ui.cookbook.AddRecipeActivity"
             android:exported="false"
-            android:label="Recipe"/>
+            android:label="Recipe" />
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
