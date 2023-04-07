@@ -8,6 +8,25 @@ public class Const {
     private static final String URL_SERVER = "http://coms-309-011.class.las.iastate.edu:8080";
     // URL_SERVER = "http://localhost:8080"; // for local testing
 
+    /* Meals */
+    public static final String URL_MEALS_ADD = URL_SERVER + "/meals/add";
+    public static final String URL_MEALS_REMOVE = URL_SERVER + "/meals/remove";
+    public static final String URL_MEALS_UPDATE = URL_SERVER + "/meals/update";
+    public static final String URL_MEALS_GET_BYDAY = URL_SERVER + "/meals/get/by-day";
+    public static final String URL_MEALS_GET_ALL = URL_SERVER + "/meals/get/all";
+
+    /* Pantry */
+    // NOT USED // public static final String URL_PANTRY_GETPANTRY = URL_SERVER + "/pantry/getUserPantry";
+    public static final String URL_PANTRY_GETPANTRYITEMS = URL_SERVER + "/pantry/getUserPantryString";
+    public static final String URL_PANTRY_ADDITEM = URL_SERVER + "/pantry/addToPantry";
+    public static final String URL_PANTRY_REMOVEITEM = URL_SERVER + "/pantry/removeFromPantry";
+
+    /* Recipes */
+    public static final String URL_RECIPES_GETRECIPE = URL_SERVER + "/recipes/get";
+    public static final String URL_RECIPES_GETLABELS = URL_SERVER + "/recipes/get/labels";
+    public static final String URL_RECIPES_ADDRECIPE = URL_SERVER + "/recipes/add";
+    public static final String URL_RECIPES_REMOVERECIPE = URL_SERVER + "/recipes/remove";
+
     /** API endpoints **/
     /* User Auth */
     public static final String URL_CREATE_USER = URL_SERVER + "/users/create";
@@ -15,9 +34,5 @@ public class Const {
     // TODO: public static final String URL_DELETE_USER = URL_SERVER + "/users/delete";
     // TODO: public static final String URL_RESET_PWD = URL_SERVER + "/users/reset-password";
 
-    /* Pantry */
-    // NOT USED // public static final String URL_PANTRY_GETPANTRY = URL_SERVER + "/pantry/getUserPantry";
-    public static final String URL_PANTRY_GETPANTRYITEMS = URL_SERVER + "/pantry/getUserPantryString";
-    public static final String URL_PANTRY_ADDITEM = URL_SERVER + "/pantry/addToPantry";
-    public static final String URL_PANTRY_REMOVEITEM = URL_SERVER + "/pantry/removeFromPantry";
+
 }
