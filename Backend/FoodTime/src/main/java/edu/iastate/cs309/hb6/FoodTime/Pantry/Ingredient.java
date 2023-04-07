@@ -25,6 +25,12 @@ public class Ingredient implements Serializable { //no identifier for ingredient
         this.quantityType = "typeless";
     }
 
+    public Ingredient(String name, int quantity, String unitsType){
+        this.name = name;
+        this.quantity = quantity;
+        this.quantityType = unitsType;
+    }
+
     public Ingredient(){}
 
     //basic get/set methods
