@@ -73,7 +73,7 @@ public class MealController {
         return new ResponseEntity<>(userDB.findByUID(UID).getUserMeals(), HttpStatus.OK);
     }
 
-    @GetMapping("meals/enoughForMeal") //behold der UberController
+    @GetMapping("meals/enoughForMeal") //der UberController
     public ResponseEntity<Object> pantryHasIngredientsForMeal(@RequestParam String userID, @RequestBody Meal meal){
 
         if(userDB.existsById(userID)){ //ensure user exists cause you can never be too careful
