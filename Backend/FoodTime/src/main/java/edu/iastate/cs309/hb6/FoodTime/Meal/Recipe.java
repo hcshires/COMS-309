@@ -9,9 +9,9 @@ import java.util.ArrayList;
 @Table(name = "recipe_book")
 public class Recipe extends Meal {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+//    @Id
+//    @GeneratedValue
+//    private Long id;
 
     public Recipe() {
 
