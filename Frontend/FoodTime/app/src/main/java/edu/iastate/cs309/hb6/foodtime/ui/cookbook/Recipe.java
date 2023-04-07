@@ -45,13 +45,14 @@ public class Recipe {
     }
 
 
-    public static ArrayList<Recipe> createRecipeList(int numRecipes){
-        ArrayList<Recipe> recipes = new ArrayList<Recipe>(numRecipes);
+    public static ArrayList<String> createRecipeList(ArrayList<String> recipes){
+        ArrayList<String> cookbook = new ArrayList<>();
+        cookbook = recipes;
         ArrayList<HashMap<String, Object>> ingredients = new ArrayList<>(5);
-        for (int i = 1; i <= numRecipes; i++) {
-            recipes.add(new Recipe("title",ingredients));
+        int i;
+        for (i = 0; i < recipes.size(); i++) {
+            recipes.set(i, "Text Test");
         }
-
-        return recipes;
+        return cookbook;
     }
 }

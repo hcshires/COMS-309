@@ -61,7 +61,7 @@ public class CookBookFragment extends Fragment {
 
         /* Initialize Tests */
         recipes = new ArrayList<>();
-        getUserRecipes(userID);
+        Recipe.createRecipeList(getUserRecipes(userID));
         /* Adapter */
         adapter = new CardAdapter(root.getContext(), recipes);
         /* Attach adapter to recycler view */
@@ -76,19 +76,19 @@ public class CookBookFragment extends Fragment {
             startActivity(cookbookIntent);
         });
 
-
         return root;
-
     }
 
-    private void getUserRecipes(String userID) {
+    private ArrayList<String> getUserRecipes(String userID) {
         JsonArrayRequest getUserRecipes = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_GETLABELS + "?UID=" + userID, null, response -> {
             recipes.addAll(new Gson().fromJson(String.valueOf(response), ArrayList.class));
+//            Recipe.createRecipeList(response.length());
             Log.d("TAG", recipes.toString());
         }, error -> {
 //            Toast.makeText()
         });
         AppController.getInstance().addToRequestQueue(getUserRecipes, tag_cookbook_req);
+        return recipes;
     }
 
     @Override

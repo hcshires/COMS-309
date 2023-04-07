@@ -35,8 +35,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         public View view;
         public Context context;
         public String currRecipe;
-
-
         public CardViewHolder(View itemView) {
             super(itemView);
             view = itemView;
@@ -84,10 +82,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public void onBindViewHolder(CardViewHolder holder, int position) {
 
         TextView tt2 = holder.text2;
-        String recipe = recipes.get(position);
-        holder.currRecipe = recipes.get(position);
-        tt2.setText(recipe);
-        Log.d("RECIPE", recipe.toString());
+        tt2.setText(recipes.get(position));
+        Log.d("RECIPE", recipes.toString());
 
     }
     /**
