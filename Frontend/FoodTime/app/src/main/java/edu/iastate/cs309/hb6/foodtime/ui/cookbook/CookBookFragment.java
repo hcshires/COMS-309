@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,12 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.iastate.cs309.hb6.foodtime.R;
 import edu.iastate.cs309.hb6.foodtime.databinding.FragmentCookbookBinding;
@@ -31,17 +30,12 @@ import edu.iastate.cs309.hb6.foodtime.utils.Const;
 
 public class CookBookFragment extends Fragment {
 
+    private final String tag_cookbook_req = "cookbook_req";
     private FragmentCookbookBinding binding;
-
     private ArrayList<String> recipes;
-
-
     private RecyclerView rvRecipes;
     private Button addRecipe;
     private CardAdapter adapter;
-
-    private final String tag_cookbook_req = "cookbook_req";
-
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -81,11 +75,13 @@ public class CookBookFragment extends Fragment {
 
     private ArrayList<String> getUserRecipes(String userID) {
         JsonArrayRequest getUserRecipes = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_GETLABELS + "?UID=" + userID, null, response -> {
-            recipes.addAll(new Gson().fromJson(String.valueOf(response), ArrayList.class));
-//            Recipe.createRecipeList(response.length());
+            try {
+                recipes.addAll(new ObjectMapper().readValue(String.valueOf(response), ArrayList.class));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
             Log.d("TAG", recipes.toString());
         }, error -> {
-//            Toast.makeText()
         });
         AppController.getInstance().addToRequestQueue(getUserRecipes, tag_cookbook_req);
         return recipes;
