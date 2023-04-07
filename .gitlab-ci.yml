@@ -73,4 +73,7 @@ maven-deploy:
     - sudo mv target/*.jar /target/FoodTime.jar
     - sudo systemctl stop FoodTime
     - sudo systemctl start FoodTime
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
 
