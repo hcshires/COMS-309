@@ -8,6 +8,21 @@
     android:visibility="visible"
     tools:context=".ui.pantry.PantryFragment">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/baseline_add_24"
+        app:backgroundTint="@color/colorTertiary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.915"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.869" />
+
     <ListView
         android:id="@+id/pantryItems"
         android:layout_width="415dp"
@@ -32,18 +47,28 @@
 
         <EditText
             android:id="@+id/editTextAddPantry"
-            android:layout_width="213dp"
+            android:layout_width="159dp"
             android:layout_height="49dp"
             android:ems="10"
             android:hint="(i.e. Butter)"
             android:inputType="textPersonName" />
 
-        <Button
-            android:id="@+id/addButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorTertiary"
-            android:text="Add Ingredient" />
+        <EditText
+            android:id="@+id/quantityTxt"
+            android:layout_width="35dp"
+            android:layout_height="49dp"
+            android:ems="10"
+            android:hint="1"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/unitTypesTxt"
+            android:layout_width="97dp"
+            android:layout_height="49dp"
+            android:ems="10"
+            android:hint="Can"
+            android:inputType="textPersonName" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

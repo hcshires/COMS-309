@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
 
@@ -41,7 +42,7 @@ public class PantryFragment extends Fragment {
     private static ArrayList<String> ingredientsList;
     private ArrayAdapter<String> pantryAdapter;
     private ListView pantry;
-    private EditText input;
+    private EditText input, quantityInput, unitInput;
     private FragmentPantryBinding binding;
     private final String TAG = PantryFragment.class.getSimpleName();
     private final String tag_pantry_req = "pantry_req";
@@ -66,9 +67,11 @@ public class PantryFragment extends Fragment {
         View root = binding.getRoot();
 
         /* Widgets */
-        Button addButton = (Button) root.findViewById(R.id.addButton);
+        FloatingActionButton addButton = root.findViewById(R.id.addButton);
         pantry = (ListView) root.findViewById(R.id.pantryItems);
         input = root.findViewById(R.id.editTextAddPantry);
+        quantityInput = root.findViewById(R.id.quantityTxt);
+        unitInput = root.findViewById(R.id.unitTypesTxt);
 
         /* Store user ID for requests */
         Bundle userData = requireActivity().getIntent().getExtras();
@@ -85,9 +88,11 @@ public class PantryFragment extends Fragment {
         /* Add an item typed in the text box */
         addButton.setOnClickListener(view -> {
             String ingredient = input.getText().toString();
+            String unitType = unitInput.getText().toString();
+            int quantity = Integer.parseInt(quantityInput.getText().toString());
             if (!ingredient.isEmpty()) {
                 try {
-                    addItem(view, userID, ingredient);
+                    addItem(view, userID, ingredient, quantity, unitType);
                     input.setText("");
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -137,13 +142,16 @@ public class PantryFragment extends Fragment {
      * @param view       - the current view
      * @param userID     - the UID of the current user pertaining to their unique pantry
      * @param ingredient - the name of a given ingredient the user wants to add
+     * @param quantity   - the quantity of the same item in the pantry
+     * @param unitsType  - the type of amount (can, cup, tablespoon, etc.)
      */
-    private void addItem(View view, String userID, String ingredient) throws JSONException {
+    private void addItem(View view, String userID, String ingredient, int quantity, String unitsType) throws JSONException {
         /* If the user inputted text, send it */
         if (!ingredient.isEmpty()) {
-            JsonArrayRequest addToPantryRequest = new JsonArrayRequest(Request.Method.PUT, Const.URL_PANTRY_ADDITEM + "?userID=" + userID + "&ingredientName=" + ingredient, null,
+            JsonArrayRequest addToPantryRequest = new JsonArrayRequest(Request.Method.PUT,
+                    Const.URL_PANTRY_ADDITEM + "?userID=" + userID + "&ingredientName=" + ingredient + "&quantity=" + quantity + "&unitsType=" + unitsType, null,
                     response -> {
-                        ingredientsList.add(ingredient);
+                        ingredientsList.add(ingredient + " - " + quantity + " - " + unitsType);
                         pantryAdapter.notifyDataSetChanged();
                     }, error -> {
                 if (error.networkResponse != null) {

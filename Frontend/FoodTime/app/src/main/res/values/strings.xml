@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">FoodTime</string>
-    <string name="title_home">Home</string>
-    <string name="title_pantry">Pantry</string>
-    <string name="title_cookbook">CookBook</string>
+    <string name="title_home">Meal Planner</string>
+    <string name="title_pantry">My Pantry</string>
+    <string name="title_cookbook">Cook Book</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="cook_book">Cook Book</string>
     <string name="pantry">Pantry</string>
@@ -14,4 +14,5 @@
     <string name="get_started">Get Started</string>
     <string name="welcome_to_nfoodtime">Welcome to\nFoodTime!</string>
     <string name="helping_people_find_their_inner_chef">Helping people find their inner chef</string>
+    <string name="add_meals_to_calendar">Add meals to calendar</string>
 </resources>

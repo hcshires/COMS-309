@@ -1,6 +1,7 @@
 package edu.iastate.cs309.hb6.FoodTime.Login;
 
 
+import edu.iastate.cs309.hb6.FoodTime.Meal.Meal;
 import edu.iastate.cs309.hb6.FoodTime.Meal.MealList;
 import edu.iastate.cs309.hb6.FoodTime.Meal.MealRepository;
 import edu.iastate.cs309.hb6.FoodTime.Pantry.Pantry;
@@ -12,7 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import edu.iastate.cs309.hb6.FoodTime.Pantry.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class LoginController {
@@ -31,6 +35,7 @@ public class LoginController {
 
     @PostMapping("/users/create")
     @ResponseBody
+    @Transactional
     //We can return an HTTP response as well as a UID after creating the user
     public ResponseEntity<Object> createUser(@RequestBody User user) {
         if (!userDB.existsByUsername(user.getUsername())) {
@@ -43,12 +48,20 @@ public class LoginController {
             //Assign them a pantry entry
             Pantry userPantry = new Pantry (user.getUID().toString());
 
-            //Create their list of meals
+            //Create their weekly list of meals
             MealList userMeals = new MealList(user.getUID());
+
+            //User's recipe book
+            Map<String, Meal> userRecipeBook = new HashMap<>();
+
+            //List of meal labels, only for frontend, backend do not use these
+            ArrayList<String> userRecipeLabels = new ArrayList<>();
 
             user.setUserPreferences(prefs);
             user.setUserPantry(userPantry);
             user.setUserMeals(userMeals);
+            user.setRecipeLabels(userRecipeLabels);
+            //User recipes is set in the User constructor
             userPantry.setUser(user);
             prefs.setUser(user);
             userMeals.setUser(user);

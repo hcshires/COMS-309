@@ -1,16 +1,19 @@
 package edu.iastate.cs309.hb6.FoodTime.Login;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import javax.persistence.*;
-import java.util.UUID;
+import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import edu.iastate.cs309.hb6.FoodTime.Meal.Meal;
 import edu.iastate.cs309.hb6.FoodTime.Meal.MealList;
+import edu.iastate.cs309.hb6.FoodTime.Meal.Recipe;
 import edu.iastate.cs309.hb6.FoodTime.Pantry.*;
 import edu.iastate.cs309.hb6.FoodTime.Preferences.UserPreferences;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.annotations.Type;
 
 
 @Entity
@@ -35,7 +38,15 @@ public class User {
     private Pantry userPantry;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private MealList userMeals;
+    private MealList userMealsWeekly;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "recipe_book_uid")
+    private Map<String, Recipe> userRecipes;
+
+    @Column(name = "recipe_labels")
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
+    private ArrayList<String> recipeLabels;
 
     public User () {
 
@@ -45,6 +56,7 @@ public class User {
     public User (String username, String password) {
         this.username = username;
         this.password = password;
+        userRecipes = new HashMap<>();
     }
 
     public void assignUID() {
@@ -80,7 +92,7 @@ public class User {
     }
 
     public void setUserMeals(MealList userMeals) {
-        this.userMeals = userMeals;
+        this.userMealsWeekly = userMeals;
     }
 
     public UserPreferences getUserPreferences() {
@@ -92,6 +104,22 @@ public class User {
     }
 
     public MealList getUserMeals() {
-        return userMeals;
+        return userMealsWeekly;
+    }
+
+    public Map<String, Recipe> getUserRecipes() {
+        return userRecipes;
+    }
+
+    public void setUserRecipes(Map<String, Recipe> userRecipes) {
+        this.userRecipes = userRecipes;
+    }
+
+    public ArrayList<String> getRecipeLabels() {
+        return recipeLabels;
+    }
+
+    public void setRecipeLabels(ArrayList<String> recipeLabels) {
+        this.recipeLabels = recipeLabels;
     }
 }

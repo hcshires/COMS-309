@@ -1,7 +1,7 @@
 package edu.iastate.cs309.hb6.FoodTime.Pantry;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import edu.iastate.cs309.hb6.FoodTime.Login.User;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ public class Pantry {
     private User user;
 
     @Column
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
     private ArrayList<Ingredient> ingredientList;
     public Pantry(){
 
@@ -48,7 +49,8 @@ public class Pantry {
     public Ingredient getIngredientByName(String name){
 
     for(int i = 0; i< ingredientList.size(); i++){
-        if(ingredientList.get(i).getName().toLowerCase() == name.toLowerCase()){
+        
+        if(ingredientList.get(i).getName().toLowerCase().equals(name.toLowerCase() ) ){
             return ingredientList.get(i);
             }
         }
@@ -78,6 +80,41 @@ public class Pantry {
         ingredientList.add(new Ingredient(name));
     }
 
+    public int getQuantity(String name){
+        return getIngredientByName(name).getQuantity();
+    }
+
+    public void setQuantity(String name, int num){
+        ingredientList.get(findIngredientIndex(name)).setQuantity(num);
+    }
+
+    public String getQuantityType(String name){
+        return ingredientList.get(findIngredientIndex(name)).getQuantityType();
+    }
+
+    public void setQuantityType(String name, String quantityType){
+        ingredientList.get(findIngredientIndex(name)).setQuantityType(quantityType);
+    }
+
+    //utility. might make private
+    public boolean hasIngredient(String name){
+        for(int i = 0; i< ingredientList.size(); i++){
+            if(ingredientList.get(i).getName().equals(name)){ //to prevent any problems
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //utility. might make private
+    public int findIngredientIndex(String name) {
+        for (int i = 0; i < ingredientList.size(); i++) {
+            if (ingredientList.get(i).getName().equals(name)) { //to prevent any problems
+                return i;
+            }
+        }
+        return -1; //will throw error down the line
+    }
 
     public void setUser(User user) {
         this.user = user;
