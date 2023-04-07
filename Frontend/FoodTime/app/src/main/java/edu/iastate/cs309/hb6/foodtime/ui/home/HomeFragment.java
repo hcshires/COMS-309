@@ -1,11 +1,6 @@
 package edu.iastate.cs309.hb6.foodtime.ui.home;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,12 +22,14 @@ import com.android.volley.Request;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
+import java.io.DataInput;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -56,6 +52,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private HashMap<String, HashMap<String, Object>> meals;
     private ArrayList<String> recipes;
+    private HashMap recipe;
     private ArrayList<String> dayMealsLabels;
     private ArrayAdapter<String> dayMealsAdapter;
     private final String TAG = HomeFragment.class.getSimpleName();
@@ -90,6 +87,7 @@ public class HomeFragment extends Fragment {
         /* Meals */
         meals = new HashMap<>();
         recipes = new ArrayList<>();
+        recipe = new HashMap<>();
 
         getRecipeLabels(userID);
 
@@ -158,8 +156,6 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     adapter.notifyDataSetChanged();
-                    Log.d(TAG, recipeSelect.getSelectedItem().toString());
-
                 }
 
                 @Override
@@ -176,7 +172,10 @@ public class HomeFragment extends Fragment {
                     })
                     .setPositiveButton("Add", (dialog, id) -> {
                         // Get the recipe corresponding to the name in the cookbook and add it as a meal in the calendar
-                        addMeal(userID, toDayString(calUtil.get(Calendar.DAY_OF_WEEK)), getRecipeFromBook(userID, recipeSelect.getSelectedItem().toString()));
+                        String day = toDayString(calUtil.get(Calendar.DAY_OF_WEEK));
+                        String recipeName = recipeSelect.getSelectedItem().toString();
+                        getRecipeFromBook(userID, recipeName);
+                        addMeal(userID, day, recipe);
                     })
                     .setNegativeButton("Cancel", (dialogInterface, i) -> {
                         dialogInterface.dismiss();
@@ -202,6 +201,7 @@ public class HomeFragment extends Fragment {
 
     /**
      * Convert CalendarUtil day of week integer to English day string
+     *
      * @param dayOfWeek - day of week represented as an int
      * @return day of week represented as a string in English
      */
@@ -255,25 +255,30 @@ public class HomeFragment extends Fragment {
 
     /**
      * Get a recipe from the user's cookbook based on the name
+     *
      * @param userID - the user
      * @param mealName - the name of the recipe to get
      */
-    private HashMap<String, Object> getRecipeFromBook(String userID, String mealName) {
-        HashMap<String, Object> recipe = new HashMap<>();
+    private void getRecipeFromBook(String userID, String mealName) {
         JsonObjectRequest getRecipeReq = new JsonObjectRequest(Request.Method.GET, Const.URL_RECIPES_GETRECIPE + "?UID=" + userID + "&mealName=" + mealName, null, response -> {
-            recipe.putAll(new Gson().fromJson(String.valueOf(response), HashMap.class));
+            try {
+                recipe.putAll(new ObjectMapper().readValue(String.valueOf(response), HashMap.class));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }, error -> {
             VolleyLog.d(TAG, error);
         });
 
         AppController.getInstance().addToRequestQueue(getRecipeReq, tag_home_req);
 
-        return recipe;
+        return;
     }
 
     /**
+     * Get the labels of each recipe in the user's cookbook to populate the add item options
      *
-     * @param userID
+     * @param userID - the ID of the current user
      */
     private void getRecipeLabels(String userID) {
         JsonArrayRequest recipeLabelsReq = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_GETLABELS + "?UID=" + userID, null, response -> {
@@ -286,9 +291,10 @@ public class HomeFragment extends Fragment {
     }
 
     /**
+     * Get the list of meals planned for a given day
      *
-     * @param userID
-     * @param day
+     * @param userID - the ID of the current user
+     * @param day - the day to get meals for
      */
     private void getMealsByDay(String userID, String day) {
         JsonObjectRequest getMealByDayReq = new JsonObjectRequest(Request.Method.GET, Const.URL_MEALS_GET_BYDAY + "?UID=" + userID + "&day=" + day, null, response -> {
@@ -312,7 +318,7 @@ public class HomeFragment extends Fragment {
         JsonObjectRequest addMealReq = new JsonObjectRequest(Request.Method.PUT, Const.URL_MEALS_ADD + "?UID=" + userID + "&day=" + day, new JSONObject(meal), response -> {
             Toast.makeText(getContext(), "Meal added", Toast.LENGTH_SHORT).show();
         }, error -> {
-            Toast.makeText(getContext(), "Failed to add meal", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getContext(), "Failed to add meal", Toast.LENGTH_SHORT).show();
         });
 
         AppController.getInstance().addToRequestQueue(addMealReq, tag_home_req);
