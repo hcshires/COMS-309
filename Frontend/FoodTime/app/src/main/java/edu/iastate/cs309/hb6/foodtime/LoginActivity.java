@@ -98,11 +98,11 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(loginIntent);
         }, error -> {
             Log.d(TAG, "Error: " + error.getMessage());
-//            if (error.networkResponse.statusCode == 404) {
-//                Toast.makeText(this, "Email and/or password is incorrect. Please try again.", Toast.LENGTH_SHORT).show();
-//            } else {
-//                Toast.makeText(this, "An unexpected error occurred. Please try again.", Toast.LENGTH_SHORT).show();
-//            }
+            if (error.networkResponse.statusCode == 404) {
+                Toast.makeText(this, "Email and/or password is incorrect. Please try again.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "An unexpected error occurred. Please try again.", Toast.LENGTH_SHORT).show();
+            }
         }) {
             /**
              * Passing some request headers
