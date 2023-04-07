@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @RestController
+
 public class MealController {
 
     @Autowired
@@ -73,11 +74,13 @@ public class MealController {
     }
 
     @GetMapping("meals/enoughForMeal") //behold der UberController
-    public ResponseEntity<Object> pantryHasIngredientsForMeal(@RequestParam String userID, @RequestParam Meal meal){
+    public ResponseEntity<Object> pantryHasIngredientsForMeal(@RequestParam String userID, @RequestBody Meal meal){
 
         if(userDB.existsById(userID)){ //ensure user exists cause you can never be too careful
 
-            ArrayList<Ingredient> insufficientQuantity = null;
+            ArrayList<Ingredient> insufficientQuantity = new ArrayList<>();
+            int quantityTypeErrorCheck = 0;
+            int nameMatchErrorCheck =0;
 
             //this is gonna be ugly and inefficient
             for(int i = 0; i < userDB.findByUID(userID).getUserPantry().getIngredientList().size(); i++){ //iterate through user's pantry
@@ -85,24 +88,59 @@ public class MealController {
 
                     //may need front end to handle type coversions, or at least not leave it up to the user cause that's dangerous
                     //check if ingredient names match, amount required by meal is less than what is in the pantry, and if the quantity types match
-                    //this brings me joy
-                    if(meal.getIngredients().get(j).getName().equals(userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getName()) &
-                            meal.getIngredients().get(j).getQuantity() <= userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getQuantity() &
-                            meal.getIngredients().get(j).getQuantityType().equals(userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getQuantityType())
-                    ){
+                    //this is significantly less horrible, but still bad enough to be fun
 
-                        //do nothing
+                    if( !(meal.getIngredients().get(j).getName().equals(userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getName() ) ) ){ //check if names match
+                        //if names don't match, try next entry
+                        //TODO remove before turnin
+//                        System.out.println("ingredient name not match");
+//                        System.out.println(meal.getIngredients().get(j).getName() + " " + userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getName());
+//                        System.out.println();
+                        //nameMatchErrorCheck++; //this does not work, need a better way to do this. should probably redesign this damn thing.
+                        continue;
+                    }
 
-                    }else{
+                    if( !(meal.getIngredients().get(j).getQuantityType().equals(userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getQuantityType() ) ) ){
+                        //if quantity types dont match, skip to next entry
+                        //TODO remove before turnin
+//                        System.out.println("ingredient quantity type not match");
+//                        System.out.println();
+//
+//                        quantityTypeErrorCheck++;
+                        continue;
+                    }
+
+                    if( !(meal.getIngredients().get(j).getQuantity() <= userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getQuantity() ) ){
+                        //if the quantity required by meal is more than what the pantry has, add that ingredient to the list and set it's quantity to the difference in quantity
+                        meal.getIngredients().get(j).setQuantity(meal.getIngredients().get(j).getQuantity()-userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getQuantity());
+
+                        //TODO remove before turnin
+                        //System.out.println(meal.getIngredients().get(j).getName() + " " + meal.getIngredients().get(j).getQuantity());
 
                         insufficientQuantity.add(meal.getIngredients().get(j));
-                        //pantry doesn't have enough, add it to the list
-                        //hopefully no duplicates
+
+                        //WHY AM I STILL RUNNING INTO COLUMN SIZE LIMITATIONS DAMN YOU SPRING JUST MAKE THEM BIGGER
+                    }else{
+                        //System.out.println("sufficient ingredient to make meal");
+
                     }
                 }
             }
 
-            if(insufficientQuantity == null){ //pantry has enough ingredients for everyone
+            //TODO remove before turnin
+//            System.out.println(quantityTypeErrorCheck);
+//            System.out.println(nameMatchErrorCheck);
+
+
+            if(quantityTypeErrorCheck > 0){ //if the above loop is skipping entries
+                return new ResponseEntity<>("some quantity types do not match",HttpStatus.I_AM_A_TEAPOT);
+            }
+
+            if(nameMatchErrorCheck > 0){ //if the above loop is skipping entries
+                return new ResponseEntity<>("some ingredient names do not match",HttpStatus.I_AM_A_TEAPOT);
+            }
+
+            if(insufficientQuantity == null || insufficientQuantity.isEmpty()){ //pantry has enough ingredients for everyone
                 //return okay
                 return new ResponseEntity<>("enougn ingredients in user's pantry to make meal", HttpStatus.OK);
 
