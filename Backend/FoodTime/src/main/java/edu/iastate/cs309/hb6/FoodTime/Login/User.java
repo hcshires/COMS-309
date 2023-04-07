@@ -13,6 +13,7 @@ import edu.iastate.cs309.hb6.FoodTime.Meal.MealList;
 import edu.iastate.cs309.hb6.FoodTime.Meal.Recipe;
 import edu.iastate.cs309.hb6.FoodTime.Pantry.*;
 import edu.iastate.cs309.hb6.FoodTime.Preferences.UserPreferences;
+import org.hibernate.annotations.Type;
 
 
 @Entity
@@ -42,6 +43,10 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "recipe_book_uid")
     private Map<String, Recipe> userRecipes;
+
+    @Column(name = "recipe_labels")
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
+    private ArrayList<String> recipeLabels;
 
     public User () {
 
@@ -108,5 +113,13 @@ public class User {
 
     public void setUserRecipes(Map<String, Recipe> userRecipes) {
         this.userRecipes = userRecipes;
+    }
+
+    public ArrayList<String> getRecipeLabels() {
+        return recipeLabels;
+    }
+
+    public void setRecipeLabels(ArrayList<String> recipeLabels) {
+        this.recipeLabels = recipeLabels;
     }
 }

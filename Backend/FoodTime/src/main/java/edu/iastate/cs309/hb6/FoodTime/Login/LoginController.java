@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,9 +54,13 @@ public class LoginController {
             //User's recipe book
             Map<String, Meal> userRecipeBook = new HashMap<>();
 
+            //List of meal labels, only for frontend, backend do not use these
+            ArrayList<String> userRecipeLabels = new ArrayList<>();
+
             user.setUserPreferences(prefs);
             user.setUserPantry(userPantry);
             user.setUserMeals(userMeals);
+            user.setRecipeLabels(userRecipeLabels);
             //User recipes is set in the User constructor
             userPantry.setUser(user);
             prefs.setUser(user);
