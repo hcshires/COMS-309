@@ -1,29 +1,60 @@
 package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
+
+import android.content.ClipData.*;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.iastate.cs309.hb6.foodtime.R;
 
+
+
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder>{
 
-    private List<Recipe> recipes;
+    private Context context;
+    private ArrayList<String> recipes;
 
-    /**
-     * Constructor for Card Adapter
-     * @param recipes
-     */
-    public CardAdapter(List<Recipe> recipes){
+    public static class CardViewHolder extends RecyclerView.ViewHolder {
+        public CardView cv;
+        public TextView text2;
+        public View view;
+        public Context context;
+        public String currRecipe;
+
+
+        public CardViewHolder(View itemView) {
+            super(itemView);
+            view = itemView;
+            cv = (CardView)itemView.findViewById(R.id.cv);
+            text2 = (TextView)itemView.findViewById((R.id.textTest2));
+            context = view.getContext();
+            view.setOnClickListener(view -> {
+                Intent viewRecipeIntent = new Intent(view.getContext(), ViewRecipeActivity.class);
+                Toast.makeText(view.getContext(), "Clicked", Toast.LENGTH_LONG).show();
+                view.getContext().startActivity(viewRecipeIntent);
+            });
+        }
+    }
+
+    //constructor
+
+    public CardAdapter(Context context, ArrayList<String> recipes) {
+        this.context = context;
         this.recipes = recipes;
     }
 
@@ -37,12 +68,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
      */
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_layout, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.row_layout, parent, false);
         CardViewHolder pvh = new CardViewHolder(v);
         return pvh;
     }
 
     /**
+     *onBindViewHolder
      *
      * @param holder   The ViewHolder which should be updated to represent the contents of the
      *                 item at the given position in the data set.
@@ -50,14 +82,17 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
      */
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
-        Recipe recipe = recipes.get(position);
-        TextView tt1 = holder.text1;
-        //tt1.setText(recipe.getTextTest1());
+
         TextView tt2 = holder.text2;
-        //tt2.setText(recipe.getTextTest2());
-//        Ion.with(holder.stockPhoto).error(R.mipmap.ic_launcher).load(recipes.get(position).getPhotoId());
+        String recipe = recipes.get(position);
+        holder.currRecipe = recipes.get(position);
+        tt2.setText(recipe);
+        Log.d("RECIPE", recipe.toString());
+
     }
     /**
+     * getItemCount
+     *
      *getter method to get the number of recipes in the cook book.
      * @return
      */
@@ -78,18 +113,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     /**
      *
      */
-    public static class CardViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
-        TextView text1;
-        TextView text2;
 
-
-        CardViewHolder(View itemView) {
-            super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.cv);
-            text2 = (TextView)itemView.findViewById(R.id.textTest2);
-
-        }
-    }
 
 }

@@ -9,7 +9,7 @@ public class Recipe {
     private double cookTime;
     private int difficulty;
 
-    private ArrayList<HashMap<String,String>> ingredients;
+    private ArrayList<HashMap<String,Object>> ingredients;
 
 //    public Recipe(String rTitle, double rCookTime, int rDifficulty) {
 //        rTitle = title;
@@ -17,10 +17,9 @@ public class Recipe {
 //        rDifficulty = difficulty;
 //    }
 
-    public Recipe(String rTitle, ArrayList<HashMap<String,String>> rIngredients) {
-        rTitle = title;
-        ingredients = new ArrayList<>(6);
-        rIngredients = ingredients;
+    public Recipe(String rTitle, ArrayList<HashMap<String,Object>> rIngredients) {
+        title = rTitle;
+        ingredients = rIngredients;
 
     }
 
@@ -37,17 +36,20 @@ public class Recipe {
         return difficulty;
     }
 
-    public ArrayList<HashMap<String,String>> getIngredients() {
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public ArrayList<HashMap<String,Object>> getIngredients() {
         return ingredients;
     }
 
 
     public static ArrayList<Recipe> createRecipeList(int numRecipes){
         ArrayList<Recipe> recipes = new ArrayList<Recipe>(numRecipes);
-        ArrayList<HashMap<String,String>> ingredients = new ArrayList<>(5);
-
+        ArrayList<HashMap<String, Object>> ingredients = new ArrayList<>(5);
         for (int i = 1; i <= numRecipes; i++) {
-            recipes.add(new Recipe("textTest1",ingredients));
+            recipes.add(new Recipe("title",ingredients));
         }
 
         return recipes;
