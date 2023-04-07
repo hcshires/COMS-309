@@ -110,7 +110,7 @@ public class MealController {
                         continue;
                     }
 
-                    if( !(meal.getIngredients().get(j).getQuantity() <= userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getQuantity() ) ){
+                    if( meal.getIngredients().get(j).getQuantity() > userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getQuantity() ){
                         //if the quantity required by meal is more than what the pantry has, add that ingredient to the list and set it's quantity to the difference in quantity
                         meal.getIngredients().get(j).setQuantity(meal.getIngredients().get(j).getQuantity()-userDB.findByUID(userID).getUserPantry().getIngredientList().get(i).getQuantity());
 
@@ -141,7 +141,9 @@ public class MealController {
             }
 
             if(insufficientQuantity == null || insufficientQuantity.isEmpty()){ //pantry has enough ingredients for everyone
-                //return okay
+                //return okak
+
+                //System.out.println(insufficientQuantity.);
                 return new ResponseEntity<>("enougn ingredients in user's pantry to make meal", HttpStatus.OK);
 
             }else{
