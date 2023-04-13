@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.cookbook.AddRecipeActivity">
+
+
+    <EditText
+        android:id="@+id/qtInput2"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Qt"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/ingredientInput2"
+        app:layout_constraintTop_toBottomOf="@+id/qtInput1" />
+
+    <EditText
+        android:id="@+id/ingredientInput5"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Cumin"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/tV_i5"
+        app:layout_constraintTop_toBottomOf="@+id/ingredientInput4" />
+
+    <TextView
+        android:id="@+id/tV_i5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="55dp"
+        android:text="5)"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tV_i4" />
+
+    <EditText
+        android:id="@+id/ingredientInput4"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Cheese"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/tV_i4"
+        app:layout_constraintTop_toBottomOf="@+id/ingredientInput3" />
+
+    <TextView
+        android:id="@+id/tV_i4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="55dp"
+        android:text="4)"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tV_i3" />
+
+    <EditText
+        android:id="@+id/ingredientInput3"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Milk"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/tV_i3"
+        app:layout_constraintTop_toBottomOf="@+id/ingredientInput2" />
+
+    <TextView
+        android:id="@+id/tV_i3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="55dp"
+        android:text="3)"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tV_i2" />
+
+    <EditText
+        android:id="@+id/ingredientInput2"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Flour"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/tV_i2"
+        app:layout_constraintTop_toBottomOf="@+id/ingredientInput1" />
+
+    <TextView
+        android:id="@+id/tV_i2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="55dp"
+        android:text="2)"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tV_i1" />
+
+    <EditText
+        android:id="@+id/recipeTitleInput"
+        android:layout_width="288dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Lasgna"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/recipeTitleTV"
+        android:layout_width="99dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="44dp"
+        android:text="Recipe Title:"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/ingredientsTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="172dp"
+        android:layout_marginEnd="156dp"
+        android:text="Ingredients:"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/ingredientInput1"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:hint="Butter"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/tV_i1"
+        app:layout_constraintTop_toBottomOf="@+id/ingredientsTV" />
+
+    <TextView
+        android:id="@+id/tV_i1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="225dp"
+        android:text="1)"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/submitRecipe"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="60dp"
+        android:backgroundTint="@color/colorTertiary"
+        android:text="Add Recipe"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/dayTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="25dp"
+        android:text="Day:"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipeTitleTV" />
+
+    <EditText
+        android:id="@+id/dayInput"
+        android:layout_width="348dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="6dp"
+        android:ems="10"
+        android:hint="wednesday"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipeTitleInput" />
+
+    <EditText
+        android:id="@+id/qtInput1"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:hint="Qt"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/ingredientInput1"
+        app:layout_constraintTop_toBottomOf="@+id/ingredientsTV" />
+
+    <EditText
+        android:id="@+id/qtInput5"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Qt"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/ingredientInput5"
+        app:layout_constraintTop_toBottomOf="@+id/qtInput4" />
+
+    <EditText
+        android:id="@+id/typeInput1"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:hint="Type"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/qtInput1"
+        app:layout_constraintTop_toBottomOf="@+id/ingredientsTV" />
+
+    <EditText
+        android:id="@+id/typeInput2"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Type"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/qtInput2"
+        app:layout_constraintTop_toBottomOf="@+id/typeInput1" />
+
+    <EditText
+        android:id="@+id/qtInput3"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Qt"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/ingredientInput3"
+        app:layout_constraintTop_toBottomOf="@+id/qtInput2" />
+
+    <EditText
+        android:id="@+id/typeInput3"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Type"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/qtInput3"
+        app:layout_constraintTop_toBottomOf="@+id/typeInput2" />
+
+    <EditText
+        android:id="@+id/qtInput4"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Qt"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/ingredientInput4"
+        app:layout_constraintTop_toBottomOf="@+id/qtInput3" />
+
+    <EditText
+        android:id="@+id/typeInput4"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Type"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/qtInput4"
+        app:layout_constraintTop_toBottomOf="@+id/qtInput3" />
+
+    <EditText
+        android:id="@+id/typeInput5"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Type"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/qtInput5"
+        app:layout_constraintTop_toBottomOf="@+id/typeInput4" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
