@@ -96,7 +96,7 @@ public class MealController {
                     //if meal requires more ingredient than what the pantry has, save the difference between the two values in that ingredient in meal
                     if(meal.getIngredients().get(j).getQuantity() > userPantry.get(i).getQuantity()){
 
-                        int diff = meal.getIngredients().get(j).getQuantity() - userPantry.get(i).getQuantity(); //should be negative
+                        int diff =  userPantry.get(i).getQuantity() - meal.getIngredients().get(j).getQuantity(); //should be negative
 
                         meal.getIngredients().get(j).setQuantity(diff);
 
