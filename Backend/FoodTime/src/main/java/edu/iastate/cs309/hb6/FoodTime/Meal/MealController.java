@@ -1,14 +1,12 @@
 package edu.iastate.cs309.hb6.FoodTime.Meal;
 
 import edu.iastate.cs309.hb6.FoodTime.Login.UserRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +21,7 @@ public class MealController {
 
     @PutMapping("/meals/add")
     @Transactional
+    @ResponseBody
     public ResponseEntity<Object> addMeal(@RequestParam String UID, @RequestParam String day, @RequestBody Meal meal) {
         HashMap<String, Meal> mealsForDay = getUserMealsForDay(UID, day);
         mealsForDay.put(meal.getName(), meal);
@@ -86,6 +85,7 @@ public class MealController {
 
     @PutMapping("recipes/add")
     @Transactional
+    @ResponseBody
     public ResponseEntity<Object> addRecipe(@RequestParam String UID, @RequestBody Meal mealToAdd) {
         Map<String, Recipe> userRecipes = userDB.findByUID(UID).getUserRecipes();
         if (!userRecipes.containsKey(mealToAdd.getName())) {
