@@ -23,6 +23,7 @@ public class Meal implements Serializable {
     private String name;
 
     //HashMap so that we can easily add and remove ingredients
+    @Column(columnDefinition = "json")
     @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
     private ArrayList<Ingredient> necessaryIngredients;
 

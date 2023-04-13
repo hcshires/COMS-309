@@ -18,7 +18,7 @@ public class MealList {
     private User user;
 
     //Each hash map will contain a number of meals that the user wishes to make on that day
-    @Column (name = "sunday")
+    @Column (name = "sunday", columnDefinition = "json")
     @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
     private HashMap<String, Meal> sunday;
     @Column (name = "monday", columnDefinition = "json")
