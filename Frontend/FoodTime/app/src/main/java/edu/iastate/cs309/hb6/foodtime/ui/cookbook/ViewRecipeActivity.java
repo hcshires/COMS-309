@@ -1,6 +1,7 @@
 package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.widget.EditText;
@@ -12,9 +13,8 @@ import edu.iastate.cs309.hb6.foodtime.R;
 
 public class ViewRecipeActivity extends AppCompatActivity {
 
-    private TextView recipeTitle;
-    private ListView ingredientsLV;
     private TableLayout ingDircTab;
+    private ViewPager viewRicipeVP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
         /*Widgets*/
         //recipeTitle = (TextView) findViewById(R.id.recipeTitle);
         //ingredientsLV = (ListView) findViewById(R.id.ingredientsListViewer);
-        ingDircTab = (TableLayout) findViewById(R.id.ingDircTab);
+        ingDircTab = (TableLayout) findViewById(R.id.viewRecipeTabLayout);
+        viewRicipeVP = (ViewPager) findViewById(R.id.viewRecipeViewPager);
+        //ingDircTab;
         //recipeTitle.setText(set text from put extras);
 
     }
