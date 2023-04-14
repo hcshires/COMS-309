@@ -5,6 +5,8 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.ArrayList;
+
 
 @Entity
 @Table(name = "weekly_meal_list")
