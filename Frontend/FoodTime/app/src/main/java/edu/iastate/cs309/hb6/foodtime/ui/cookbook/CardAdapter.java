@@ -55,7 +55,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         TextView tt2 = holder.text2;
         tt2.setText(recipes.get(position));
         Log.d("RECIPE", recipes.toString());
-
     }
 
     /**
@@ -69,7 +68,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public int getItemCount() {
         return recipes.size();
     }
-
     /**
      * @param recyclerView The RecyclerView instance which started observing this adapter.
      */
@@ -98,10 +96,5 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             });
         }
     }
-
-    /**
-     *
-     */
-
 
 }
