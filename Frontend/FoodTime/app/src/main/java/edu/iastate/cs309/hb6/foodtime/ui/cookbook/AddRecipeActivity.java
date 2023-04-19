@@ -57,7 +57,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe);
 
         Intent recipeIntent = getIntent();
-        String userID = recipeIntent.getStringExtra("userID");
+        String UID = recipeIntent.getStringExtra("UID");
 
         /* Widgets */
         Button submitRecipe = findViewById(R.id.submitRecipe);
@@ -129,11 +129,11 @@ public class AddRecipeActivity extends AppCompatActivity {
             Log.d(TAG, "JSON Body: " + mealObj);
 
             if (!ingredientsHashList.isEmpty()) {
-                JsonObjectRequest addRecipeRequest = new JsonObjectRequest(Request.Method.PUT, Const.URL_RECIPES_ADDRECIPE + "?UID=" + userID, mealObj,
+                JsonObjectRequest addRecipeRequest = new JsonObjectRequest(Request.Method.PUT, Const.URL_RECIPES_ADDRECIPE + "?UID=" + UID, mealObj,
                     response -> {
                         Toast.makeText(view.getContext(), "Meal added", Toast.LENGTH_LONG).show();
                         Intent addRecipeIntent = new Intent(AddRecipeActivity.this, DashboardActivity.class);
-                        addRecipeIntent.putExtra("userID", userID);
+                        addRecipeIntent.putExtra("UID", UID);
                         startActivity(addRecipeIntent);
                     }, error -> {
                     Toast.makeText(view.getContext(), "An Error Occurred.", Toast.LENGTH_LONG).show();

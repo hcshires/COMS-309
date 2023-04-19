@@ -58,7 +58,7 @@ public class CookBookFragment extends Fragment {
 
         /* Store user ID for requests */
         Bundle userData = requireActivity().getIntent().getExtras();
-        String userID = userData.getString("userID").replaceAll("\"", "");
+        String UID = userData.getString("UID").replaceAll("\"", "");
 
         /* Widgets */
         FloatingActionButton addRecipe = root.findViewById(R.id.addRecipeBtn);
@@ -71,13 +71,13 @@ public class CookBookFragment extends Fragment {
         adapter = new CardAdapter(root.getContext(), recipes);
 
         /* Initialize Recipes */
-        getUserRecipes(userID);
+        getUserRecipes(UID);
         Log.d(TAG, "Recipes List: " + recipes);
 
         /* Go to AddRecipe when button clicked */
         addRecipe.setOnClickListener(view -> {
             Intent cookbookIntent = new Intent(root.getContext(), AddRecipeActivity.class);
-            cookbookIntent.putExtra("userID", userID);
+            cookbookIntent.putExtra("UID", UID);
             startActivity(cookbookIntent);
         });
 
@@ -86,10 +86,10 @@ public class CookBookFragment extends Fragment {
 
     /**
      * Return an ArrayList of recipes for the user from the database
-     * @param userID - the given user ID for the user
+     * @param UID - the given user ID for the user
      */
-    private void getUserRecipes(String userID) {
-        JsonArrayRequest getUserRecipes = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_GETLABELS + "?UID=" + userID, null, response -> {
+    private void getUserRecipes(String UID) {
+        JsonArrayRequest getUserRecipes = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_GETLABELS + "?UID=" + UID, null, response -> {
             try {
                 for (int i = 0; i < response.length(); i++) {
                     String item = response.getString(i);
