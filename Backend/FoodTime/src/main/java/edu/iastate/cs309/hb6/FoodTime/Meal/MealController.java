@@ -92,19 +92,20 @@ public class MealController {
     }
 
     @GetMapping("recipe/compareIngredients")
-    public ResponseEntity<Object> pantryHasIngredientsForMeal(@RequestParam String userID, @RequestParam String mealName) {
+    public ResponseEntity<Object> pantryHasIngredientsForMeal(@RequestParam String UID, @RequestParam String mealName) {
 
-        if (!userDB.existsById(userID)) { //ensure user exists cause you can never be too careful
+        if (!userDB.existsById(UID)) { //ensure user exists cause you can never be too careful
             return new ResponseEntity<>("user does not exist", HttpStatus.NOT_FOUND);
         }
 
-        if(!mealRepository.existsById(mealName)){
-            return new ResponseEntity<>("user does not exist", HttpStatus.NOT_FOUND);
+        if(!userDB.findByUID(UID).getUserRecipes().containsKey(mealName)){
+            return new ResponseEntity<>("meal does not exist", HttpStatus.NOT_FOUND);
         }
 
-        ArrayList<Ingredient> userPantry = pantryRepository.findByUID(userID).getIngredientList();
+        ArrayList<Ingredient> userPantry = pantryRepository.findByUID(UID).getIngredientList();
 
-        ArrayList<Ingredient> meal = recipeDB.getById(mealName).getIngredients();
+        //uses a MAP to store a user's recipes. because why not.
+        ArrayList<Ingredient> meal = userDB.findByUID(UID).getUserRecipes().get(mealName).getIngredients();
 
         for(int i = 0; i < userPantry.size(); i++){
             for(int j = 0; j < meal.size(); j++){
@@ -131,13 +132,12 @@ public class MealController {
             }
         }
 
-
         if(meal.isEmpty()){
             return new ResponseEntity<>("can make meal", HttpStatus.OK);
         }else{
             //only things left in the meal object should be:
-            // type mismatches
-            // insufficient quantity of ingredients to make, in which the quantity value will be how much quantity is missing, will be negative
+            // unit type mismatches
+            // insufficient quantity of ingredients to make, in which the quantity value will be how much quantity is missing, should be negative
             //ingredients that are requested but not in the pantry at all
             return new ResponseEntity<>(meal, HttpStatus.I_AM_A_TEAPOT);
         }
