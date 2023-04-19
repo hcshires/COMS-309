@@ -24,7 +24,7 @@
         android:layout_width="100dp"
         android:layout_height="60dp"
         android:layout_marginStart="22dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Cumin"
         android:inputType="textPersonName"
