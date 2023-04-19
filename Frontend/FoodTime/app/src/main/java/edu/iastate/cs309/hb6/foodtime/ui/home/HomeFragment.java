@@ -2,7 +2,6 @@ package edu.iastate.cs309.hb6.foodtime.ui.home;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,6 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-import java.io.DataInput;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -271,8 +269,6 @@ public class HomeFragment extends Fragment {
         });
 
         AppController.getInstance().addToRequestQueue(getRecipeReq, tag_home_req);
-
-        return;
     }
 
     /**

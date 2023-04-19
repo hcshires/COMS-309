@@ -16,12 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import edu.iastate.cs309.hb6.foodtime.R;
 import edu.iastate.cs309.hb6.foodtime.databinding.FragmentCookbookBinding;
@@ -29,14 +28,26 @@ import edu.iastate.cs309.hb6.foodtime.utils.AppController;
 import edu.iastate.cs309.hb6.foodtime.utils.Const;
 
 public class CookBookFragment extends Fragment {
-
-    private final String tag_cookbook_req = "cookbook_req";
     private FragmentCookbookBinding binding;
-    private ArrayList<String> recipes;
-    private RecyclerView rvRecipes;
-    private Button addRecipe;
-    private CardAdapter adapter;
 
+    private RecyclerView recipeCards;
+    private CardAdapter adapter;
+    private final ArrayList<String> recipes = new ArrayList<>();
+    private final String tag_cookbook_req = "cookbook_req";
+    private final String TAG = CookBookFragment.class.getSimpleName();
+
+    /**
+     * OnCreateView
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return View
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         CookBookViewModel cookBookViewModel =
@@ -45,25 +56,25 @@ public class CookBookFragment extends Fragment {
         binding = FragmentCookbookBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        /* Widgets */
-        rvRecipes = (RecyclerView) root.findViewById(R.id.recyclerList);
-        addRecipe = (Button) root.findViewById(R.id.addRecipeButt);
-
         /* Store user ID for requests */
         Bundle userData = requireActivity().getIntent().getExtras();
         String userID = userData.getString("userID").replaceAll("\"", "");
 
-        /* Initialize Tests */
-        recipes = new ArrayList<>();
-        Recipe.createRecipeList(getUserRecipes(userID));
-        /* Adapter */
-        adapter = new CardAdapter(root.getContext(), recipes);
-        /* Attach adapter to recycler view */
-        rvRecipes.setAdapter(adapter);
-        /* Set layout manager to position items */
-        rvRecipes.setLayoutManager(new LinearLayoutManager(root.getContext()));
+        /* Widgets */
+        FloatingActionButton addRecipe = root.findViewById(R.id.addRecipeBtn);
+        recipeCards = root.findViewById(R.id.recyclerList);
 
-        /*Go to AddRecipe when button clicked*/
+        // Set layout manager to position items
+        recipeCards.setLayoutManager(new LinearLayoutManager(root.getContext()));
+
+        // Adapter
+        adapter = new CardAdapter(root.getContext(), recipes);
+
+        /* Initialize Recipes */
+        getUserRecipes(userID);
+        Log.d(TAG, "Recipes List: " + recipes);
+
+        /* Go to AddRecipe when button clicked */
         addRecipe.setOnClickListener(view -> {
             Intent cookbookIntent = new Intent(root.getContext(), AddRecipeActivity.class);
             cookbookIntent.putExtra("userID", userID);
@@ -73,18 +84,28 @@ public class CookBookFragment extends Fragment {
         return root;
     }
 
-    private ArrayList<String> getUserRecipes(String userID) {
+    /**
+     * Return an ArrayList of recipes for the user from the database
+     * @param userID - the given user ID for the user
+     */
+    private void getUserRecipes(String userID) {
         JsonArrayRequest getUserRecipes = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_GETLABELS + "?UID=" + userID, null, response -> {
             try {
-                recipes.addAll(new ObjectMapper().readValue(String.valueOf(response), ArrayList.class));
-            } catch (JsonProcessingException e) {
+                for (int i = 0; i < response.length(); i++) {
+                    String item = response.getString(i);
+                    recipes.add(item); // Add to ArrayList
+                }
+
+                /* Attach adapter to recycler view */
+                recipeCards.setAdapter(adapter);
+            } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            Log.d("TAG", recipes.toString());
         }, error -> {
+            // Error
         });
+
         AppController.getInstance().addToRequestQueue(getUserRecipes, tag_cookbook_req);
-        return recipes;
     }
 
     @Override

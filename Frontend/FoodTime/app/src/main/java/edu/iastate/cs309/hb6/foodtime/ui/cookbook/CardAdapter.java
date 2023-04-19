@@ -16,17 +16,23 @@ import java.util.ArrayList;
 
 import edu.iastate.cs309.hb6.foodtime.R;
 
+/**
+ * CardAdapter to render Cookbook Cards
+ */
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
 
-    private Context context;
-    private ArrayList<String> recipes;
+    private final Context context;
+    private final ArrayList<String> recipes;
 
+    /**
+     * 
+     * @param context
+     * @param recipes
+     */
     public CardAdapter(Context context, ArrayList<String> recipes) {
         this.context = context;
         this.recipes = recipes;
     }
-
-    //constructor
 
     /**
      * View holder for Card View
@@ -39,8 +45,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.row_layout, parent, false);
-        CardViewHolder pvh = new CardViewHolder(v);
-        return pvh;
+        return new CardViewHolder(v);
     }
 
     /**
@@ -52,10 +57,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
      */
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
-        TextView tt2 = holder.text2;
+        TextView tt2 = holder.recipeTitle;
         tt2.setText(recipes.get(position));
         Log.d("RECIPE", recipes.toString());
-
     }
 
     /**
@@ -69,7 +73,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public int getItemCount() {
         return recipes.size();
     }
-
     /**
      * @param recyclerView The RecyclerView instance which started observing this adapter.
      */
@@ -78,30 +81,29 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         super.onAttachedToRecyclerView(recyclerView);
     }
 
+    /**
+     * Contents of CardView
+     */
     public static class CardViewHolder extends RecyclerView.ViewHolder {
-        public CardView cv;
-        public TextView text2;
-        public View view;
-        public Context context;
-        public String currRecipe;
+        private final TextView recipeTitle;
 
+        /**
+         * 
+         * @param itemView
+         */
         public CardViewHolder(View itemView) {
             super(itemView);
-            view = itemView;
-            cv = (CardView) itemView.findViewById(R.id.cv);
-            text2 = (TextView) itemView.findViewById((R.id.textTest2));
-            context = view.getContext();
-            view.setOnClickListener(view -> {
+            CardView cv = itemView.findViewById(R.id.cv);
+            Context context = itemView.getContext();
+
+            recipeTitle = itemView.findViewById((R.id.recipeTitle));
+
+            itemView.setOnClickListener(view -> {
                 Intent viewRecipeIntent = new Intent(view.getContext(), ViewRecipeActivity.class);
                 Toast.makeText(view.getContext(), "Clicked", Toast.LENGTH_LONG).show();
                 view.getContext().startActivity(viewRecipeIntent);
             });
         }
     }
-
-    /**
-     *
-     */
-
 
 }
