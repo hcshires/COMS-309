@@ -54,8 +54,9 @@ public class CookBookFragment extends Fragment {
         String userID = userData.getString("userID").replaceAll("\"", "");
 
         /* Initialize Tests */
-        recipes = new ArrayList<>();
-        Recipe.createRecipeList(getUserRecipes(userID));
+        recipes = getUserRecipes(userID);
+        Log.d("TAG", recipes.toString());
+        //Recipe.createRecipeList(recipes);
         /* Adapter */
         adapter = new CardAdapter(root.getContext(), recipes);
         /* Attach adapter to recycler view */
@@ -80,7 +81,7 @@ public class CookBookFragment extends Fragment {
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
-            Log.d("TAG", recipes.toString());
+            //Log.d("TAG", recipes.toString());
         }, error -> {
         });
         AppController.getInstance().addToRequestQueue(getUserRecipes, tag_cookbook_req);
