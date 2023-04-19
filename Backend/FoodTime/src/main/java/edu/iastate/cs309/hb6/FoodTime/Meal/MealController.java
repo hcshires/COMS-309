@@ -26,6 +26,8 @@ public class MealController {
 
     @Autowired
     RecipeRepository recipeDB;
+    @Autowired
+    private MealRepository mealRepository;
 
     @PutMapping("/meals/add")
     @Transactional
@@ -89,42 +91,48 @@ public class MealController {
         return new ResponseEntity<>(userDB.findByUID(UID).getUserMeals(), HttpStatus.OK);
     }
 
-    @GetMapping("meals/enoughForMeal") //der UberController
-    public ResponseEntity<Object> pantryHasIngredientsForMeal(@RequestParam String userID, @RequestBody Meal meal) {
+    @GetMapping("recipe/compareIngredients")
+    public ResponseEntity<Object> pantryHasIngredientsForMeal(@RequestParam String userID, @RequestParam String mealName) {
 
         if (!userDB.existsById(userID)) { //ensure user exists cause you can never be too careful
             return new ResponseEntity<>("user does not exist", HttpStatus.NOT_FOUND);
         }
 
+        if(!mealRepository.existsById(mealName)){
+            return new ResponseEntity<>("user does not exist", HttpStatus.NOT_FOUND);
+        }
+
         ArrayList<Ingredient> userPantry = pantryRepository.findByUID(userID).getIngredientList();
 
+        ArrayList<Ingredient> meal = recipeDB.getById(mealName).getIngredients();
 
         for(int i = 0; i < userPantry.size(); i++){
-            for(int j = 0; j < meal.getIngredients().size(); j++){
+            for(int j = 0; j < meal.size(); j++){
 
                 //if ingredient name and quantity type match,
-                if(meal.getIngredients().get(j).getName().equals(userPantry.get(i).getName()) &&
-                        meal.getIngredients().get(j).getQuantityType().equals(userPantry.get(i).getQuantityType())){ //if names match
+                if(meal.get(j).getName().equals(userPantry.get(i).getName()) &&
+                        meal.get(j).getQuantityType().equals(userPantry.get(i).getQuantityType())){ //if names match
 
                     //if meal requires more ingredient than what the pantry has, save the difference between the two values in that ingredient in meal
-                    if(meal.getIngredients().get(j).getQuantity() > userPantry.get(i).getQuantity()){
+                    if(meal.get(j).getQuantity() > userPantry.get(i).getQuantity()){
 
-                        int diff =  userPantry.get(i).getQuantity() - meal.getIngredients().get(j).getQuantity(); //should be negative
+                        int diff =  userPantry.get(i).getQuantity() - meal.get(j).getQuantity(); //should be negative
 
-                        meal.getIngredients().get(j).setQuantity(diff);
+                        meal.get(j).setQuantity(diff);
 
                     }else{ //you have enough ingredients for that ingredient, remove that ingredient from meal
                         //will return what's left of the meal object to tell front end what the pantry is missing
                         //any ingredients remaining in the meal object either dont have enough quantity to make, have the wrong type, or dont exist in the pantry
 
-                        meal.removeIngredient(meal.getIngredients().get(j).getName());
+//                        meal.remove(meal.get(j).getName());
+                          meal.remove(j);
                     }
                 }
             }
         }
 
 
-        if(meal.getIngredients().isEmpty()){
+        if(meal.isEmpty()){
             return new ResponseEntity<>("can make meal", HttpStatus.OK);
         }else{
             //only things left in the meal object should be:
