@@ -37,7 +37,7 @@ public class LoginController {
     @ResponseBody
     @Transactional
     //We can return an HTTP response as well as a UID after creating the user
-    public ResponseEntity<Object> createUser(@RequestBody User user) {
+    public ResponseEntity<Object> createUser(@RequestBody User user, @RequestParam String parentUID) {
         if (!userDB.existsByUsername(user.getUsername())) {
             //Create a user if they do not exist in the system
             user.assignUID();
@@ -65,6 +65,13 @@ public class LoginController {
             userPantry.setUser(user);
             prefs.setUser(user);
             userMeals.setUser(user);
+
+            if (!user.getAccessLevel().equals(User.AccessLevel.CHILD) && userDB.existsById(parentUID)) {
+                user.setParentUser(userDB.findByUID(parentUID));
+            }
+            else {
+                return new ResponseEntity<>("Attempted to set parent of this user to a user that does not exist", HttpStatus.NOT_FOUND);
+            }
 
             userDB.save(user);
             prefsDB.save(prefs);
