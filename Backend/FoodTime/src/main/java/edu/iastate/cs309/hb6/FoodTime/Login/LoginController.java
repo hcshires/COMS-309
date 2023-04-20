@@ -8,6 +8,7 @@ import edu.iastate.cs309.hb6.FoodTime.Pantry.Pantry;
 import edu.iastate.cs309.hb6.FoodTime.Pantry.PantryRepository;
 import edu.iastate.cs309.hb6.FoodTime.Preferences.UserPreferencesRepository;
 import edu.iastate.cs309.hb6.FoodTime.Preferences.UserPreferences;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public class LoginController {
     @ResponseBody
     @Transactional
     //We can return an HTTP response as well as a UID after creating the user
-    public ResponseEntity<Object> createUser(@RequestBody User user, @RequestParam String parentUID) {
+    public ResponseEntity<Object> createUser(@RequestBody User user, @RequestParam String parentUsername) {
         if (!userDB.existsByUsername(user.getUsername())) {
             //Create a user if they do not exist in the system
             user.assignUID();
@@ -45,44 +46,52 @@ public class LoginController {
             //Assign them default preferences
             UserPreferences prefs = new UserPreferences(user.getUID());
 
-            //Assign them a pantry entry
-            Pantry userPantry = new Pantry (user.getUID().toString());
-
-            //Create their weekly list of meals
-            MealList userMeals = new MealList(user.getUID());
-
-            //User's recipe book
-            Map<String, Meal> userRecipeBook = new HashMap<>();
-
-            //List of meal labels, only for frontend, backend do not use these
-            ArrayList<String> userRecipeLabels = new ArrayList<>();
-
-            user.setUserPreferences(prefs);
-            user.setUserPantry(userPantry);
-            user.setUserMeals(userMeals);
-            user.setRecipeLabels(userRecipeLabels);
-            //User recipes is set in the User constructor
-            userPantry.setUser(user);
-            prefs.setUser(user);
-            userMeals.setUser(user);
-
-            if (!user.getAccessLevel().equals(User.AccessLevel.CHILD) && userDB.existsById(parentUID)) {
-                user.setParentUser(userDB.findByUID(parentUID));
+            //Child user only needs preferences and information from parent
+            if (user.getAccessLevel().equals(User.AccessLevel.CHILD)) {
+                if (userDB.existsByUsername(parentUsername)) {
+                    user.setParentUser(userDB.findByUsername(parentUsername));
+                    user.setUserPreferences(prefs);
+                    prefs.setUser(user);
+                    userDB.save(user);
+                    prefsDB.save(prefs);
+                    return new ResponseEntity<>(user, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("Attempted to set parent of this user to a user that does not exist", HttpStatus.NOT_FOUND);
+                }
             }
+            //Parent gets full access
             else {
-                return new ResponseEntity<>("Attempted to set parent of this user to a user that does not exist", HttpStatus.NOT_FOUND);
-            }
+                //Assign them a pantry entry
+                Pantry userPantry = new Pantry(user.getUID().toString());
 
-            userDB.save(user);
-            prefsDB.save(prefs);
-            pantryDB.save(userPantry);
-            mealDB.save(userMeals);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+                //Create their weekly list of meals
+                MealList userMeals = new MealList(user.getUID());
+
+                //User's recipe book
+                Map<String, Meal> userRecipeBook = new HashMap<>();
+
+                //List of meal labels, only for frontend, backend do not use these
+                ArrayList<String> userRecipeLabels = new ArrayList<>();
+
+                user.setUserPreferences(prefs);
+                user.setUserPantry(userPantry);
+                user.setUserMeals(userMeals);
+                user.setRecipeLabels(userRecipeLabels);
+                //User recipes is set in the User constructor
+                userPantry.setUser(user);
+                prefs.setUser(user);
+                userMeals.setUser(user);
+
+                userDB.save(user);
+                prefsDB.save(prefs);
+                pantryDB.save(userPantry);
+                mealDB.save(userMeals);
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            }
         }
         else {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }
-
     }
 
     @GetMapping("/users/login")

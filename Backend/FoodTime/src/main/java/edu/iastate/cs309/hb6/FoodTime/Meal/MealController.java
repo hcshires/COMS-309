@@ -126,7 +126,7 @@ public class MealController {
 
     @GetMapping("recipe/compareIngredients")
     public ResponseEntity<Object> pantryHasIngredientsForMeal(@RequestParam String UID, @RequestParam String mealName) {
-
+        System.out.println("doing stuff");
         if (!userDB.existsById(UID)) { //ensure user exists cause you can never be too careful
             return new ResponseEntity<>("user does not exist", HttpStatus.NOT_FOUND);
         }
@@ -141,9 +141,12 @@ public class MealController {
         ArrayList<Ingredient> meal;
 
         if (user.getAccessLevel().equals(User.AccessLevel.PARENT)) {
-            userPantry = pantryRepository.findByUID(user.getParentUser().getUID().toString()).getIngredientList();
+            System.out.println("ded");
+            userPantry = pantryRepository.findByUID(UID).getIngredientList();
             //uses a MAP to store a user's recipes. because why not.
+            System.out.println(userPantry);
             meal = user.getUserRecipes().get(mealName).getIngredients();
+            System.out.println(meal);
         }
         else if (user.getAccessLevel().equals(User.AccessLevel.CHILD)) {
             userPantry = pantryRepository.findByUID(user.getParentUser().getUID().toString()).getIngredientList();
@@ -201,7 +204,7 @@ public class MealController {
             userRecipes = user.getUserRecipes();
         }
         else if (user.getAccessLevel().equals((User.AccessLevel.CHILD))) {
-            userRecipes = user.getParentUser().getUserRecipes();
+            return new ResponseEntity<>("Child user cannot add recipes to the recipe book", HttpStatus.FORBIDDEN);
         }
         else return new ResponseEntity<>("Invalid AccessType set for user.", HttpStatus.BAD_REQUEST);
 
