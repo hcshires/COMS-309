@@ -15,4 +15,6 @@
     <string name="welcome_to_nfoodtime">Welcome to\nFoodTime!</string>
     <string name="helping_people_find_their_inner_chef">Helping people find their inner chef</string>
     <string name="add_meals_to_calendar">Add meals to calendar</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

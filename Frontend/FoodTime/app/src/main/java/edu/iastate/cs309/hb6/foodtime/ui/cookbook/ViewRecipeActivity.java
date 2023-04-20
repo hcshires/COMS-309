@@ -10,19 +10,21 @@ import edu.iastate.cs309.hb6.foodtime.R;
 
 public class ViewRecipeActivity extends AppCompatActivity {
 
+    private TabLayout ingDricTab;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
 
         /* Widgets */
-        //recipeTitle = (TextView) findViewById(R.id.recipeTitle);
-        //ingredientsLV = (ListView) findViewById(R.id.ingredientsListViewer);
-
-        TabLayout ingDircTab = findViewById(R.id.viewRecipeTabLayout);
+        ingDricTab = findViewById(R.id.ingDirTabs);
         ViewPager viewRicipeVP = findViewById(R.id.viewRecipeViewPager);
+//        viewRicipeVP.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
 
-        //ingDircTab;
-        //recipeTitle.setText(set text from put extras);
+        /*Create the tabs*/
+        ingDricTab.addTab(ingDricTab.newTab().setText("Ingredients"));
+        ingDricTab.addTab(ingDricTab.newTab().setText("Directions"));
     }
 }
