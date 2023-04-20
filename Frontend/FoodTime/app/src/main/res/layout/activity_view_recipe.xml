@@ -6,21 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.cookbook.ViewRecipeActivity">
 
-
-
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewRecipeViewPager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent">
-
-    </androidx.viewpager.widget.ViewPager>
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/ingDirTabs"
         android:layout_width="match_parent"
@@ -30,5 +15,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
     </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewRecipeViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent">
+
+    </androidx.viewpager2.widget.ViewPager2>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
