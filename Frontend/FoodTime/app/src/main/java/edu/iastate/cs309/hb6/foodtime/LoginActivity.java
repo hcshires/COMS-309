@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
         StringRequest loginRequest = new StringRequest(
                 Request.Method.GET, Const.URL_LOGIN_USER + "?username=" + email.getText().toString() + "&password=" + pwd.getText().toString(), response -> {
             Log.d(TAG, response);
-            loginIntent.putExtra("userID", response);
+            loginIntent.putExtra("UID", response);
             startActivity(loginIntent);
         }, error -> {
             Log.d(TAG, "Error: " + error.getMessage());
@@ -147,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "Success: " + response.toString());
                     try {
                         // Get the UID from the response body
-                        loginIntent.putExtra("userID", response.get("uid").toString());
+                        loginIntent.putExtra("UID", response.get("uid").toString());
                         startActivity(loginIntent);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
