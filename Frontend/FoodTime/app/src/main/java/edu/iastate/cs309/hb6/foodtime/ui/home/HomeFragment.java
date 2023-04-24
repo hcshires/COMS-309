@@ -45,15 +45,34 @@ import edu.iastate.cs309.hb6.foodtime.databinding.FragmentHomeBinding;
 import edu.iastate.cs309.hb6.foodtime.utils.AppController;
 import edu.iastate.cs309.hb6.foodtime.utils.Const;
 
+/**
+ * Dashboard Fragment: Home (Calendar)
+ * View the user's calendar and list of scheduled recipes (known as meals) for a given day of the week
+ */
 public class HomeFragment extends Fragment {
 
+    /** Fragment Binding */
     private FragmentHomeBinding binding;
+
+    /** Map of meals for the entire week */
     private HashMap<String, HashMap<String, Object>> meals;
+
+    /** List of recipes for the entire week */
     private ArrayList<String> recipes;
+
+    /** Map of recipe details */
     private HashMap recipe;
+
+    /** List of meals for a given day */
     private ArrayList<String> dayMealsLabels;
+
+    /** Adapter for ListView of meals for a given day */
     private ArrayAdapter<String> dayMealsAdapter;
+
+    /** Tag for logging */
     private final String TAG = HomeFragment.class.getSimpleName();
+
+    /** Tag for requests */
     private final String tag_home_req = "home_req";
 
     /**
@@ -228,10 +247,10 @@ public class HomeFragment extends Fragment {
      * Populate the list of meals onto the calendar based on the selected day of the week
      * Add meals to the ListView array list based on the selected day in the calendar
      *
+     * @param root - the root view
      * @param UID - the ID of the user to get meals for
      * @param day - the day of the week as an integer per the java.util.Calendar class
      *
-     * @returns the weekday the meals were set for as a string
      */
     private void setMealsToCalendar(View root, String UID, int day) {
         // List Label
