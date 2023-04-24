@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"edu.iastate.cs309.hb6.foodtime"},{"l":"edu.iastate.cs309.hb6.foodtime.ui.cookbook"},{"l":"edu.iastate.cs309.hb6.foodtime.ui.home"},{"l":"edu.iastate.cs309.hb6.foodtime.ui.pantry"},{"l":"edu.iastate.cs309.hb6.foodtime.utils"}];updateSearchResults();
