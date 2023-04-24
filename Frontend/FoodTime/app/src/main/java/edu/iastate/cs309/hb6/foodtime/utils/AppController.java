@@ -8,16 +8,19 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 /**
- * Controller to invoke FoodTime API
+ * Controller to invoke FoodTime server API
  */
 public class AppController extends Application {
 
+    /** Controller tag used in outputs */
     public static final String TAG = AppController.class
-            .getSimpleName(); // Controller tag used in outputs
+            .getSimpleName();
 
-    private RequestQueue mRequestQueue; // Volley Request Queue
+    /** Volley Request Queue */
+    private RequestQueue mRequestQueue;
 
-    private static AppController mInstance; // A single controller instance to use across the app
+    /** Singleton instance of the controller */
+    private static AppController mInstance;
 
     /**
      * Extends Android application

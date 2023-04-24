@@ -39,12 +39,25 @@ import edu.iastate.cs309.hb6.foodtime.utils.Const;
  */
 public class PantryFragment extends Fragment {
 
+    /** The pantry list */
     private static ArrayList<String> ingredientsList;
+
+    /** The adapter for the pantry list */
     private ArrayAdapter<String> pantryAdapter;
+
+    /** The pantry ListView */
     private ListView pantry;
+
+    /** An input text box */
     private EditText input, quantityInput, unitInput;
+
+    /** The binding for this fragment */
     private FragmentPantryBinding binding;
+
+    /** The tag for this fragment */
     private final String TAG = PantryFragment.class.getSimpleName();
+
+    /** The tag for pantry requests */
     private final String tag_pantry_req = "pantry_req";
 
     /**
@@ -134,7 +147,6 @@ public class PantryFragment extends Fragment {
         });
     }
 
-
     /**
      * For a given UID and ingredient, sends req to add that ingredient to the Users pantry
      * response is string of all items in the pantry of the user request returns
@@ -144,6 +156,8 @@ public class PantryFragment extends Fragment {
      * @param ingredient - the name of a given ingredient the user wants to add
      * @param quantity   - the quantity of the same item in the pantry
      * @param unitsType  - the type of amount (can, cup, tablespoon, etc.)
+     *
+     * @throws JSONException - if the JSON is malformed
      */
     private void addItem(View view, String UID, String ingredient, int quantity, String unitsType) throws JSONException {
         /* If the user inputted text, send it */
@@ -205,7 +219,6 @@ public class PantryFragment extends Fragment {
                 response -> {
                     Toast.makeText(this.getContext(), "Item Removed", Toast.LENGTH_LONG).show();
                 }, error -> {
-
         });
 
         AppController.getInstance().addToRequestQueue(pantryRemoveRequest, tag_pantry_req);
