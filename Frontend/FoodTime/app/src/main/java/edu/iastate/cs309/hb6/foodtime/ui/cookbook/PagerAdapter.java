@@ -40,8 +40,8 @@ public class PagerAdapter extends FragmentStateAdapter {
         if (position ==1) {
             return directionsFragment;
         }
-        args.putString(IngredientsFragment.TITLE, "Ingredients") ;
-        ingredientsFragment.setArguments(args);
+//        args.putString(IngredientsFragment.TITLE, "Ingredients") ;
+////        ingredientsFragment.setArguments(args);
         return ingredientsFragment;
     }
 

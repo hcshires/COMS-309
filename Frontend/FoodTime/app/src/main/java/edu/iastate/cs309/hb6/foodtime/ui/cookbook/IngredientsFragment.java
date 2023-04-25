@@ -36,11 +36,11 @@ public class IngredientsFragment extends Fragment {
      * @param savedInstanceState If non-null, this fragment is being re-constructed
      *                           from a previous saved state as given here.
      */
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ((TextView)view.findViewById(R.id.recipeTitle)).setText(getArguments().getString(TITLE));
+//    @Override
+//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//        ((TextView)view.findViewById(R.id.recipeTitle)).setText(getArguments().getString(TITLE));
 //        ((CardView)view.findViewById(R.id.ingrCV))
-
-    }
+//
+//    }
 }

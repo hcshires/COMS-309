@@ -49,7 +49,12 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         /* Tab Layout Mediator */
         new TabLayoutMediator(ingDricTab, viewRecipeVP, (tab, position) -> {
-            tab.setText("Ingredients");
+            if(position == 1) {
+                tab.setText("Directions");
+            }
+            else {
+                tab.setText("Ingredients");
+            }
         }).attach();
 
 
