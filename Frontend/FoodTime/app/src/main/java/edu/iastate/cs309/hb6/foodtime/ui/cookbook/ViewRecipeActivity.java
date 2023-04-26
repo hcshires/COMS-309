@@ -47,32 +47,23 @@ public class ViewRecipeActivity extends AppCompatActivity {
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getLifecycle());
         viewRecipeVP.setAdapter(pagerAdapter);
 
-        /* Tab Layout Mediator */
-        new TabLayoutMediator(ingDricTab, viewRecipeVP, (tab, position) -> {
-            if(position == 1) {
-                tab.setText("Directions");
-            }
-            else {
-                tab.setText("Ingredients");
-            }
-        }).attach();
-
-
-        //  switches pages if slid
-        viewRecipeVP.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            /**
-             * @param position Position index of the new selected page.
-             */
+        ingDricTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onPageSelected(int position) {
-                ingDricTab.selectTab(ingDricTab.getTabAt(position));
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewRecipeVP.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
 
-
-        //old code, might re implement
-//        pagerAdapter.addFragment(new IngredientsFragment(), recipeTitle);
-//        pagerAdapter.addFragment(new DirectionsFragment(), recipeTitle);
 
     }
 }

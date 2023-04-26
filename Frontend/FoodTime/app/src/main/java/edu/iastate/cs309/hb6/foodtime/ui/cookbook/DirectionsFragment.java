@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +24,16 @@ public class DirectionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("DirectionsFragment", "Directions Fragment was created");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_directions, container, false);
     }
 
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 //        ((TextView)view.findViewById(R.id.recipeTitle)).setText(getArguments().getString(TITLE_D));
 //        ((CardView)view.findViewById(R.id.ingrCV))
-//
-//    }
+
+    }
 }

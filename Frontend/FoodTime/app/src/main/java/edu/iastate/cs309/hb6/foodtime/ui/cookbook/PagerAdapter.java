@@ -34,15 +34,13 @@ public class PagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        IngredientsFragment ingredientsFragment = new IngredientsFragment();
-        DirectionsFragment directionsFragment = new DirectionsFragment();
+//        IngredientsFragment ingredientsFragment = new IngredientsFragment();
+//        DirectionsFragment directionsFragment = new DirectionsFragment();
         Bundle args =new Bundle();
         if (position ==1) {
-            return directionsFragment;
+            return new DirectionsFragment();
         }
-//        args.putString(IngredientsFragment.TITLE, "Ingredients") ;
-////        ingredientsFragment.setArguments(args);
-        return ingredientsFragment;
+        return new IngredientsFragment();
     }
 
     /**
@@ -53,9 +51,5 @@ public class PagerAdapter extends FragmentStateAdapter {
         return 2;
     }
 
-//    public void addFragment(Fragment fragment, String title) {
-//        fragmentArrayList.add(fragment);
-//        fragmentTitles.add(title);
-//    }
 
 }
