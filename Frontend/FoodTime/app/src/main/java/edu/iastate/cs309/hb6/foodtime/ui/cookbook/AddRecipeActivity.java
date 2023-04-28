@@ -132,11 +132,16 @@ public class AddRecipeActivity extends AppCompatActivity {
                 JsonObjectRequest addRecipeRequest = new JsonObjectRequest(Request.Method.PUT, Const.URL_RECIPES_ADDRECIPE + "?UID=" + userID, mealObj,
                     response -> {
                         Toast.makeText(view.getContext(), "Meal added", Toast.LENGTH_LONG).show();
-                        Intent addRecipeIntent = new Intent(AddRecipeActivity.this, DashboardActivity.class);
+                        Intent addRecipeIntent = new Intent(AddRecipeActivity.this, AddDirectionActivity.class);
                         addRecipeIntent.putExtra("userID", userID);
+                        addRecipeIntent.putExtra("RecipeTitle", recipeTitle);
                         startActivity(addRecipeIntent);
                     }, error -> {
-                    Toast.makeText(view.getContext(), "An Error Occurred.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(view.getContext(), "An Error Occurred.", Toast.LENGTH_LONG).show();
+                        Intent addRecipeIntent = new Intent(AddRecipeActivity.this, AddDirectionActivity.class);
+                        addRecipeIntent.putExtra("userID", userID);
+                        addRecipeIntent.putExtra("RecipeTitle", recipeTitle);
+                        startActivity(addRecipeIntent);
                 });
 
                 AppController.getInstance().addToRequestQueue(addRecipeRequest, tag_recipe_req);
