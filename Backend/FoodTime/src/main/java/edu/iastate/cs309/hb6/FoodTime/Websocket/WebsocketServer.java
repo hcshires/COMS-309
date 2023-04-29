@@ -84,7 +84,11 @@ public class WebsocketServer {
     public Meal lookUpMeal (String mealName, String UID) {
         logger.info("Sending meal" + mealName);
         Map<String, Recipe> userRecipes = userRepository.findByUID(UID).getUserRecipes();
-        //TODO find recipe and send back
-        return null;
+        if (userRecipes.containsKey(mealName)) {
+            return userRecipes.get(mealName);
+        }
+        else {
+            return null;
+        } 
     }
 }
