@@ -21,13 +21,18 @@ import edu.iastate.cs309.hb6.foodtime.R;
  */
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
 
+    /** The current context */
     private final Context context;
+
+    /** Recipes to populate cards to be used by RecyclerView */
     private final ArrayList<String> recipes;
 
+
     /**
-     * 
-     * @param context
-     * @param recipes
+     * CardAdapter
+     *
+     * @param context - The current context.
+     * @param recipes - The data (recipes from database) to populate cards to be used by RecyclerView.
      */
     public CardAdapter(Context context, ArrayList<String> recipes) {
         this.context = context;
@@ -40,7 +45,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
      * @param parent   The ViewGroup into which the new View will be added after it is bound to
      *                 an adapter position.
      * @param viewType The view type of the new View.
-     * @return
+     * @return A new ViewHolder that holds a View of the given view type.
      */
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -50,6 +55,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     /**
      * onBindViewHolder
+     * When the card is created, set properties, such as the recipe title and image
      *
      * @param holder   The ViewHolder which should be updated to represent the contents of the
      *                 item at the given position in the data set.
@@ -57,24 +63,22 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
      */
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
-        TextView tt2 = holder.recipeTitle;
-        tt2.setText(recipes.get(position));
-        Log.d("RECIPE", recipes.toString());
+        TextView recipeTitle = holder.recipeTitle;
+        recipeTitle.setText(recipes.get(position));
     }
 
     /**
-     * getItemCount
-     * <p>
-     * getter method to get the number of recipes in the cook book.
-     *
-     * @return
+     * Get the number of recipes (items) in the Cookbook
+     * @return The total number of items in the data set held by the adapter (Cookbook).
      */
     @Override
     public int getItemCount() {
         return recipes.size();
     }
+
     /**
-     * @param recyclerView The RecyclerView instance which started observing this adapter.
+     * onAttachedToRecyclerView
+     * @param recyclerView - The RecyclerView instance which is currently connected to this adapter.
      */
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -82,24 +86,29 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     }
 
     /**
-     * Contents of CardView
+     * CardViewHolder
+     * <p>
+     * The contents of an instance of CardView
      */
     public static class CardViewHolder extends RecyclerView.ViewHolder {
+
+        /** The title of the recipe */
         private final TextView recipeTitle;
 
         /**
-         * 
-         * @param itemView
+         * CardViewHolder
+         * Set properties of the CardView, such as handling ViewRecipeActivity intent when clicked
+         *
+         * @param itemView - The CardView
          */
         public CardViewHolder(View itemView) {
             super(itemView);
-            CardView cv = itemView.findViewById(R.id.cv);
-            Context context = itemView.getContext();
-
             recipeTitle = itemView.findViewById((R.id.recipeTitle));
 
+            // Create intent to ViewRecipeActivity when card is clicked
             itemView.setOnClickListener(view -> {
                 Intent viewRecipeIntent = new Intent(view.getContext(), ViewRecipeActivity.class);
+                viewRecipeIntent.putExtra("RecipeTitle", recipeTitle.getText().toString());
                 Toast.makeText(view.getContext(), "Clicked", Toast.LENGTH_LONG).show();
                 view.getContext().startActivity(viewRecipeIntent);
             });

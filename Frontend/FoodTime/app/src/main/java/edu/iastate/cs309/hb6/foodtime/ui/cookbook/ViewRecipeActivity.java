@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -23,6 +24,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
     private PagerAdapter pagerAdapter;
 
     private String recipeTitle;
+    private Bundle usrData;
 
 
 
@@ -31,9 +33,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
 
-        /* for testing*/
-        recipeTitle = "Lasagna";
-        //eventually we will grab recipeTitle through putsextra
+        Intent intent = getIntent();
+        usrData = intent.getExtras();
+        recipeTitle = usrData.getString("RecipeTitle");
 
         /* Widgets */
         ingDricTab = findViewById(R.id.ingDirTabs);

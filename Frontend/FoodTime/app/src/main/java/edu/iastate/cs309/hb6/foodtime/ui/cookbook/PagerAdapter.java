@@ -34,11 +34,11 @@ public class PagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-//        IngredientsFragment ingredientsFragment = new IngredientsFragment();
-//        DirectionsFragment directionsFragment = new DirectionsFragment();
         Bundle args =new Bundle();
         if (position ==1) {
-            return new DirectionsFragment();
+            Fragment fragDirections = new DirectionsFragment();
+//            fragDirections.setArguments();
+            return fragDirections;
         }
         return new IngredientsFragment();
     }

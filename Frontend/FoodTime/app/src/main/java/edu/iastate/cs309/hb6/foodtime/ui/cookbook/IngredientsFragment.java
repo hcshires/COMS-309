@@ -1,5 +1,6 @@
 package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,7 +19,8 @@ import edu.iastate.cs309.hb6.foodtime.R;
 
 public class IngredientsFragment extends Fragment {
 
-    public static final String TITLE = "recipe Ingredients";
+    private static final String TAG = IngredientsFragment.class.getSimpleName();
+    private TextView recipeTitle;
 
     public IngredientsFragment() {
         // Required empty public constructor
@@ -29,7 +31,11 @@ public class IngredientsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Log.d("IngredientsFragment", "Ingredients Fragment was created");
+        Log.d(TAG, "Ingredients Fragment was created");
+        Intent intent = requireActivity().getIntent();
+        Bundle usrData = intent.getExtras();
+//        recipeTitle.setText(usrData.getString("RecipeTitle"));
+
         return inflater.inflate(R.layout.fragment_ingredients, container, false);
     }
 
@@ -38,11 +44,10 @@ public class IngredientsFragment extends Fragment {
      * @param savedInstanceState If non-null, this fragment is being re-constructed
      *                           from a previous saved state as given here.
      */
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        ((TextView)view.findViewById(R.id.recipeTitle)).setText(getArguments().getString(TITLE));
-//        ((CardView)view.findViewById(R.id.ingrCV))
-//
-//    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+    }
 }

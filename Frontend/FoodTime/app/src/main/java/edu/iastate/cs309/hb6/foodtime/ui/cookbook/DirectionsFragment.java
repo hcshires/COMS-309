@@ -1,5 +1,6 @@
 package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,7 +17,9 @@ import edu.iastate.cs309.hb6.foodtime.R;
 
 public class DirectionsFragment extends Fragment {
 
-    public static final String TITLE_D = "Directions";
+//    public static final String TITLE_D = "Directions";
+    private static final String TAG = DirectionsFragment.class.getSimpleName();
+    private TextView recipeTitle;
     public DirectionsFragment() {
         // Required empty public constructor
     }
@@ -25,6 +28,10 @@ public class DirectionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d("DirectionsFragment", "Directions Fragment was created");
+
+        Intent intent = requireActivity().getIntent();
+        Bundle usrData = intent.getExtras();
+        recipeTitle.setText(usrData.getString("RecipeTitle"));
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_directions, container, false);
     }
@@ -32,8 +39,7 @@ public class DirectionsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        ((TextView)view.findViewById(R.id.recipeTitle)).setText(getArguments().getString(TITLE_D));
-//        ((CardView)view.findViewById(R.id.ingrCV))
+
 
     }
 }
