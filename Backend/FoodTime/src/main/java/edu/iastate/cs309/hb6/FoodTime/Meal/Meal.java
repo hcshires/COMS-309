@@ -26,6 +26,10 @@ public class Meal implements Serializable {
     @Column
     private String imgLink;
 
+    @Column
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
+    private ArrayList<String> directionSteps;
+
     //HashMap so that we can easily add and remove ingredients
     @Column(columnDefinition = "json")
     @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
