@@ -1,4 +1,4 @@
-package edu.iastate.cs309.hb6.foodtime.ui.home;
+package edu.iastate.cs309.hb6.foodtime.ui.calendar;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
