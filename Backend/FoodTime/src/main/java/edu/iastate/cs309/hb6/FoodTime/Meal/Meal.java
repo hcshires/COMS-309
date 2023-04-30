@@ -94,4 +94,12 @@ public class Meal implements Serializable {
         }
         return -1;
     }
+
+    public String getLink(){
+        return this.imgLink;
+    }
+
+    public void setLink(String link){
+        this.imgLink = link;
+    }
 }
