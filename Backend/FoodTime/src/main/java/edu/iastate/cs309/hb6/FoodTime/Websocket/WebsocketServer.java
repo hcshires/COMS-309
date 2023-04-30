@@ -63,17 +63,19 @@ public class WebsocketServer {
         logger.info("Sending meal " + mealName + " to user " + destUser);
 
         String UID = sessionUsernameMap.get(session);
+        logger.info("Got UID: " + UID + " from sessionUsernameMap");
 
-        try {
-            //UID is for the user that is sending the recipe
-            //destUID is the UID of the user that it is being sent to
-            Meal mealToSend = lookUpMeal(mealName, UID);
+//        try {
+//            //UID is for the user that is sending the recipe
+//            //destUID is the UID of the user that it is being sent to
+            Recipe mealToSend = lookUpMeal(mealName, UID);
+            logger.info("Heck?");
             String destUID = userRepository.findByUsername(destUser).getUID().toString();
             usernameSessionMap.get(destUID).getBasicRemote().sendText(mapper.writeValueAsString(mealToSend));
-        }
-        catch (Exception e) {
-            System.out.printf("Error looking up meal %s for UID %s%n", mealName, UID);
-        }
+//        }
+//        catch (Exception e) {
+//            System.out.printf("Error looking up meal %s for UID %s%n", mealName, UID);
+//        }
     }
 
     @OnError
@@ -81,14 +83,19 @@ public class WebsocketServer {
         logger.info("Handling error");
     }
 
-    public Meal lookUpMeal (String mealName, String UID) {
-        logger.info("Sending meal" + mealName);
+    private Recipe lookUpMeal (String mealName, String UID) {
+        logger.info("Sending meal " + mealName);
         Map<String, Recipe> userRecipes = userRepository.findByUID(UID).getUserRecipes();
+        logger.info("the fuck");
         if (userRecipes.containsKey(mealName)) {
-            return userRecipes.get(mealName);
+            Recipe recipe = userRecipes.get(mealName);
+            System.out.println("Took if");
+            return recipe;
         }
         else {
+            logger.info("Meal " + mealName + " not found for user " + UID);
+            System.out.println("Took else");
             return null;
-        } 
+        }
     }
 }
