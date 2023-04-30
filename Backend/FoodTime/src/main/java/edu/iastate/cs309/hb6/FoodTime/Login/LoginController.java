@@ -1,6 +1,5 @@
 package edu.iastate.cs309.hb6.FoodTime.Login;
 
-
 import edu.iastate.cs309.hb6.FoodTime.Meal.Meal;
 import edu.iastate.cs309.hb6.FoodTime.Meal.MealList;
 import edu.iastate.cs309.hb6.FoodTime.Meal.MealRepository;
@@ -34,7 +33,7 @@ public class LoginController {
     @Autowired
     MealRepository mealDB;
 
-    @PostMapping("/users/create")
+    @PostMapping(value = "/users/create", produces="application/json")
     @ResponseBody
     @Transactional
     //We can return an HTTP response as well as a UID after creating the user
@@ -104,6 +103,8 @@ public class LoginController {
         }
         else return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
+
+
 
     @DeleteMapping("/users/delete")
     @ResponseBody
