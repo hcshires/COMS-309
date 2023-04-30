@@ -2,25 +2,23 @@ package edu.iastate.cs309.hb6.FoodTime.Websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.iastate.cs309.hb6.FoodTime.Login.UserRepository;
-import edu.iastate.cs309.hb6.FoodTime.Meal.Meal;
-import edu.iastate.cs309.hb6.FoodTime.Meal.RecipeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 
 import edu.iastate.cs309.hb6.FoodTime.Meal.*;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@ServerEndpoint("/websocket/send-meal/{UID}")
 @Component
+@ServerEndpoint("/websocket/send-meal/{UID}")
 public class WebsocketServer {
     // Store all socket session and their corresponding username.
     private static Map<Session, String> sessionUsernameMap = new Hashtable<>();
@@ -29,10 +27,7 @@ public class WebsocketServer {
     private final Logger logger = LoggerFactory.getLogger(WebsocketServer.class);
 
     @Autowired
-    private RecipeRepository recipeRepository;
-
-    @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @OnOpen
     public void onOpen(Session session, @PathParam("UID") String UID) throws IOException {
@@ -65,17 +60,18 @@ public class WebsocketServer {
         String UID = sessionUsernameMap.get(session);
         logger.info("Got UID: " + UID + " from sessionUsernameMap");
 
-//        try {
-//            //UID is for the user that is sending the recipe
-//            //destUID is the UID of the user that it is being sent to
+        try {
+            //UID is for the user that is sending the recipe
+            //destUID is the UID of the user that it is being sent to
             Recipe mealToSend = lookUpMeal(mealName, UID);
             logger.info("Heck?");
             String destUID = userRepository.findByUsername(destUser).getUID().toString();
             usernameSessionMap.get(destUID).getBasicRemote().sendText(mapper.writeValueAsString(mealToSend));
-//        }
-//        catch (Exception e) {
-//            System.out.printf("Error looking up meal %s for UID %s%n", mealName, UID);
-//        }
+        }
+        catch (Exception e) {
+            logger.info(String.format("Error looking up meal %s for UID %s%n", mealName, UID));
+            e.printStackTrace();
+        }
     }
 
     @OnError
