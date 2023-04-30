@@ -27,14 +27,29 @@ import edu.iastate.cs309.hb6.foodtime.databinding.FragmentCookbookBinding;
 import edu.iastate.cs309.hb6.foodtime.utils.AppController;
 import edu.iastate.cs309.hb6.foodtime.utils.Const;
 
+/**
+ * Dashboard Fragment: CookBook
+ * View the user's recipes (collection of all possible meals to make) and add new ones
+ */
 public class CookBookFragment extends Fragment {
+
+    /** The binding for this fragment */
     private FragmentCookbookBinding binding;
 
+    /** View to hold recipe cards */
     private RecyclerView recipeCards;
+
+    /** Data set adapter for recipe cards */
     private CardAdapter adapter;
+
+    /** List of recipes */
     private final ArrayList<String> recipes = new ArrayList<>();
-    private final String tag_cookbook_req = "cookbook_req";
+
+    /** Tag for logging */
     private final String TAG = CookBookFragment.class.getSimpleName();
+
+    /** Tag for requests */
+    private final String tag_cookbook_req = "cookbook_req";
 
     /**
      * OnCreateView
@@ -58,7 +73,7 @@ public class CookBookFragment extends Fragment {
 
         /* Store user ID for requests */
         Bundle userData = requireActivity().getIntent().getExtras();
-        String userID = userData.getString("userID").replaceAll("\"", "");
+        String UID = userData.getString("UID").replaceAll("\"", "");
 
         /* Widgets */
         FloatingActionButton addRecipe = root.findViewById(R.id.addRecipeBtn);
@@ -71,13 +86,13 @@ public class CookBookFragment extends Fragment {
         adapter = new CardAdapter(root.getContext(), recipes);
 
         /* Initialize Recipes */
-        getUserRecipes(userID);
+        getUserRecipes(UID);
         Log.d(TAG, "Recipes List: " + recipes);
 
         /* Go to AddRecipe when button clicked */
         addRecipe.setOnClickListener(view -> {
             Intent cookbookIntent = new Intent(root.getContext(), AddRecipeActivity.class);
-            cookbookIntent.putExtra("userID", userID);
+            cookbookIntent.putExtra("UID", UID);
             startActivity(cookbookIntent);
         });
 
@@ -86,10 +101,10 @@ public class CookBookFragment extends Fragment {
 
     /**
      * Return an ArrayList of recipes for the user from the database
-     * @param userID - the given user ID for the user
+     * @param UID - the given user ID for the user
      */
-    private void getUserRecipes(String userID) {
-        JsonArrayRequest getUserRecipes = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_GETLABELS + "?UID=" + userID, null, response -> {
+    private void getUserRecipes(String UID) {
+        JsonArrayRequest getUserRecipes = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_GETLABELS + "?UID=" + UID, null, response -> {
             try {
                 for (int i = 0; i < response.length(); i++) {
                     String item = response.getString(i);
@@ -108,6 +123,10 @@ public class CookBookFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(getUserRecipes, tag_cookbook_req);
     }
 
+    /**
+     * onDestroyView
+     * Handle when the view is no longer active
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();

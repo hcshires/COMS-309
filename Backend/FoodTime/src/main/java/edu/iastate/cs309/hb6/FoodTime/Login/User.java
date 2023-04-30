@@ -20,11 +20,35 @@ import org.hibernate.annotations.Type;
 @Table(name = "users")
 public class User {
 
+    public AccessLevel getAccessLevel() {
+        return accessLevel;
+    }
+
+    public void setAccessLevel(AccessLevel accessLevel) {
+        this.accessLevel = accessLevel;
+    }
+
+    public User getParentUser() {
+        return parentUser;
+    }
+
+    public void setParentUser(User parentUser) {
+        this.parentUser = parentUser;
+    }
+
+    public enum AccessLevel {
+        CHILD,
+        PARENT
+    }
+
     @Column (unique = true)
     private String username;
 
     @Column
     private String password;
+
+    @Column
+    private AccessLevel accessLevel;
 
     //This is a string because UUIDs do not play super nicely in the DB
     @Id
@@ -40,6 +64,9 @@ public class User {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private MealList userMealsWeekly;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    private User parentUser;
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "recipe_book_uid")
     private Map<String, Recipe> userRecipes;
@@ -53,9 +80,10 @@ public class User {
     }
 
     @JsonCreator
-    public User (String username, String password) {
+    public User (String username, String password, AccessLevel accessLevel) {
         this.username = username;
         this.password = password;
+        this.accessLevel = accessLevel;
         userRecipes = new HashMap<>();
     }
 

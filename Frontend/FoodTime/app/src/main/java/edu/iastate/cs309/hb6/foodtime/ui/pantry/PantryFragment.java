@@ -39,12 +39,25 @@ import edu.iastate.cs309.hb6.foodtime.utils.Const;
  */
 public class PantryFragment extends Fragment {
 
+    /** The pantry list */
     private static ArrayList<String> ingredientsList;
+
+    /** The adapter for the pantry list */
     private ArrayAdapter<String> pantryAdapter;
+
+    /** The pantry ListView */
     private ListView pantry;
+
+    /** An input text box */
     private EditText input, quantityInput, unitInput;
+
+    /** The binding for this fragment */
     private FragmentPantryBinding binding;
+
+    /** The tag for this fragment */
     private final String TAG = PantryFragment.class.getSimpleName();
+
+    /** The tag for pantry requests */
     private final String tag_pantry_req = "pantry_req";
 
     /**
@@ -75,7 +88,7 @@ public class PantryFragment extends Fragment {
 
         /* Store user ID for requests */
         Bundle userData = requireActivity().getIntent().getExtras();
-        String userID = userData.getString("userID").replaceAll("\"", "");
+        String UID = userData.getString("UID").replaceAll("\"", "");
 
         /* Store the pantry */
         ingredientsList = new ArrayList<>();
@@ -83,7 +96,7 @@ public class PantryFragment extends Fragment {
         pantry.setAdapter(pantryAdapter);
 
         /* Pull the pantry version from the server to update the local array list */
-        getUserPantryString(userID);
+        getUserPantryString(UID);
 
         /* Add an item typed in the text box */
         addButton.setOnClickListener(view -> {
@@ -92,7 +105,7 @@ public class PantryFragment extends Fragment {
             int quantity = Integer.parseInt(quantityInput.getText().toString());
             if (!ingredient.isEmpty()) {
                 try {
-                    addItem(view, userID, ingredient, quantity, unitType);
+                    addItem(view, UID, ingredient, quantity, unitType);
                     input.setText("");
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -103,7 +116,7 @@ public class PantryFragment extends Fragment {
         });
 
         /* Listen for clicks on the pantry (i.e. delete items) */
-        setUpListViewListener(userID);
+        setUpListViewListener(UID);
         return root;
     }
 
@@ -120,36 +133,37 @@ public class PantryFragment extends Fragment {
      * Listens for events pertaining to the pantry
      * If the user long presses an item in the list, the handler will remove the item from the server and local list
      *
-     * @param userID - the UID of the current user pertaining to their unique pantry
+     * @param UID - the UID of the current user pertaining to their unique pantry
      */
-    private void setUpListViewListener(String userID) {
+    private void setUpListViewListener(String UID) {
         pantry.setOnItemLongClickListener((adapterView, view, i, l) -> {
             Context context = view.getContext().getApplicationContext();
 
             /* Update server and local list simultaneously */
-            removeFromPantry(userID, ingredientsList.remove(i));
+            removeFromPantry(UID, ingredientsList.remove(i));
             pantryAdapter.notifyDataSetChanged();
 
             return true;
         });
     }
 
-
     /**
      * For a given UID and ingredient, sends req to add that ingredient to the Users pantry
      * response is string of all items in the pantry of the user request returns
      *
      * @param view       - the current view
-     * @param userID     - the UID of the current user pertaining to their unique pantry
+     * @param UID     - the UID of the current user pertaining to their unique pantry
      * @param ingredient - the name of a given ingredient the user wants to add
      * @param quantity   - the quantity of the same item in the pantry
      * @param unitsType  - the type of amount (can, cup, tablespoon, etc.)
+     *
+     * @throws JSONException - if the JSON is malformed
      */
-    private void addItem(View view, String userID, String ingredient, int quantity, String unitsType) throws JSONException {
+    private void addItem(View view, String UID, String ingredient, int quantity, String unitsType) throws JSONException {
         /* If the user inputted text, send it */
         if (!ingredient.isEmpty()) {
             JsonArrayRequest addToPantryRequest = new JsonArrayRequest(Request.Method.PUT,
-                    Const.URL_PANTRY_ADDITEM + "?userID=" + userID + "&ingredientName=" + ingredient + "&quantity=" + quantity + "&unitsType=" + unitsType, null,
+                    Const.URL_PANTRY_ADDITEM + "?UID=" + UID + "&ingredientName=" + ingredient + "&quantity=" + quantity + "&unitsType=" + unitsType, null,
                     response -> {
                         ingredientsList.add(ingredient + " - " + quantity + " - " + unitsType);
                         pantryAdapter.notifyDataSetChanged();
@@ -170,11 +184,11 @@ public class PantryFragment extends Fragment {
     /**
      * Get the pantry as an array of ingredients as strings from the server
      *
-     * @param userID - the UID of the current user pertaining to their unique pantry
+     * @param UID - the UID of the current user pertaining to their unique pantry
      */
-    private void getUserPantryString(String userID) {
+    private void getUserPantryString(String UID) {
         JsonArrayRequest pantryStringRequest = new JsonArrayRequest(
-                Request.Method.GET, Const.URL_PANTRY_GETPANTRYITEMS + "?userID=" + userID, null,
+                Request.Method.GET, Const.URL_PANTRY_GETPANTRYITEMS + "?UID=" + UID, null,
                 response -> {
                     try {
                         for (int i = 0; i < response.length(); i++) {
@@ -196,16 +210,15 @@ public class PantryFragment extends Fragment {
     /**
      * Remove a requested ingredient from the pantry on the server and locally
      *
-     * @param userID     - the UID of the current user pertaining to their unique pantry
+     * @param UID     - the UID of the current user pertaining to their unique pantry
      * @param ingredient - the name of the specified ingredient
      */
-    private void removeFromPantry(String userID, String ingredient) {
+    private void removeFromPantry(String UID, String ingredient) {
         StringRequest pantryRemoveRequest = new StringRequest(
-                Request.Method.DELETE, Const.URL_PANTRY_REMOVEITEM + "?userID=" + userID + "&ingredientName=" + ingredient,
+                Request.Method.DELETE, Const.URL_PANTRY_REMOVEITEM + "?UID=" + UID + "&ingredientName=" + ingredient,
                 response -> {
                     Toast.makeText(this.getContext(), "Item Removed", Toast.LENGTH_LONG).show();
                 }, error -> {
-
         });
 
         AppController.getInstance().addToRequestQueue(pantryRemoveRequest, tag_pantry_req);
