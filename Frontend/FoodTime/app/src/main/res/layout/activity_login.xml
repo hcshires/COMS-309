@@ -48,7 +48,7 @@
         android:inputType="textPassword" />
 
     <RadioGroup
-        android:id="@+id/userRole"
+        android:id="@+id/userLevelOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -66,14 +66,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/capriola"
             android:text="Parent"
-            android:textColor="@color/colorSecondary" />
-
-        <RadioButton
-            android:id="@+id/adminRoleBtn"
-            android:layout_width="215dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/capriola"
-            android:text="Family Admin"
             android:textColor="@color/colorSecondary" />
     </RadioGroup>
 

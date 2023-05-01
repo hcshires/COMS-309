@@ -6,6 +6,8 @@ import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +33,10 @@ import edu.iastate.cs309.hb6.foodtime.utils.Const;
  */
 public class LoginActivity extends AppCompatActivity {
     /** The EditText fields for the user's email and password */
-    private EditText email, pwd;
+    private EditText email, pwd, parentUsername;
+
+    /** RadioButtons for user's account permission level */
+    private RadioGroup userLevels;
 
     /** The Intent to start the DashboardActivity */
     private Intent loginIntent;
@@ -54,8 +59,12 @@ public class LoginActivity extends AppCompatActivity {
 
         Button loginBtn = findViewById(R.id.loginBtn);
         Button registerBtn = findViewById(R.id.registerBtn);
+
+        // Get fields
         email = findViewById(R.id.email);
         pwd = findViewById(R.id.password);
+        userLevels = findViewById(R.id.userLevelOptions);
+        parentUsername = findViewById(R.id.parentUsername);
 
         loginIntent = new Intent(LoginActivity.this, DashboardActivity.class);
 
@@ -122,15 +131,23 @@ public class LoginActivity extends AppCompatActivity {
      * @throws JSONException - if the response body is not a valid JSON object
      */
     private void createUser() throws JSONException {
+        // JSON Body
         Map<String, String> params = new HashMap<>();
+
+        // User, pass
         params.put("username", email.getText().toString());
         params.put("password", pwd.getText().toString());
 
+        // User access level select
+        int selectedLevelId = userLevels.getCheckedRadioButtonId();
+        RadioButton selectedLevel = findViewById(selectedLevelId);
+        params.put("accessLevel", selectedLevel.getText().toString().toUpperCase());
+
         JSONObject reqBody = new JSONObject(params);
         JsonObjectRequest createUserRequest = new JsonObjectRequest(Request.Method.POST,
-                Const.URL_CREATE_USER, reqBody,
+                Const.URL_CREATE_USER + "?parentUsername=" + parentUsername.getText().toString(), reqBody,
                 response -> {
-                    Log.d(TAG, "Success: " + response.toString());
+                    Log.d(TAG, "New user created: " + response.toString());
                     try {
                         // Get the UID from the response body
                         loginIntent.putExtra("UID", response.get("uid").toString());
