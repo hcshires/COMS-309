@@ -7,10 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,9 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
-import edu.iastate.cs309.hb6.foodtime.DashboardActivity;
 import edu.iastate.cs309.hb6.foodtime.R;
 import edu.iastate.cs309.hb6.foodtime.databinding.FragmentPantryBinding;
 import edu.iastate.cs309.hb6.foodtime.utils.AppController;
@@ -80,7 +76,7 @@ public class PantryFragment extends Fragment {
         View root = binding.getRoot();
 
         /* Widgets */
-        FloatingActionButton addButton = root.findViewById(R.id.addButton);
+        FloatingActionButton addButton = root.findViewById(R.id.addToPantryBtn);
         pantry = (ListView) root.findViewById(R.id.pantryItems);
         input = root.findViewById(R.id.editTextAddPantry);
         quantityInput = root.findViewById(R.id.quantityTxt);

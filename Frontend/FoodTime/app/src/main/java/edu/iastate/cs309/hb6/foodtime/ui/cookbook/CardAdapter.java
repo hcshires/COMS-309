@@ -2,14 +2,11 @@ package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -26,7 +23,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     /** Recipes to populate cards to be used by RecyclerView */
     private final ArrayList<String> recipes;
-
 
     /**
      * CardAdapter

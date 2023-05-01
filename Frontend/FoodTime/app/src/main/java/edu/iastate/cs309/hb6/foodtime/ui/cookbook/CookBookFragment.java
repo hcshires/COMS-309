@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -77,7 +76,7 @@ public class CookBookFragment extends Fragment {
 
         /* Widgets */
         FloatingActionButton addRecipe = root.findViewById(R.id.addRecipeBtn);
-        recipeCards = root.findViewById(R.id.recyclerList);
+        recipeCards = root.findViewById(R.id.cookbookItems);
 
         // Set layout manager to position items
         recipeCards.setLayoutManager(new LinearLayoutManager(root.getContext()));
