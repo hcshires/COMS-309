@@ -25,6 +25,8 @@ import static org.hamcrest.CoreMatchers.allOf;
 
 import android.content.Intent;
 
+import edu.iastate.cs309.hb6.foodtime.utils.Const;
+
 /**
  * Test cases for LoginActivity on FoodTime
  * <p>
@@ -35,6 +37,9 @@ import android.content.Intent;
 @LargeTest   // large execution time
 public class LoginTest {
     private static final int SIMULATED_DELAY_MS = 1000;
+
+    private static final String testEmail = Const.CRED_PARENT_USER[0];
+    private static final String testPass = Const.CRED_PARENT_USER[1];
 
     @Rule
     public ActivityScenarioRule<LoginActivity> activityScenarioRule = new ActivityScenarioRule<>(LoginActivity.class);
@@ -49,9 +54,6 @@ public class LoginTest {
      */
     @Test
     public void loginUser(){
-        String testEmail = "testchild@test.com";
-        String testPass = "food";
-
         onView(withId(R.id.email)).perform(typeText(testEmail));                        // Enter email
         onView(withId(R.id.password)).perform(typeText(testPass), closeSoftKeyboard()); // Enter password
         onView(withId(R.id.loginBtn)).perform(click());                                 // Click login button

@@ -54,5 +54,12 @@ public class Const {
     // NOT USED // public static final String URL_DELETE_USER = URL_SERVER + "/users/delete";
     // NOT USED // static final String URL_RESET_PWD = URL_SERVER + "/users/reset-password";
 
+    /** Other Constants **/
+    /** Child User Testing credentials, username[0], password[1], uid[2] */
+    // NOT USED // public static final String[] CRED_CHILD_USER = {"SystemTestChild@COMS309.com", "root", "b22a34c4-6460-4458-bd43-6c14547259a8"};
+
+    /** Child User Testing credentials, username[0], password[1], uid[2] */
+    public static final String[] CRED_PARENT_USER = {"SystemTestUser@COMS309.com", "root", "6bc95713-067d-4f72-ab2b-0180f759daad"};
+
 
 }

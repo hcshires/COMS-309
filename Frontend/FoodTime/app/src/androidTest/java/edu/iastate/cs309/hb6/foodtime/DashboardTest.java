@@ -38,6 +38,7 @@ import java.util.Random;
 
 import edu.iastate.cs309.hb6.foodtime.ui.cookbook.AddRecipeActivity;
 import edu.iastate.cs309.hb6.foodtime.ui.cookbook.Recipe;
+import edu.iastate.cs309.hb6.foodtime.utils.Const;
 
 /**
  * Test cases for DashboardActivity on FoodTime
@@ -49,7 +50,8 @@ import edu.iastate.cs309.hb6.foodtime.ui.cookbook.Recipe;
 @RunWith(AndroidJUnit4ClassRunner.class)
 @LargeTest   // large execution time
 public class DashboardTest {
-    private static final int SIMULATED_DELAY_MS = 500;
+    /** Sample UID to test app with */
+    private static final String testUID = Const.CRED_PARENT_USER[2];
 
     /** ActivityScenarioRule to log in a user first before using the Dashboard */
     @Rule
@@ -61,9 +63,6 @@ public class DashboardTest {
     @Before
     public void setUp() {
         // Inject UID into Activity
-        // testchild@test.com
-        String testUID = "1313c52b-e7bf-48a1-a7bb-75b05032f307";
-
         setupScenarioRule.getScenario().onActivity(activity -> {
             Intent intent = new Intent(activity.getApplicationContext(), DashboardActivity.class);
             intent.putExtra("UID", testUID);
