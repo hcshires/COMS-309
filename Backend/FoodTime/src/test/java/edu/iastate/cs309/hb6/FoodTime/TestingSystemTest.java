@@ -12,6 +12,9 @@ import io.restassured.response.Response;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -59,5 +62,83 @@ public class TestingSystemTest {
 
     }
 
+    @Test
+    public void addMealTest() throws JSONException {
+        JsonObject mealBody = Json.createObjectBuilder()
+                .add("name", "Quesadillas")
+                .add("ingredients", Json.createArrayBuilder()
+                        .add(Json.createObjectBuilder()
+                                .add("name", "Beans")
+                                .add("quantity", "2")
+                                .add ("quantityType", "cans"))
+                        .add(Json.createObjectBuilder()
+                                .add("name", "Black beans")
+                                .add("quantity", "69")
+                                .add ("quantityType", "cans"))
+                        .add(Json.createObjectBuilder()
+                                .add("name", "Sour cream")
+                                .add("quantity", "1")
+                                .add ("quantityType", "tub")))
+                .build();
 
+        System.out.println(mealBody);
+
+        Response response = RestAssured.given().
+                header("Content-Type", "application/json").
+                header("charset","utf-8").
+                param("UID", "6bc95713-067d-4f72-ab2b-0180f759daad").
+                param("day", "monday").
+                body(mealBody.toString()).
+                when().
+                put("/meals/add");
+
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+    }
+
+    @Test
+    public void getByDayTest() {
+        Response response = RestAssured.given().
+                header("Content-Type", "application/json").
+                header("charset","utf-8").
+                param("UID", "6bc95713-067d-4f72-ab2b-0180f759daad").
+                param("day", "monday").
+                when().
+                get("/meals/get/by-day");
+
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        String returnString = response.getBody().asString();
+        assertNotNull(returnString);
+    }
+
+    @Test
+    public void getAllForUserTest() {
+        Response response = RestAssured.given().
+                header("Content-Type", "application/json").
+                header("charset","utf-8").
+                param("UID", "6bc95713-067d-4f72-ab2b-0180f759daad").
+                when().
+                get("/meals/get/all");
+
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+    }
+
+    @Test
+    public void removeMealTest() {
+        Response response = RestAssured.given().
+                header("Content-Type", "application/json").
+                header("charset","utf-8").
+                param("UID", "6bc95713-067d-4f72-ab2b-0180f759daad").
+                param("day", "monday").
+                param("mealName", "Quesadillas").
+                param("removeAll", "false").
+                when().
+                delete("/meals/remove");
+
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+    }
 }
