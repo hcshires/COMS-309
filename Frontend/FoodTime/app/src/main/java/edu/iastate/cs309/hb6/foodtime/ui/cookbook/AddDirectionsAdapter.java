@@ -1,6 +1,8 @@
 package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +14,13 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.iastate.cs309.hb6.foodtime.R;
 
 public class AddDirectionsAdapter extends RecyclerView.Adapter<AddDirectionsAdapter.CardViewHolder> {
     private final Context context;
-    private final ArrayList<String> directions = new ArrayList<>();
+    private final List<Direction> directions = new ArrayList<>();
 
     public AddDirectionsAdapter(Context context) {
         this.context = context;
@@ -57,6 +60,10 @@ public class AddDirectionsAdapter extends RecyclerView.Adapter<AddDirectionsAdap
         return 10;
     }
 
+    public List<Direction> getDirections () {
+        return directions;
+    }
+
     public static class CardViewHolder extends RecyclerView.ViewHolder {
         private  TextView txtDirection;
         private EditText edtDirection;
@@ -66,11 +73,9 @@ public class AddDirectionsAdapter extends RecyclerView.Adapter<AddDirectionsAdap
          */
         public CardViewHolder(View itemView) {
             super(itemView);
-            CardView cv = itemView.findViewById(R.id.cvIngredients);
-            Context context = itemView.getContext();
-
             txtDirection = itemView.findViewById((R.id.txtDirection));
             edtDirection = itemView.findViewById(R.id.edtIngredient);
         }
+
     }
 }

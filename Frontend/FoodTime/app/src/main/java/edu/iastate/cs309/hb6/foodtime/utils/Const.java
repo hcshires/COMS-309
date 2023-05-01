@@ -45,6 +45,12 @@ public class Const {
     public static final String URL_RECIPES_ADDRECIPE = URL_SERVER + "/recipes/add";
     // NOT USED // public static final String URL_RECIPES_REMOVERECIPE = URL_SERVER + "/recipes/remove";
 
+    /** Add new directions for a recipe" */
+    public static final String URL_DIRECTIONS_SETDIRECTIONS = URL_SERVER + "/meals/setDirections";
+
+    /** Get directions given recipe name */
+    public static final String URL_DIRECTIONS_GETDIRECTIONS = URL_SERVER + "meals/getDirections";
+
     /* User Auth */
     /** Create a new user */
     public static final String URL_CREATE_USER = URL_SERVER + "/users/create";
