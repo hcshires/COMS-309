@@ -332,7 +332,7 @@ public class MealController {
 
     @PutMapping("/meals/setDirections")
     @Transactional
-    public ResponseEntity<Object> setMealDirections(@RequestParam String UID, @RequestParam String mealName, @RequestParam ArrayList<String> directions){
+    public ResponseEntity<Object> setMealDirections(@RequestParam String UID, @RequestParam String mealName, @RequestBody ArrayList<String> directions){
 
         if (!userDB.existsById(UID)) { //ensure user exists cause you can never be too careful
             return new ResponseEntity<>("user does not exist", HttpStatus.NOT_FOUND);
