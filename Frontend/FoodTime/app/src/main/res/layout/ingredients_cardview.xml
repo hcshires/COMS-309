@@ -2,10 +2,10 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools"
-    android:id="@+id/cvDirections"
+    android:id="@+id/cvIngredients"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="3dp"
+    android:layout_margin="5dp"
     android:elevation="3dp"
     android:gravity="center_vertical"
     app:cardBackgroundColor="@color/light_gray"
@@ -51,6 +51,7 @@
             android:layout_below="@+id/rlProductName">
 
             <TextView
+                android:id="@+id/txtQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -82,6 +83,7 @@
             android:layout_marginTop="5dp">
 
             <TextView
+                android:id="@+id/txtType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -92,7 +94,7 @@
                 android:visibility="visible" />
 
             <EditText
-                android:id="@+id/edtPrice"
+                android:id="@+id/edtType"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

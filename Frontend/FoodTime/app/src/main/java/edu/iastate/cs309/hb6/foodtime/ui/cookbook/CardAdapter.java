@@ -109,7 +109,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             itemView.setOnClickListener(view -> {
                 Intent viewRecipeIntent = new Intent(view.getContext(), ViewRecipeActivity.class);
                 viewRecipeIntent.putExtra("RecipeTitle", recipeTitle.getText().toString());
-                Toast.makeText(view.getContext(), "Clicked", Toast.LENGTH_LONG).show();
+                Toast.makeText(view.getContext(), recipeTitle.getText().toString(), Toast.LENGTH_LONG).show();
                 view.getContext().startActivity(viewRecipeIntent);
             });
         }

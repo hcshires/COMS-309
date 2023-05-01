@@ -22,10 +22,11 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/ingrCV"
         android:layout_width="match_parent"
-        android:layout_height="613dp"
+        android:layout_height="460dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="150dp"
         android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="@color/white"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,11 +35,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipeTitle">
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvIngredients"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </ListView>
+            android:layout_height="match_parent"/>
 
     </androidx.cardview.widget.CardView>
 

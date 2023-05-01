@@ -1,13 +1,11 @@
 package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,13 +14,14 @@ import java.util.ArrayList;
 
 import edu.iastate.cs309.hb6.foodtime.R;
 
-public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.CardViewHolder> {
-    private final Context context;
-    private final ArrayList<String> strings;
+public class DirectionsAdaper extends RecyclerView.Adapter<DirectionsAdaper.CardViewHolder> {
 
-    public IngredientsAdapter(Context context, ArrayList<String> strings) {
+    private final Context context;
+    private final ArrayList<String> directions;
+
+    public DirectionsAdaper(Context context, ArrayList<String> directions) {
         this.context = context;
-        this.strings = strings;
+        this.directions = directions;
     }
 
     /**
@@ -33,8 +32,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
      */
     @NonNull
     @Override
-    public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.ingredients_cardview, parent, false);
+    public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(context).inflate(R.layout.directions_cardview, parent, false);
         return new CardViewHolder(v);
     }
 
@@ -44,10 +43,12 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
      * @param position The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(CardViewHolder holder, int position) {
-        EditText ingredientTitle = holder.edtIngredients;
-        ingredientTitle.setText(strings.get(position));
-
+    public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
+        TextView directionNum = holder.txtDirection;
+        EditText direction = holder.edtDirection;
+        int truePosition = position + 1;
+        direction.setText(directions.get(position));
+        directionNum.setText("Direction: " + truePosition);
     }
 
     /**
@@ -55,7 +56,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
      */
     @Override
     public int getItemCount() {
-        return strings.size();
+        return directions.size();
     }
 
     /**
@@ -69,14 +70,10 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public static class CardViewHolder extends RecyclerView.ViewHolder {
 
         /** txtViews */
-        private final TextView txtIngredients;
-        private final TextView txtQuantity;
-        private final TextView txtType;
+        private final TextView txtDirection;
 
         /** edtViews*/
-        private final EditText edtIngredients;
-        private final EditText edtQuantity;
-        private final EditText edtType;
+        private final EditText edtDirection;
 
 
         /**
@@ -89,13 +86,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             super(itemView);
 
             /*initialize widgets*/
-            txtIngredients = itemView.findViewById(R.id.txtIngredient);
-            txtQuantity = itemView.findViewById(R.id.txtQuantity);
-            txtType = itemView.findViewById(R.id.txtType);
-            edtIngredients = itemView.findViewById(R.id.edtIngredient);
-            edtQuantity = itemView.findViewById(R.id.edtQuantity);
-            edtType = itemView.findViewById(R.id.edtType);
-
+            txtDirection = itemView.findViewById(R.id.txtDirection);
+            edtDirection = itemView.findViewById(R.id.edtDirection);
 
         }
     }

@@ -87,7 +87,6 @@ public class CookBookFragment extends Fragment {
 
         /* Initialize Recipes */
         getUserRecipes(UID);
-        Log.d(TAG, "Recipes List: " + recipes);
 
         /* Go to AddRecipe when button clicked */
         addRecipe.setOnClickListener(view -> {
@@ -110,7 +109,6 @@ public class CookBookFragment extends Fragment {
                     String item = response.getString(i);
                     recipes.add(item); // Add to ArrayList
                 }
-
                 /* Attach adapter to recycler view */
                 recipeCards.setAdapter(adapter);
             } catch (JSONException e) {

@@ -1,13 +1,11 @@
 package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -17,12 +15,11 @@ import java.util.ArrayList;
 
 import edu.iastate.cs309.hb6.foodtime.R;
 
-public class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.CardViewHolder> {
-
+public class AddDirectionsAdapter extends RecyclerView.Adapter<AddDirectionsAdapter.CardViewHolder> {
     private final Context context;
     private final ArrayList<String> directions = new ArrayList<>();
 
-    public DirectionsAdapter(Context context) {
+    public AddDirectionsAdapter(Context context) {
         this.context = context;
     }
 
@@ -46,7 +43,7 @@ public class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.Ca
      * @param position The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(@NonNull DirectionsAdapter.CardViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AddDirectionsAdapter.CardViewHolder holder, int position) {
         TextView tt1 = holder.txtDirection;
         int truePosition = position + 1;
         tt1.setText("Direction " + truePosition);
@@ -69,7 +66,7 @@ public class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.Ca
          */
         public CardViewHolder(View itemView) {
             super(itemView);
-            CardView cv = itemView.findViewById(R.id.cvDirections);
+            CardView cv = itemView.findViewById(R.id.cvIngredients);
             Context context = itemView.getContext();
 
             txtDirection = itemView.findViewById((R.id.txtDirection));

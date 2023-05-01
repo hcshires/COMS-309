@@ -16,7 +16,7 @@ import edu.iastate.cs309.hb6.foodtime.R;
 public class AddDirectionActivity extends AppCompatActivity {
     private EditText recipeTitle;
     private RecyclerView recyclerView;
-    private DirectionsAdapter adapter;
+    private AddDirectionsAdapter adapter;
     private Button btnAdd;
     private String UID;
     private final String TAG = AddDirectionActivity.class.getSimpleName();
@@ -44,7 +44,7 @@ public class AddDirectionActivity extends AppCompatActivity {
         Log.d(TAG, usrData.getString("RecipeTitle"));
 
         /*Attach adapter to RV*/
-        adapter = new DirectionsAdapter(AddDirectionActivity.this);
+        adapter = new AddDirectionsAdapter(AddDirectionActivity.this);
         recyclerView.setAdapter(adapter);
 
         /*OnClick Listener*/
