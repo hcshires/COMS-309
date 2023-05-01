@@ -1,6 +1,7 @@
 package edu.iastate.cs309.hb6.FoodTime.Websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.iastate.cs309.hb6.FoodTime.Login.User;
 import edu.iastate.cs309.hb6.FoodTime.Login.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +27,7 @@ public class WebsocketServer {
 
     private final Logger logger = LoggerFactory.getLogger(WebsocketServer.class);
 
-    @Autowired
-    private UserRepository userRepository;
+    private static UserRepository userRepository;
 
     @OnOpen
     public void onOpen(Session session, @PathParam("UID") String UID) throws IOException {
@@ -65,8 +65,25 @@ public class WebsocketServer {
             //destUID is the UID of the user that it is being sent to
             Recipe mealToSend = lookUpMeal(mealName, UID);
             logger.info("Heck?");
-            String destUID = userRepository.findByUsername(destUser).getUID().toString();
-            usernameSessionMap.get(destUID).getBasicRemote().sendText(mapper.writeValueAsString(mealToSend));
+
+            User destUserObj = userRepository.findByUsername(destUser);
+            if (userRepository.existsByUsername(destUser)) {
+                logger.info("Destination user exists");
+            }
+            else {
+                logger.info("Destination user does not exist");
+            }
+            String destUID = destUserObj.getUID().toString();
+            logger.info("Destination UID is: " + destUID);
+
+            if (usernameSessionMap.containsKey(destUID)) {
+                usernameSessionMap.get(destUID).getBasicRemote().sendText(userRepository.findByUID(UID).getUsername() + " sent you a meal:\n" + mapper.writeValueAsString(mealToSend));
+                session.getBasicRemote().sendText("Successfully sent meal to user.");
+            }
+            else {
+                logger.error("Cannot send meal to user that is not currently online.");
+                session.getBasicRemote().sendText("Error: Cannot send meal to user that is not currently online.");
+            }
         }
         catch (Exception e) {
             logger.info(String.format("Error looking up meal %s for UID %s%n", mealName, UID));
@@ -82,10 +99,10 @@ public class WebsocketServer {
     private Recipe lookUpMeal (String mealName, String UID) {
         logger.info("Sending meal " + mealName);
         Map<String, Recipe> userRecipes = userRepository.findByUID(UID).getUserRecipes();
-        logger.info("the fuck");
         if (userRecipes.containsKey(mealName)) {
             Recipe recipe = userRecipes.get(mealName);
-            System.out.println("Took if");
+            logger.info("Took if");
+            logger.info(recipe.getIngredients().toString());
             return recipe;
         }
         else {
@@ -94,4 +111,10 @@ public class WebsocketServer {
             return null;
         }
     }
+
+    @Autowired
+    public void setUserRepository(UserRepository repo) {
+        userRepository = repo;
+    }
+
 }
