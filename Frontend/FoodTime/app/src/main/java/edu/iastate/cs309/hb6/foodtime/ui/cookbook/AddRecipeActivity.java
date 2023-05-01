@@ -162,7 +162,11 @@ public class AddRecipeActivity extends AppCompatActivity {
                     addRecipeIntent.putExtra("UID", UID);
                     startActivity(addRecipeIntent);
                 }, error -> {
-            Toast.makeText(view.getContext(), "An Error Occurred.", Toast.LENGTH_LONG).show();
+            if (error.networkResponse.statusCode == 409) {
+                Toast.makeText(this, "A recipe with that name is already in your cookbook.", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "An unexpected error occurred. Please try again.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         AppController.getInstance().addToRequestQueue(addRecipeReq, tag_recipe_req);
