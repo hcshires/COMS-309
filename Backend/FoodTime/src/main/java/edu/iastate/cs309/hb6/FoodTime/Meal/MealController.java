@@ -329,4 +329,34 @@ public class MealController {
         userDB.findByUID(UID).getUserRecipes().get(mealName).setLink(newLink);
         return new ResponseEntity<>(userDB.findByUID(UID).getUserRecipes().get(mealName).getLink(), HttpStatus.OK);
     }
+
+    @PutMapping("/meals/setDirections")
+    @Transactional
+    public ResponseEntity<Object> setMealDirections(@RequestParam String UID, @RequestParam String mealName, @RequestParam ArrayList<String> directions){
+
+        if (!userDB.existsById(UID)) { //ensure user exists cause you can never be too careful
+            return new ResponseEntity<>("user does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        if(!userDB.findByUID(UID).getUserRecipes().containsKey(mealName)) {
+            return new ResponseEntity<>("meal does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        userDB.findByUID(UID).getUserRecipes().get(mealName).setDirections(directions);
+        return new ResponseEntity<>(userDB.findByUID(UID).getUserRecipes().get(mealName).getDirections(), HttpStatus.OK);
+    }
+
+    @GetMapping("/meals/getDirections")
+    public ResponseEntity<Object> getMealDirections(@RequestParam String UID, @RequestParam String mealName){
+
+        if (!userDB.existsById(UID)) { //ensure user exists cause you can never be too careful
+            return new ResponseEntity<>("user does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        if(!userDB.findByUID(UID).getUserRecipes().containsKey(mealName)) {
+            return new ResponseEntity<>("meal does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(userDB.findByUID(UID).getUserRecipes().get(mealName).getDirections(), HttpStatus.OK);
+    }
 }

@@ -49,6 +49,7 @@ public class Meal implements Serializable {
         this.name = name;
         this.necessaryIngredients = necessaryIngredients;
         imgLink = "";
+        directionSteps = null;
     }
 
     public String getName() {
@@ -105,5 +106,13 @@ public class Meal implements Serializable {
 
     public void setLink(String link){
         this.imgLink = link;
+    }
+
+    public void setDirections(ArrayList<String> directions){
+        this.directionSteps = directions;
+    }
+
+    public ArrayList<String> getDirections(){
+        return this.directionSteps;
     }
 }
