@@ -22,6 +22,14 @@ public class Meal implements Serializable {
 
     private String name;
 
+    //holds link to reference images
+    @Column
+    private String imgLink;
+
+    @Column
+    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
+    private ArrayList<String> directionSteps;
+
     //HashMap so that we can easily add and remove ingredients
     @Column(columnDefinition = "json")
     @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonStringType")
@@ -40,6 +48,7 @@ public class Meal implements Serializable {
     public Meal(String name, ArrayList<Ingredient> necessaryIngredients) {
         this.name = name;
         this.necessaryIngredients = necessaryIngredients;
+        imgLink = "";
     }
 
     public String getName() {
@@ -88,5 +97,13 @@ public class Meal implements Serializable {
             }
         }
         return -1;
+    }
+
+    public String getLink(){
+        return this.imgLink;
+    }
+
+    public void setLink(String link){
+        this.imgLink = link;
     }
 }
