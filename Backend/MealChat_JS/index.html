@@ -1,0 +1,40 @@
+<html>
+
+<head>
+  <title>Chat</title>
+    <script src="websocket.js"></script>
+</head>
+
+<body>
+  <table style="width: 100%">
+    <tr>
+      <td>
+        <input type="text" id="wsserver"
+	style = "width: 15rem;"
+        placeholder="ws://localhost:8080/websocket/send-meal/"
+	value ="ws://localhost:8080/websocket/send-meal/"
+/>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input type="text" id="uid" style:"width=100%;" placeholder="uid" />
+        <button type="button" onclick="connect();">Connect</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <textarea readonly="true" rows="10" cols="80" id="log"></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input type="text" size="51" id="msg" placeholder="Message" />
+        <button type="button" onclick="send();">Send</button>
+      </td>
+    </tr>
+  </table>
+</body>
+<script src="websocket.js"></script>
+
+</html>
