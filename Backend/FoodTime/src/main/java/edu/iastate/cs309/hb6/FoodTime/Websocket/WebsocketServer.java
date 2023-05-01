@@ -1,6 +1,10 @@
 package edu.iastate.cs309.hb6.FoodTime.Websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import edu.iastate.cs309.hb6.FoodTime.Login.User;
 import edu.iastate.cs309.hb6.FoodTime.Login.UserRepository;
 import org.slf4j.Logger;
@@ -16,7 +20,6 @@ import java.util.Map;
 
 import edu.iastate.cs309.hb6.FoodTime.Meal.*;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 @ServerEndpoint("/websocket/send-meal/{UID}")
@@ -33,8 +36,14 @@ public class WebsocketServer {
     public void onOpen(Session session, @PathParam("UID") String UID) throws IOException {
         logger.info(String.format("Opened session for %s", UID));
 
-        sessionUsernameMap.put(session, UID);
-        usernameSessionMap.put(UID, session);
+        if (userRepository.existsById(UID)) {
+            sessionUsernameMap.put(session, UID);
+            usernameSessionMap.put(UID, session);
+        }
+        else {
+            session.getBasicRemote().sendText("Invalid UID. Cannot connect.");
+        }
+
     }
 
     @OnClose
@@ -63,8 +72,8 @@ public class WebsocketServer {
         try {
             //UID is for the user that is sending the recipe
             //destUID is the UID of the user that it is being sent to
-            Recipe mealToSend = lookUpMeal(mealName, UID);
-            logger.info("Heck?");
+            Recipe mealToSend = lookUpMeal(mealName, UID, session);
+            if (mealToSend == null) throw new NullPointerException("Recipe not found in user's cookbook.");
 
             User destUserObj = userRepository.findByUsername(destUser);
             if (userRepository.existsByUsername(destUser)) {
@@ -72,12 +81,19 @@ public class WebsocketServer {
             }
             else {
                 logger.info("Destination user does not exist");
+                session.getBasicRemote().sendText("Error: Specified recipient does not exist.");
             }
             String destUID = destUserObj.getUID().toString();
             logger.info("Destination UID is: " + destUID);
 
             if (usernameSessionMap.containsKey(destUID)) {
-                usernameSessionMap.get(destUID).getBasicRemote().sendText(userRepository.findByUID(UID).getUsername() + " sent you a meal:\n" + mapper.writeValueAsString(mealToSend));
+                //Prettify the Meal instead of it printing raw json
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                JsonParser jsonParser = new JsonParser();
+                JsonElement jsonElement = jsonParser.parse(mapper.writeValueAsString(mealToSend));
+                String prettyRecipeJson = gson.toJson(jsonElement);
+
+                usernameSessionMap.get(destUID).getBasicRemote().sendText(userRepository.findByUID(UID).getUsername() + " sent you a meal:\n" + prettyRecipeJson);
                 session.getBasicRemote().sendText("Successfully sent meal to user.");
             }
             else {
@@ -92,22 +108,22 @@ public class WebsocketServer {
     }
 
     @OnError
-    public void onError(Session session, Throwable throwable) {
+    public void onError(Session session, Throwable throwable) throws IOException {
         logger.info("Handling error");
+        session.getBasicRemote().sendText("Error: " + throwable.getStackTrace());
     }
 
-    private Recipe lookUpMeal (String mealName, String UID) {
+    private Recipe lookUpMeal (String mealName, String UID, Session session) throws IOException {
         logger.info("Sending meal " + mealName);
         Map<String, Recipe> userRecipes = userRepository.findByUID(UID).getUserRecipes();
         if (userRecipes.containsKey(mealName)) {
             Recipe recipe = userRecipes.get(mealName);
-            logger.info("Took if");
             logger.info(recipe.getIngredients().toString());
             return recipe;
         }
         else {
             logger.info("Meal " + mealName + " not found for user " + UID);
-            System.out.println("Took else");
+            session.getBasicRemote().sendText("Error: Recipe not found in your cookbook.");
             return null;
         }
     }
