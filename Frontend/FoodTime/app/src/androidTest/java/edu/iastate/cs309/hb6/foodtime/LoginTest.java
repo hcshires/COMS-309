@@ -1,9 +1,13 @@
 package edu.iastate.cs309.hb6.foodtime;
 
+import org.hamcrest.Matcher;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
@@ -12,10 +16,14 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.core.StringEndsWith.endsWith;
+
+import static org.hamcrest.CoreMatchers.allOf;
+
+import android.content.Intent;
 
 /**
  * Test cases for LoginActivity on FoodTime
@@ -26,61 +34,75 @@ import static org.hamcrest.core.StringEndsWith.endsWith;
 @RunWith(AndroidJUnit4ClassRunner.class)
 @LargeTest   // large execution time
 public class LoginTest {
-    private static final int SIMULATED_DELAY_MS = 500;
+    private static final int SIMULATED_DELAY_MS = 1000;
 
     @Rule
     public ActivityScenarioRule<LoginActivity> activityScenarioRule = new ActivityScenarioRule<>(LoginActivity.class);
 
-//    /**
-//     * Start the server and run this test
-//     */
-//    @Test
-//    public void loginUser(){
-//        String testString = "defaultstring";
-//        String resultString = "gnirtstluafed";
-//
-//        activityScenarioRule.getScenario().onActivity(activity -> {
-//            activity.defaultString = testString;
-//            activity.aSwitch.setChecked(true);
-//        });
-//
-//        onView(withId(R.id.submit)).perform(click());
-//        // Put thread to sleep to allow volley to handle the request
-//        try {
-//            Thread.sleep(SIMULATED_DELAY_MS);
-//        } catch (InterruptedException e) {}
-//
-//        // Verify that volley returned the correct value
-//        onView(withId(R.id.myTextView)).check(matches(withText(endsWith(resultString))));
-//    }
-//
-//    /**
-//     * Start the server and run this test
-//     */
-//    @Test
-//    public void createUser(){
-//
-//        String testString = "inputstring";
-//        String resultString = "gnirtstupni";
-//
-//        activityScenarioRule.getScenario().onActivity(activity -> {
-//            activity.defaultString = null;
-//            activity.aSwitch.setChecked(false);
-//        });
-//
-//        // Type in testString and send request
-//        onView(withId(R.id.stringEntry)).perform(typeText(testString), closeSoftKeyboard());
-//
-//        // Click button to submit
-//        onView(withId(R.id.submit)).perform(click());
-//
-//        // Put thread to sleep to allow volley to handle the request
-//        try {
-//            Thread.sleep(SIMULATED_DELAY_MS);
-//        } catch (InterruptedException e) {}
-//
-//        // Verify that volley returned the correct value
-//        onView(withId(R.id.myTextView)).check(matches(withText(endsWith(resultString))));
-//    }
+    @Before
+    public void setUp() {
+        Intents.init();
+    }
+
+    /**
+     * Start the server and run this test
+     */
+    @Test
+    public void loginUser(){
+        String testEmail = "testchild@test.com";
+        String testPass = "food";
+
+        onView(withId(R.id.email)).perform(typeText(testEmail));                        // Enter email
+        onView(withId(R.id.password)).perform(typeText(testPass), closeSoftKeyboard()); // Enter password
+        onView(withId(R.id.loginBtn)).perform(click());                                 // Click login button
+
+        // Put thread to sleep to allow volley to handle the request
+        try {
+            Thread.sleep(SIMULATED_DELAY_MS);
+        } catch (InterruptedException e) {}
+
+        Matcher<Intent> intent = allOf(
+                hasComponent(DashboardActivity.class.getName()),
+                hasExtraWithKey("UID")
+        );
+
+        intended(intent); // Check the intent started the Dashboard
+    }
+
+    /**
+     * Start the server and run this test
+     * TODO: Needs fix, issue #54 needs merged
+     */
+    @Test
+    public void createUser(){
+        String testEmail = "child@hcshires.com";
+        String testPass = "food";
+        String testParentUsername = "hcsgeek@gmail.com";
+
+        onView(withId(R.id.email)).perform(typeText(testEmail));                   // Enter email
+        onView(withId(R.id.password)).perform(typeText(testPass), closeSoftKeyboard());                 // Enter password
+        onView(withId(R.id.childRoleBtn)).perform(click());                        // Enter role "Child"
+        onView(withId(R.id.parentUsername)).perform(typeText(testParentUsername), closeSoftKeyboard()); // Enter parent username
+
+        // Verify that volley returned the correct value
+        onView(withId(R.id.registerBtn)).perform(click()); // Click register button
+
+        // Put thread to sleep to allow volley to handle the request
+        try {
+            Thread.sleep(SIMULATED_DELAY_MS);
+        } catch (InterruptedException e) {}
+
+        Matcher<Intent> intent = allOf(
+                hasComponent(DashboardActivity.class.getName()),
+                hasExtraWithKey("UID")
+        );
+
+        intended(intent); // Check the intent started the Dashboard
+    }
+
+    @After
+    public void tearDown() {
+        Intents.release();
+    }
 }
 
