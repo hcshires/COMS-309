@@ -40,7 +40,7 @@ public class TestingSystemTest {
     String testIngredientName = "testFood1234";
     int testQuantity = 5;
     String testUnitType = "count";
-    String UID = "a3053327-8016-477c-807c-314ba227071c";
+    String UID = "53716f11-fee4-489a-8957-4e8371089067";
 
 
     @Test
@@ -134,7 +134,7 @@ public class TestingSystemTest {
         Response response = RestAssured.given().
                 header("Content-Type", "application/json").
                 header("charset","utf-8").
-                param("UID", "6bc95713-067d-4f72-ab2b-0180f759daad").
+                param("UID", UID).
                 param("day", "monday").
                 param("mealName", "Quesadillas").
                 body(mealBody.toString()).
@@ -317,146 +317,6 @@ public class TestingSystemTest {
 
 
     }
-
-
-//    @Order(6)
-//    @Test
-//    public void addToPantryTest(){
-//        //add an item to a given user's pantry
-//        //PutMapping(path = "/pantry/addToPantry"
-//        //Param String UID, Param String ingredientName, Param int quantity, Param String unitsType
-//
-//        Response response = RestAssured.given().
-//                header("Content-Type", "application/json").
-//                header("charset","utf-8").
-//                param("UID", UID).
-//                param("ingredientName", testIngredientName).
-//                param("quantity", testQuantity).
-//                param("unitsType", testUnitType).
-//                when().
-//                put("/pantry/addToPantry");
-//
-//        System.out.println(response.getBody().asString());
-//
-//        assertEquals(200, response.getStatusCode());
-//    }
-
-//    @Order(7)
-//    @Test
-//    public void getPantryTest(){
-//        //return a user's whole pantry
-//        //GetMapping(path = "/pantry/getUserPantry")
-//        //@RequestParam String UID
-//
-//        Response response = RestAssured.given().
-//                header("Content-Type", "application/json").
-//                header("charset","utf-8").
-//                param("UID", UID).
-//                when().
-//                get("/pantry/getUserPantry");
-//
-//        assertTrue(response.getBody().asString().contains(testIngredientName)); //check if ingredient you just added is in the list
-//        assertEquals(200, response.getStatusCode()); //check if successful
-//    }
-
-//    @Order(8)
-//    @Test
-//    public void changeQuantityTest(){
-//
-//        //PutMapping(path = "/pantry/setQuantity"
-//        //RequestParam String UID, @RequestParam String ingredientName, @RequestParam int quantity
-//
-//        //change ingredient quantity value
-//        Response response = RestAssured.given().
-//                header("Content-Type", "application/json").
-//                header("charset","utf-8").
-//                param("UID", UID).
-//                param("ingredientName", testIngredientName).
-//                param("quantity", 6). //!= original value
-//                        when().
-//                put("/pantry/setQuantity");
-//
-//        assertEquals(200, response.getStatusCode());
-//    }
-
-//    @Order(9)
-//    @Test
-//    public void changeUnitTest(){
-//
-//        //PutMapping(path = "/pantry/setQuantityType
-//        //Param String UID, @RequestParam String ingredientName, @RequestParam String quantityType
-//
-//        //change unit type
-//        Response response = RestAssured.given().
-//                header("Content-Type", "application/json").
-//                header("charset","utf-8").
-//                param("UID", UID).
-//                param("ingredientName", testIngredientName).
-//                param("quantityType", "uncountable").
-//                when().
-//                put("/pantry/setQuantityType");
-//
-//        assertEquals(200, response.getStatusCode());
-//    }
-
-//    @Order(10)
-//    @Test
-//    public void changeQuantTest(){
-//
-//        //GetMapping(path = "/pantry/getQuantity"
-//        //Param String UID, @RequestParam String ingredientName
-//
-//        //check for new value
-//        Response response = RestAssured.given().
-//                header("Content-Type", "application/json").
-//                header("charset","utf-8").
-//                param("UID", UID).
-//                param("ingredientName", testIngredientName).
-//                when().
-//                get("/pantry/getQuantity");
-//
-//        assertEquals(200, response.getStatusCode());
-//        assertEquals(true, response.getBody().asString().contains("6"));
-//    }
-
-//    @Order(11)
-//    @Test
-//    public void changeUnitTypeTest(){
-//
-//        //GetMapping(path = "/pantry/getQuantityType"
-//        //Param String UID, @RequestParam String ingredientName
-//
-//        //check for new unit type
-//        Response response = RestAssured.given().
-//                header("Content-Type", "application/json").
-//                header("charset","utf-8").
-//                param("UID", UID).
-//                param("ingredientName", testIngredientName).
-//                when().
-//                get("/pantry/getQuantityType");
-//
-//        assertEquals(200, response.getStatusCode());
-//        assertEquals(true, response.getBody().asString().contains("uncountable"));
-//    }
-
-//    @Order(12)
-//    @Test
-//    public void removeFromPantryTest() {
-//        //remove items by name from user's pantry
-//        //Delete /pantry/removeFromPantry
-//        //Param String UID, Param String ingredientName
-//
-//        Response response = RestAssured.given().
-//                header("Content-Type", "application/json").
-//                header("charset", "utf-8").
-//                param("UID", UID).
-//                param("ingredientName", testIngredientName).
-//                when().
-//                delete("/pantry/removeFromPantry");
-//
-//        assertEquals(200, response.getStatusCode()); //note that the ingredient does actually need to be present to be removed
-//
-//    }
 
     @Test
     public void addToPantryTestAnthony() {
