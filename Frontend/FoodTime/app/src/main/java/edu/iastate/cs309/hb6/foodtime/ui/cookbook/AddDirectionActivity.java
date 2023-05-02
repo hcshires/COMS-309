@@ -6,14 +6,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +38,11 @@ public class AddDirectionActivity extends AppCompatActivity {
     private int numberOfCVs = 0;
     private Button btnAdd;
     private String UID;
-    private CardView cardView1;
+    private List<Direction> directionList = new ArrayList<>();
+    private ArrayList<String> inputs = new ArrayList<>();
     private final String TAG = AddDirectionActivity.class.getSimpleName();
     private final String tag_directions_req = "directions_req";
+    private JSONArray dircObj;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,50 +62,35 @@ public class AddDirectionActivity extends AppCompatActivity {
         Bundle usrData = addRecipeIntent.getExtras();
         recipeTitle.setText(usrData.getString("RecipeTitle"));
         UID = usrData.getString("UID");
-//        Log.d(TAG, usrData.getString("RecipeTitle"));
 
         /*Attach adapter to RV*/
-        adapter = new AddDirectionsAdapter(AddDirectionActivity.this);
+        adapter = new AddDirectionsAdapter(AddDirectionActivity.this, directionList, (position, charSeq) -> inputs.add(position, charSeq));
         recyclerView.setAdapter(adapter);
+
 
 
         /*OnClick Listener*/
         Intent addDirectionsIntent = new Intent(AddDirectionActivity.this, DashboardActivity.class);
         btnAdd.setOnClickListener(view -> {
             addDirectionsIntent.putExtra("UID", UID);
-
-            List<Direction> directions = adapter.getDirections();
-
-            for (int i = 0; i < directions.size(); i++) {
-                View view1 = recyclerView.getChildAt(i);
-                EditText edtDirc = (EditText) view1.findViewById(R.id.edtDirection);
-                String strDirection = edtDirc.getText().toString();
-                Log.d(TAG, strDirection);
-
-                Direction dirDirection = new Direction();
-                dirDirection.setDirection(strDirection);
-                directions.add(dirDirection);
-            }
-
-            Log.d(TAG, directions.toString());
-
-
-
-//            addIngredientRequest(UID, recipeTitle.getText().toString(), view);
+            Log.d(TAG, inputs.toString());
+            dircObj = new JSONArray(inputs);
+            addIngredientRequest(UID, recipeTitle.getText().toString(), view);
             startActivity(addDirectionsIntent);
 
         });
 
     }
 
-//    private void addIngredientRequest(String UID, String mealName, View view) {
-//        JsonObjectRequest addDirectionReq = new JsonObjectRequest(Request.Method.PUT, Const.URL_DIRECTIONS_SETDIRECTIONS + "?UID=" + UID + "&mealName=" + mealName, dircObj, response -> {
-//
-//        }, error -> {
-//
-//        });
-//
-//        AppController.getInstance().addToRequestQueue(addDirectionReq, tag_directions_req);
-//
-//    }
+    private void addIngredientRequest(String UID, String mealName, View view) {
+        JsonArrayRequest addDirectionReq = new JsonArrayRequest(Request.Method.PUT, Const.URL_DIRECTIONS_SETDIRECTIONS + "?UID=" + UID + "&mealName=" + mealName, dircObj, response -> {
+                Log.d(TAG, "Request Sent");
+                Toast.makeText(view.getContext(), "Meal added", Toast.LENGTH_LONG).show();
+        }, error -> {
+            Toast.makeText(view.getContext(), "An unexpected error occurred", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "Request NOT Sent");
+        });
+        AppController.getInstance().addToRequestQueue(addDirectionReq, tag_directions_req);
+
+    }
 }

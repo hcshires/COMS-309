@@ -34,6 +34,9 @@ public class IngredientsFragment extends Fragment {
     private IngredientsAdapter adapter;
 
     private ArrayList<String> ingredients = new ArrayList<>();
+    private ArrayList<String> quantity = new ArrayList<>();
+    private ArrayList<String> type = new ArrayList<>();
+
 
     public IngredientsFragment() {
         // Required empty public constructor

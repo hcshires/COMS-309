@@ -20,10 +20,14 @@ import edu.iastate.cs309.hb6.foodtime.R;
 
 public class AddDirectionsAdapter extends RecyclerView.Adapter<AddDirectionsAdapter.CardViewHolder> {
     private final Context context;
-    private final List<Direction> directions = new ArrayList<>();
+    private final List<Direction> directions;
+    private OnEditTextChange onEditTextChange;
 
-    public AddDirectionsAdapter(Context context) {
+    public AddDirectionsAdapter(Context context, List<Direction> directions, OnEditTextChange onEditTextChange) {
         this.context = context;
+        this.directions = directions;
+        this.onEditTextChange = onEditTextChange;
+
     }
 
 
@@ -47,9 +51,23 @@ public class AddDirectionsAdapter extends RecyclerView.Adapter<AddDirectionsAdap
      */
     @Override
     public void onBindViewHolder(@NonNull AddDirectionsAdapter.CardViewHolder holder, int position) {
-        TextView tt1 = holder.txtDirection;
         int truePosition = position + 1;
-        tt1.setText("Direction " + truePosition);
+        holder.txtDirection.setText("Direction " + truePosition);
+        holder.edtDirection.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                onEditTextChange.onTextChanged(holder.getAbsoluteAdapterPosition(), charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     /**
@@ -74,7 +92,7 @@ public class AddDirectionsAdapter extends RecyclerView.Adapter<AddDirectionsAdap
         public CardViewHolder(View itemView) {
             super(itemView);
             txtDirection = itemView.findViewById((R.id.txtDirection));
-            edtDirection = itemView.findViewById(R.id.edtIngredient);
+            edtDirection = itemView.findViewById(R.id.edtDirection);
         }
 
     }
