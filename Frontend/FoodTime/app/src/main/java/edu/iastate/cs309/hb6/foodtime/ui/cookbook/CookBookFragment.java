@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -33,34 +32,41 @@ import edu.iastate.cs309.hb6.foodtime.utils.Const;
  */
 public class CookBookFragment extends Fragment {
 
-    /** The binding for this fragment */
-    private FragmentCookbookBinding binding;
-
-    /** View to hold recipe cards */
-    private RecyclerView recipeCards;
-
-    /** Data set adapter for recipe cards */
-    private CardAdapter adapter;
-
-    /** List of recipes */
+    /**
+     * List of recipes
+     */
     private final ArrayList<String> recipes = new ArrayList<>();
-
-    /** Tag for logging */
+    /**
+     * Tag for logging
+     */
     private final String TAG = CookBookFragment.class.getSimpleName();
-
-    /** Tag for requests */
+    /**
+     * Tag for requests
+     */
     private final String tag_cookbook_req = "cookbook_req";
+    /**
+     * The binding for this fragment
+     */
+    private FragmentCookbookBinding binding;
+    /**
+     * View to hold recipe cards
+     */
+    private RecyclerView recipeCards;
+    /**
+     * Data set adapter for recipe cards
+     */
+    private CardAdapter adapter;
 
     /**
      * OnCreateView
-     * @param inflater The LayoutInflater object that can be used to inflate
-     * any views in the fragment,
-     * @param container If non-null, this is the parent view that the fragment's
-     * UI should be attached to.  The fragment should not add the view itself,
-     * but this can be used to generate the LayoutParams of the view.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed
-     * from a previous saved state as given here.
      *
+     * @param inflater           The LayoutInflater object that can be used to inflate
+     *                           any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's
+     *                           UI should be attached to.  The fragment should not add the view itself,
+     *                           but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
      * @return View
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -101,7 +107,8 @@ public class CookBookFragment extends Fragment {
 
     /**
      * Return an ArrayList of recipes for the user from the database
-     * @param UID - the given user ID for the user
+     *
+     * @param UID the given user ID for the user
      */
     private void getUserRecipes(String UID) {
         JsonArrayRequest getUserRecipes = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_GETLABELS + "?UID=" + UID, null, response -> {
