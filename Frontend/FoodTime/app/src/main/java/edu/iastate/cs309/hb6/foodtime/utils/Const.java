@@ -11,7 +11,7 @@ public class Const {
     /**
      * Parent User Testing credentials, username[0], password[1], uid[2]
      */
-    public static final String[] CRED_PARENT_USER = {"SystemTestUser@COMS309.com", "root", "bd66484d-ae81-492a-9457-9be427aa9998"};
+    public static final String[] CRED_PARENT_USER = {"SystemTestUser@COMS309.com", "root", "53716f11-fee4-489a-8957-4e8371089067"};
 
     /* Meals */
     /**

@@ -9,17 +9,23 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
+import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.anything;
 
 import android.content.Intent;
 import android.view.View;
 import android.widget.ListView;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -27,6 +33,7 @@ import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
 import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
@@ -36,8 +43,12 @@ import org.junit.runner.RunWith;
 
 import java.util.Random;
 
+import edu.iastate.cs309.hb6.foodtime.ui.cookbook.AddDirectionActivity;
 import edu.iastate.cs309.hb6.foodtime.ui.cookbook.AddRecipeActivity;
+import edu.iastate.cs309.hb6.foodtime.ui.cookbook.CardAdapter;
+import edu.iastate.cs309.hb6.foodtime.ui.cookbook.IngredientsAdapter;
 import edu.iastate.cs309.hb6.foodtime.ui.cookbook.Recipe;
+import edu.iastate.cs309.hb6.foodtime.ui.cookbook.ViewRecipeActivity;
 import edu.iastate.cs309.hb6.foodtime.utils.Const;
 
 /**
@@ -224,7 +235,29 @@ public class DashboardTest {
 
         // Add recipe and navigate back to Cookbook
         onView(withId(R.id.submitRecipe)).perform(click());
-        intended(hasComponent(DashboardActivity.class.getName()));
+        intended(hasComponent(AddDirectionActivity.class.getName()));
+
+        String testDirection1 = "Aaaaa";
+
+        String testDirection2 = "Bbbbb";
+
+        String testDirection3 = "Ccccc";
+
+        String testDirection4 = "Dddddd";
+
+        String testDirection5 = "Eeeeee";
+
+        String testDirection6 = "Fffff";
+
+        String testDirection7 = "Ggggg";
+
+        String testDirection8 = "Hhhhh";
+
+        String testDirection9 = "Iiiii";
+
+        String testDirection10 = "Jjjjj";
+
+        onView(withId(R.id.btnAdd)).perform(click());
 
         onView(withId(R.id.navigation_cookbook)).perform(click());
         onView(withId(R.id.CookBookFragment)).check(matches(isDisplayed()));
@@ -233,6 +266,26 @@ public class DashboardTest {
         // Check if the item is in the listview, don't subtract one from size since we're adding new item
         onView(withId(R.id.cookbookItems)).perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(testName)), scrollTo()));
     }
+    @Test
+    public void viewRecipeTitle() {
+        //navigate to cookbook
+        onView(withId(R.id.navigation_cookbook)).perform(click());
+        onView(withId(R.id.CookBookFragment)).check(matches(isDisplayed()));
+        onView(withId(R.id.cookbookItems)).perform(RecyclerViewActions.actionOnItemAtPosition(0, MyViewAction.clickChildViewWithId(R.id.cv)));
+
+        onView(withId(R.id.ViewRecipeActivity)).check(matches(isDisplayed()));
+        onView(withId(R.id.recipeTitle)).check(matches(isDisplayed()));
+
+        Matcher<Intent> intent = allOf(
+                hasComponent(ViewRecipeActivity.class.getName()),
+                hasExtraWithKey("RecipeTitle")
+        );
+        intended(intent);
+
+    }
+
+
+
 
     /**
      * After tests, run cleanup
@@ -240,5 +293,30 @@ public class DashboardTest {
     @After
     public void tearDown() {
         Intents.release();
+    }
+
+    public static class MyViewAction {
+
+        public static ViewAction clickChildViewWithId(final int id) {
+            return new ViewAction() {
+                @Override
+                public Matcher<View> getConstraints() {
+                    return null;
+                }
+
+
+                @Override
+                public String getDescription() {
+                    return "Click on a child view with specified id.";
+                }
+
+                @Override
+                public void perform(UiController uiController, View view) {
+                    View v = view.findViewById(id);
+                    v.performClick();
+                }
+            };
+        }
+
     }
 }
