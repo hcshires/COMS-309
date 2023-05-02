@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">edu.iastate.cs309.hb6.foodtime</a> &gt; <span class="el_source">LoginActivity.java</span></div><h1>LoginActivity.java</h1><pre class="source lang-java linenums">package edu.iastate.cs309.hb6.foodtime;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.util.Patterns;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import edu.iastate.cs309.hb6.foodtime.utils.AppController;
+import edu.iastate.cs309.hb6.foodtime.utils.Const;
+
+/**
+ * The LoginActivity class allows the user to login with an existing FoodTime account or create a new one.
+ * The user can then use their account to navigate the FoodTime app with, allowing a place to store
+ * their recipes, meals, and pantry
+ */
+<span class="fc" id="L36">public class LoginActivity extends AppCompatActivity {</span>
+    /**
+     * The tag for logging
+     */
+<span class="fc" id="L40">    private final String TAG = LoginActivity.class.getSimpleName();</span>
+    /**
+     * The tag for the login request
+     */
+<span class="fc" id="L44">    private final String tag_login_req = &quot;login_req&quot;;</span>
+    /**
+     * The EditText fields for the user's email and password
+     */
+    private EditText email, pwd, parentUsername;
+    /**
+     * RadioButtons for user's account permission level
+     */
+    private RadioGroup userLevels;
+    /**
+     * The Intent to start the DashboardActivity
+     */
+    private Intent loginIntent;
+
+    /**
+     * Create the LoginActivity and manage its widgets
+     *
+     * @param savedInstanceState - the saved state of the activity
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L65">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L66">        setContentView(R.layout.activity_login);</span>
+
+<span class="fc" id="L68">        Button loginBtn = findViewById(R.id.loginBtn);</span>
+<span class="fc" id="L69">        Button registerBtn = findViewById(R.id.registerBtn);</span>
+
+        // Get fields
+<span class="fc" id="L72">        email = findViewById(R.id.email);</span>
+<span class="fc" id="L73">        pwd = findViewById(R.id.password);</span>
+<span class="fc" id="L74">        userLevels = findViewById(R.id.userLevelOptions);</span>
+<span class="fc" id="L75">        parentUsername = findViewById(R.id.parentUsername);</span>
+
+<span class="fc" id="L77">        loginIntent = new Intent(LoginActivity.this, DashboardActivity.class);</span>
+
+        /* Disable parent username field if user is not a child */
+<span class="fc" id="L80">        userLevels.setOnCheckedChangeListener((radioGroup, i) -&gt; {</span>
+<span class="fc" id="L81">            RadioButton selectedLevel = findViewById(i);</span>
+            // TODO Add &quot;Child&quot; to Const.java when 56 is merged
+<span class="fc" id="L83">            parentUsername.setEnabled(selectedLevel.getText().toString().equals(&quot;Child&quot;));</span>
+<span class="fc" id="L84">        });</span>
+
+        /* API Request for Login */
+<span class="fc" id="L87">        loginBtn.setOnClickListener(view -&gt; {</span>
+<span class="pc bpc" id="L88" title="2 of 4 branches missed.">            if (email.getText().toString().isEmpty() || pwd.getText().toString().isEmpty()) {</span>
+<span class="nc" id="L89">                Toast.makeText(this, &quot;Email and/or password field is blank.&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            } else if (!Patterns.EMAIL_ADDRESS.matcher(email.getText()).matches()) {</span>
+<span class="nc" id="L91">                Toast.makeText(this, &quot;Email address is incorrectly formatted. Please enter a valid email.&quot;, Toast.LENGTH_SHORT).show();</span>
+            } else {
+                try {
+<span class="fc" id="L94">                    loginUser();</span>
+<span class="nc" id="L95">                } catch (JSONException e) {</span>
+<span class="nc" id="L96">                    throw new RuntimeException(e);</span>
+<span class="fc" id="L97">                }</span>
+            }
+<span class="fc" id="L99">        });</span>
+
+        /* API Request for Registration */
+<span class="fc" id="L102">        registerBtn.setOnClickListener(view -&gt; {</span>
+<span class="pc bpc" id="L103" title="4 of 8 branches missed.">            if (email.getText().toString().isEmpty() || pwd.getText().toString().isEmpty() || userLevels.getCheckedRadioButtonId() == -1 || parentUsername.getText().toString().isEmpty()) {</span>
+<span class="nc" id="L104">                Toast.makeText(this, &quot;One or more fields blank&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">            } else if (!Patterns.EMAIL_ADDRESS.matcher(email.getText()).matches()) {</span>
+<span class="nc" id="L106">                Toast.makeText(this, &quot;Email address is incorrectly formatted. Please enter a valid email.&quot;, Toast.LENGTH_SHORT).show();</span>
+            } else {
+                try {
+<span class="fc" id="L109">                    createUser();</span>
+<span class="nc" id="L110">                } catch (JSONException e) {</span>
+<span class="nc" id="L111">                    throw new RuntimeException(e);</span>
+<span class="fc" id="L112">                }</span>
+            }
+<span class="fc" id="L114">        });</span>
+<span class="fc" id="L115">    }</span>
+
+    /**
+     * Login a FoodTime user with the inputted credentials from the TextFields
+     * If a user ID exists in the database that matches the credentials, pass
+     * in a UID from the response and log in the user otherwise, return an error.
+     *
+     * @throws JSONException if the response body is not a valid JSON object
+     */
+    private void loginUser() throws JSONException {
+<span class="fc" id="L125">        StringRequest loginRequest = new StringRequest(</span>
+<span class="fc" id="L126">                Request.Method.GET, Const.URL_LOGIN_USER + &quot;?username=&quot; + email.getText().toString() + &quot;&amp;password=&quot; + pwd.getText().toString(), response -&gt; {</span>
+<span class="fc" id="L127">            Log.d(TAG, response);</span>
+<span class="fc" id="L128">            loginIntent.putExtra(&quot;UID&quot;, response);</span>
+<span class="fc" id="L129">            startActivity(loginIntent);</span>
+<span class="fc" id="L130">        }, error -&gt; {</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">            if (error.networkResponse.statusCode == 404) {</span>
+<span class="nc" id="L132">                Toast.makeText(this, &quot;Email and/or password is incorrect. Please try again.&quot;, Toast.LENGTH_SHORT).show();</span>
+            } else {
+<span class="nc" id="L134">                Toast.makeText(this, &quot;An unexpected error occurred. Please try again.&quot;, Toast.LENGTH_SHORT).show();</span>
+            }
+<span class="nc" id="L136">        });</span>
+
+<span class="fc" id="L138">        AppController.getInstance().addToRequestQueue(loginRequest, tag_login_req);</span>
+<span class="fc" id="L139">    }</span>
+
+    /**
+     * Create a FoodTime user with the inputted credentials from the TextFields
+     *
+     * @throws JSONException if the response body is not a valid JSON object
+     */
+    private void createUser() throws JSONException {
+        // JSON Body
+<span class="fc" id="L148">        Map&lt;String, String&gt; params = new HashMap&lt;&gt;();</span>
+
+        // User, pass
+<span class="fc" id="L151">        params.put(&quot;username&quot;, email.getText().toString());</span>
+<span class="fc" id="L152">        params.put(&quot;password&quot;, pwd.getText().toString());</span>
+
+        // User access level select
+<span class="fc" id="L155">        int selectedLevelId = userLevels.getCheckedRadioButtonId();</span>
+<span class="fc" id="L156">        RadioButton selectedLevel = findViewById(selectedLevelId);</span>
+<span class="fc" id="L157">        params.put(&quot;accessLevel&quot;, selectedLevel.getText().toString().toUpperCase());</span>
+
+<span class="fc" id="L159">        JSONObject reqBody = new JSONObject(params);</span>
+<span class="fc" id="L160">        JsonObjectRequest createUserRequest = new JsonObjectRequest(Request.Method.POST,</span>
+<span class="fc" id="L161">                Const.URL_CREATE_USER + &quot;?parentUsername=&quot; + parentUsername.getText().toString(), reqBody,</span>
+                response -&gt; {
+<span class="fc" id="L163">                    Log.d(TAG, &quot;New user created: &quot; + response.toString());</span>
+                    try {
+                        // Get the UID from the response body
+<span class="fc" id="L166">                        loginIntent.putExtra(&quot;UID&quot;, response.get(&quot;uid&quot;).toString());</span>
+<span class="fc" id="L167">                        startActivity(loginIntent);</span>
+<span class="nc" id="L168">                    } catch (JSONException e) {</span>
+<span class="nc" id="L169">                        throw new RuntimeException(e);</span>
+<span class="fc" id="L170">                    }</span>
+<span class="fc" id="L171">                }, error -&gt; {</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">            if (error.networkResponse.statusCode == 409) {</span>
+<span class="nc" id="L173">                Toast.makeText(this, &quot;There is already a user with that email. Please use another email address.&quot;, Toast.LENGTH_SHORT).show();</span>
+            } else {
+<span class="nc" id="L175">                Toast.makeText(this, &quot;An unexpected error occurred. Please try again.&quot;, Toast.LENGTH_SHORT).show();</span>
+            }
+<span class="nc" id="L177">            VolleyLog.d(TAG, &quot;Error: &quot; + error.getMessage());</span>
+<span class="nc" id="L178">        });</span>
+
+<span class="fc" id="L180">        AppController.getInstance().addToRequestQueue(createUserRequest, tag_login_req);</span>
+<span class="fc" id="L181">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 7.4.2</div></body></html>

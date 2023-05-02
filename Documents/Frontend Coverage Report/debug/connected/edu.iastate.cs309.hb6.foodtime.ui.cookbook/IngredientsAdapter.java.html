@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngredientsAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">edu.iastate.cs309.hb6.foodtime.ui.cookbook</a> &gt; <span class="el_source">IngredientsAdapter.java</span></div><h1>IngredientsAdapter.java</h1><pre class="source lang-java linenums">package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
+
+import edu.iastate.cs309.hb6.foodtime.R;
+
+public class IngredientsAdapter extends RecyclerView.Adapter&lt;IngredientsAdapter.CardViewHolder&gt; {
+    private final Context context;
+    private final ArrayList&lt;Object&gt; strings;
+    private final ArrayList&lt;Object&gt; quantity;
+    private final ArrayList&lt;Object&gt; types;
+
+<span class="fc" id="L25">    public IngredientsAdapter(Context context, ArrayList&lt;Object&gt; strings, ArrayList&lt;Object&gt; quantity, ArrayList&lt;Object&gt; types) {</span>
+<span class="fc" id="L26">        this.context = context;</span>
+<span class="fc" id="L27">        this.strings = strings;</span>
+<span class="fc" id="L28">        this.quantity = quantity;</span>
+<span class="fc" id="L29">        this.types = types;</span>
+
+<span class="fc" id="L31">    }</span>
+
+    /**
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return
+     */
+    @NonNull
+    @Override
+    public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+<span class="nc" id="L42">        View v = LayoutInflater.from(context).inflate(R.layout.ingredients_cardview, parent, false);</span>
+<span class="nc" id="L43">        return new CardViewHolder(v);</span>
+    }
+
+    /**
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
+    @Override
+    public void onBindViewHolder(CardViewHolder holder, int position) {
+<span class="nc" id="L53">        EditText ingredientTitle = holder.edtIngredients;</span>
+<span class="nc" id="L54">        ingredientTitle.setText(strings.get(position).toString());</span>
+<span class="nc" id="L55">        EditText quantityTitle = holder.edtQuantity;</span>
+<span class="nc" id="L56">        quantityTitle.setText(quantity.get(position).toString());</span>
+<span class="nc" id="L57">        EditText typeTitle = holder.edtType;</span>
+<span class="nc" id="L58">        typeTitle.setText(types.get(position).toString());</span>
+
+<span class="nc" id="L60">    }</span>
+
+    /**
+     * @return
+     */
+    @Override
+    public int getItemCount() {
+<span class="nc" id="L67">        return 5;</span>
+    }
+
+    /**
+     * @param recyclerView The RecyclerView instance which started observing this adapter.
+     */
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+<span class="nc" id="L75">        super.onAttachedToRecyclerView(recyclerView);</span>
+<span class="nc" id="L76">    }</span>
+
+    public static class CardViewHolder extends RecyclerView.ViewHolder {
+
+        /** txtViews */
+        private final TextView txtIngredients;
+        private final TextView txtQuantity;
+        private final TextView txtType;
+
+        /** edtViews*/
+        private final EditText edtIngredients;
+        private final EditText edtQuantity;
+        private final EditText edtType;
+
+
+        /**
+         * CardViewHolder
+         * Set properties of the CardView, such as handling ViewRecipeActivity intent when clicked
+         *
+         * @param itemView - The CardView
+         */
+        public CardViewHolder(View itemView) {
+<span class="nc" id="L98">            super(itemView);</span>
+
+            /*initialize widgets*/
+<span class="nc" id="L101">            txtIngredients = itemView.findViewById(R.id.txtIngredient);</span>
+<span class="nc" id="L102">            txtQuantity = itemView.findViewById(R.id.txtQuantity);</span>
+<span class="nc" id="L103">            txtType = itemView.findViewById(R.id.txtType);</span>
+<span class="nc" id="L104">            edtIngredients = itemView.findViewById(R.id.edtIngredient);</span>
+<span class="nc" id="L105">            edtQuantity = itemView.findViewById(R.id.edtQuantity);</span>
+<span class="nc" id="L106">            edtType = itemView.findViewById(R.id.edtType);</span>
+
+<span class="nc" id="L108">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 7.4.2</div></body></html>

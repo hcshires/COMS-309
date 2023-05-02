@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AddRecipeActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">edu.iastate.cs309.hb6.foodtime.ui.cookbook</a> &gt; <span class="el_source">AddRecipeActivity.java</span></div><h1>AddRecipeActivity.java</h1><pre class="source lang-java linenums">package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import edu.iastate.cs309.hb6.foodtime.DashboardActivity;
+import edu.iastate.cs309.hb6.foodtime.R;
+import edu.iastate.cs309.hb6.foodtime.utils.AppController;
+import edu.iastate.cs309.hb6.foodtime.utils.Const;
+
+/**
+ * Add a recipe to the user's Cookbook and save to the database
+ */
+<span class="fc" id="L31">public class AddRecipeActivity extends AppCompatActivity {</span>
+    /**
+     * Hash map for each ingredient containing name, quantity, and quantity type
+     */
+<span class="fc" id="L35">    private final HashMap&lt;String, Object&gt; ingredientHash1 = new HashMap&lt;&gt;(6);</span>
+
+    /**
+     * Hash map for each ingredient containing name, quantity, and quantity type
+     */
+<span class="fc" id="L40">    private final HashMap&lt;String, Object&gt; ingredientHash2 = new HashMap&lt;&gt;(6);</span>
+
+    /**
+     * Hash map for each ingredient containing name, quantity, and quantity type
+     */
+<span class="fc" id="L45">    private final HashMap&lt;String, Object&gt; ingredientHash3 = new HashMap&lt;&gt;(6);</span>
+
+    /**
+     * Hash map for each ingredient containing name, quantity, and quantity type
+     */
+<span class="fc" id="L50">    private final HashMap&lt;String, Object&gt; ingredientHash4 = new HashMap&lt;&gt;(6);</span>
+
+    /**
+     * Hash map for each ingredient containing name, quantity, and quantity type
+     */
+<span class="fc" id="L55">    private final HashMap&lt;String, Object&gt; ingredientHash5 = new HashMap&lt;&gt;(6);</span>
+
+    /**
+     * List of ingredients
+     */
+<span class="fc" id="L60">    private final ArrayList&lt;HashMap&lt;String, Object&gt;&gt; ingredientsHashList = new ArrayList&lt;&gt;(6);</span>
+
+    /**
+     * Hash map for the recipe containing the ingredients and the recipe title
+     */
+<span class="fc" id="L65">    private final HashMap&lt;String, Object&gt; recipe = new HashMap&lt;&gt;(3);</span>
+    /**
+     * Tag for logging
+     */
+<span class="fc" id="L69">    private final String TAG = AddRecipeActivity.class.getSimpleName();</span>
+    /**
+     * Tag for request
+     */
+<span class="fc" id="L73">    private final String tag_recipe_req = &quot;recipe_req&quot;;</span>
+    /**
+     * UI input for recipe title, ingredients, and directions
+     */
+    private EditText recipeTitle, ingredient1, ingredient2, ingredient3, ingredient4, ingredient5, qt1, qt2, qt3, qt4, qt5, type1, type2, type3, type4, type5, dayInput;
+
+    /**
+     * Create an AddRecipeActivity instance
+     *
+     * @param savedInstanceState The saved instance state
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L86">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L87">        setContentView(R.layout.activity_recipe);</span>
+
+<span class="fc" id="L89">        Intent recipeIntent = getIntent();</span>
+<span class="fc" id="L90">        String UID = recipeIntent.getStringExtra(&quot;UID&quot;);</span>
+
+        /* Widgets */
+<span class="fc" id="L93">        Button submitRecipe = findViewById(R.id.submitRecipe);</span>
+
+<span class="fc" id="L95">        recipeTitle = findViewById(R.id.recipeTitleInput);</span>
+<span class="fc" id="L96">        ingredient1 = findViewById(R.id.ingredientInput1);</span>
+<span class="fc" id="L97">        ingredient2 = findViewById(R.id.ingredientInput2);</span>
+<span class="fc" id="L98">        ingredient3 = findViewById(R.id.ingredientInput3);</span>
+<span class="fc" id="L99">        ingredient4 = findViewById(R.id.ingredientInput4);</span>
+<span class="fc" id="L100">        ingredient5 = findViewById(R.id.ingredientInput5);</span>
+
+<span class="fc" id="L102">        qt1 = findViewById(R.id.qtInput1);</span>
+<span class="fc" id="L103">        qt2 = findViewById(R.id.qtInput2);</span>
+<span class="fc" id="L104">        qt3 = findViewById(R.id.qtInput3);</span>
+<span class="fc" id="L105">        qt4 = findViewById(R.id.qtInput4);</span>
+<span class="fc" id="L106">        qt5 = findViewById(R.id.qtInput5);</span>
+
+<span class="fc" id="L108">        type1 = findViewById(R.id.typeInput1);</span>
+<span class="fc" id="L109">        type2 = findViewById(R.id.typeInput2);</span>
+<span class="fc" id="L110">        type3 = findViewById(R.id.typeInput3);</span>
+<span class="fc" id="L111">        type4 = findViewById(R.id.typeInput4);</span>
+<span class="fc" id="L112">        type5 = findViewById(R.id.typeInput5);</span>
+
+<span class="fc" id="L114">        dayInput = findViewById(R.id.dayInput);</span>
+
+        /* Add ingredients and directions to the recipe, submit to the database when clicked */
+<span class="fc" id="L117">        submitRecipe.setOnClickListener(view -&gt; {</span>
+<span class="fc" id="L118">            ingredientHash1.clear();</span>
+<span class="fc" id="L119">            ingredientHash2.clear();</span>
+<span class="fc" id="L120">            ingredientHash3.clear();</span>
+<span class="fc" id="L121">            ingredientHash4.clear();</span>
+<span class="fc" id="L122">            ingredientHash5.clear();</span>
+<span class="fc" id="L123">            ingredientsHashList.clear();</span>
+
+            /* Create Ingredients Hash Maps */
+<span class="fc" id="L126">            ingredientHash1.put(&quot;name&quot;, ingredient1.getText().toString());</span>
+<span class="fc" id="L127">            ingredientHash1.put(&quot;quantity&quot;, Integer.parseInt(qt1.getText().toString()));</span>
+<span class="fc" id="L128">            ingredientHash1.put(&quot;quantityType&quot;, type1.getText().toString());</span>
+<span class="fc" id="L129">            ingredientsHashList.add(ingredientHash1);</span>
+
+<span class="fc" id="L131">            ingredientHash2.put(&quot;name&quot;, ingredient2.getText().toString());</span>
+<span class="fc" id="L132">            ingredientHash2.put(&quot;quantity&quot;, Integer.parseInt(qt2.getText().toString()));</span>
+<span class="fc" id="L133">            ingredientHash2.put(&quot;quantityType&quot;, type2.getText().toString());</span>
+<span class="fc" id="L134">            ingredientsHashList.add(ingredientHash2);</span>
+
+<span class="fc" id="L136">            ingredientHash3.put(&quot;name&quot;, ingredient3.getText().toString());</span>
+<span class="fc" id="L137">            ingredientHash3.put(&quot;quantity&quot;, Integer.parseInt(qt3.getText().toString()));</span>
+<span class="fc" id="L138">            ingredientHash3.put(&quot;quantityType&quot;, type3.getText().toString());</span>
+<span class="fc" id="L139">            ingredientsHashList.add(ingredientHash3);</span>
+
+<span class="fc" id="L141">            ingredientHash4.put(&quot;name&quot;, ingredient4.getText().toString());</span>
+<span class="fc" id="L142">            ingredientHash4.put(&quot;quantity&quot;, Integer.parseInt(qt4.getText().toString()));</span>
+<span class="fc" id="L143">            ingredientHash4.put(&quot;quantityType&quot;, type4.getText().toString());</span>
+<span class="fc" id="L144">            ingredientsHashList.add(ingredientHash4);</span>
+
+<span class="fc" id="L146">            ingredientHash5.put(&quot;name&quot;, ingredient5.getText().toString());</span>
+<span class="fc" id="L147">            ingredientHash5.put(&quot;quantity&quot;, Integer.parseInt(qt5.getText().toString()));</span>
+<span class="fc" id="L148">            ingredientHash5.put(&quot;quantityType&quot;, type5.getText().toString());</span>
+<span class="fc" id="L149">            ingredientsHashList.add(ingredientHash5);</span>
+
+            /* Make JSON Obj */
+<span class="fc" id="L152">            recipe.put(&quot;ingredients&quot;, ingredientsHashList);</span>
+<span class="fc" id="L153">            recipe.put(&quot;name&quot;, recipeTitle.getText().toString());</span>
+<span class="fc" id="L154">            JSONObject mealObj = new JSONObject(recipe);</span>
+
+<span class="fc" id="L156">            Log.d(TAG, &quot;JSON Body: &quot; + mealObj);</span>
+
+            // Send request to database
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">            if (!ingredientsHashList.isEmpty()) {</span>
+<span class="fc" id="L160">                addRecipeRequest(UID, mealObj, view);</span>
+            } else {
+<span class="nc" id="L162">                Toast.makeText(view.getContext(), &quot;Please add ingredients first.&quot;, Toast.LENGTH_LONG).show();</span>
+            }
+<span class="fc" id="L164">        });</span>
+<span class="fc" id="L165">    }</span>
+
+    /**
+     * Send an HTTP request to database to add a recipe
+     *
+     * @param UID     The user's ID
+     * @param mealObj The meal to add as a recipe
+     * @param view    Parent view
+     */
+    private void addRecipeRequest(String UID, JSONObject mealObj, View view) {
+<span class="fc" id="L175">        JsonObjectRequest addRecipeReq = new JsonObjectRequest(Request.Method.PUT, Const.URL_RECIPES_ADDRECIPE + &quot;?UID=&quot; + UID, mealObj,</span>
+            response -&gt; {
+<span class="fc" id="L177">                Toast.makeText(view.getContext(), &quot;Meal added&quot;, Toast.LENGTH_LONG).show();</span>
+
+<span class="fc" id="L179">                Intent addRecipeIntent = new Intent(AddRecipeActivity.this, AddDirectionActivity.class);</span>
+<span class="fc" id="L180">                addRecipeIntent.putExtra(&quot;UID&quot;, UID);</span>
+<span class="fc" id="L181">                addRecipeIntent.putExtra(&quot;RecipeTitle&quot;, recipeTitle.getText().toString());</span>
+<span class="fc" id="L182">                startActivity(addRecipeIntent);</span>
+<span class="fc" id="L183">            }, error -&gt; {</span>
+<span class="nc" id="L184">                VolleyLog.d(TAG, error);</span>
+
+<span class="nc bnc" id="L186" title="All 2 branches missed.">                if (error.networkResponse.statusCode == 403) {</span>
+<span class="nc" id="L187">                    Toast.makeText(view.getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">                } else if (error.networkResponse.statusCode == 409) {</span>
+<span class="nc" id="L189">                Toast.makeText(this, &quot;A recipe with that name is already in your cookbook.&quot;, Toast.LENGTH_LONG).show();</span>
+                } else {
+<span class="nc" id="L191">                    Toast.makeText(view.getContext(), &quot;An Error Occurred.&quot;, Toast.LENGTH_LONG).show();</span>
+                }
+<span class="nc" id="L193">        });</span>
+
+<span class="fc" id="L195">        AppController.getInstance().addToRequestQueue(addRecipeReq, tag_recipe_req);</span>
+<span class="fc" id="L196">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 7.4.2</div></body></html>

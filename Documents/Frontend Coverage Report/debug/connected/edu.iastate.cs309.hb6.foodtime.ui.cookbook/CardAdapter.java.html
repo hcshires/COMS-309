@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CardAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">edu.iastate.cs309.hb6.foodtime.ui.cookbook</a> &gt; <span class="el_source">CardAdapter.java</span></div><h1>CardAdapter.java</h1><pre class="source lang-java linenums">package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
+import edu.iastate.cs309.hb6.foodtime.R;
+
+/**
+ * CardAdapter to render Cookbook Cards
+ */
+public class CardAdapter extends RecyclerView.Adapter&lt;CardAdapter.CardViewHolder&gt; {
+
+    /**
+     * The current context
+     */
+    private final Context context;
+
+    /**
+     * Recipes to populate cards to be used by RecyclerView
+     */
+    private final ArrayList&lt;String&gt; recipes;
+    private String UID;
+
+    /**
+     * CardAdapter
+     *
+     * @param context The current context.
+     * @param recipes The data (recipes from database) to populate cards to be used by RecyclerView.
+     */
+<span class="fc" id="L40">    public CardAdapter(Context context, ArrayList&lt;String&gt; recipes, String UID) {</span>
+<span class="fc" id="L41">        this.context = context;</span>
+<span class="fc" id="L42">        this.recipes = recipes;</span>
+<span class="fc" id="L43">        this.UID = UID;</span>
+<span class="fc" id="L44">    }</span>
+
+    public String getUID() {
+<span class="nc" id="L47">        return UID;</span>
+    }
+
+    /**
+     * View holder for Card View
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
+    @Override
+    public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+<span class="fc" id="L60">        View v = LayoutInflater.from(context).inflate(R.layout.row_layout, parent, false);</span>
+<span class="fc" id="L61">        return new CardViewHolder(v);</span>
+    }
+
+    /**
+     * onBindViewHolder
+     * When the card is created, set properties, such as the recipe title and image
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
+    @Override
+    public void onBindViewHolder(CardViewHolder holder, int position) {
+<span class="fc" id="L74">        TextView recipeTitle = holder.recipeTitle;</span>
+<span class="fc" id="L75">        recipeTitle.setText(recipes.get(position));</span>
+<span class="fc" id="L76">    }</span>
+
+    /**
+     * Get the number of recipes (items) in the Cookbook
+     *
+     * @return The total number of items in the data set held by the adapter (Cookbook).
+     */
+    @Override
+    public int getItemCount() {
+<span class="fc" id="L85">        return recipes.size();</span>
+    }
+
+    /**
+     * onAttachedToRecyclerView
+     *
+     * @param recyclerView The RecyclerView instance which is currently connected to this adapter.
+     */
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+<span class="fc" id="L95">        super.onAttachedToRecyclerView(recyclerView);</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * CardViewHolder
+     * &lt;p&gt;
+     * The contents of an instance of CardView
+     */
+    public static class CardViewHolder extends RecyclerView.ViewHolder {
+
+        /**
+         * The title of the recipe
+         */
+        private final TextView recipeTitle;
+//        private final String UID;
+
+        /**
+         * CardViewHolder
+         * Set properties of the CardView, such as handling ViewRecipeActivity intent when clicked
+         *
+         * @param itemView The CardView
+         */
+        public CardViewHolder(View itemView) {
+<span class="fc" id="L118">            super(itemView);</span>
+<span class="fc" id="L119">            recipeTitle = itemView.findViewById((R.id.recipeTitle));</span>
+
+<span class="fc" id="L121">            itemView.setOnClickListener(view -&gt; {</span>
+<span class="fc" id="L122">                Intent viewRecipeIntent = new Intent(itemView.getContext(), ViewRecipeActivity.class);</span>
+<span class="fc" id="L123">                viewRecipeIntent.putExtra(&quot;RecipeTitle&quot;, recipeTitle.getText().toString());</span>
+//            viewRecipeIntent.putExtra(&quot;UID&quot;, UID);
+<span class="fc" id="L125">                Toast.makeText(itemView.getContext(), recipeTitle.getText().toString(), Toast.LENGTH_LONG).show();</span>
+<span class="fc" id="L126">                itemView.getContext().startActivity(viewRecipeIntent);</span>
+
+<span class="fc" id="L128">            });</span>
+<span class="fc" id="L129">        }</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 7.4.2</div></body></html>

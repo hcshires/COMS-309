@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PantryFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">edu.iastate.cs309.hb6.foodtime.ui.pantry</a> &gt; <span class="el_source">PantryFragment.java</span></div><h1>PantryFragment.java</h1><pre class="source lang-java linenums">package edu.iastate.cs309.hb6.foodtime.ui.pantry;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONException;
+
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+
+import edu.iastate.cs309.hb6.foodtime.R;
+import edu.iastate.cs309.hb6.foodtime.databinding.FragmentPantryBinding;
+import edu.iastate.cs309.hb6.foodtime.utils.AppController;
+import edu.iastate.cs309.hb6.foodtime.utils.Const;
+
+/**
+ * Dashboard Fragment: Pantry
+ * Used for keeping a list of known kitchen ingredients to use in the Cook Book
+ */
+<span class="fc" id="L35">public class PantryFragment extends Fragment {</span>
+
+    /**
+     * The pantry list
+     */
+    private static ArrayList&lt;String&gt; ingredientsList;
+    /**
+     * The tag for this fragment
+     */
+<span class="fc" id="L44">    private final String TAG = PantryFragment.class.getSimpleName();</span>
+    /**
+     * The tag for pantry requests
+     */
+<span class="fc" id="L48">    private final String tag_pantry_req = &quot;pantry_req&quot;;</span>
+    /**
+     * The adapter for the pantry list
+     */
+    private ArrayAdapter&lt;String&gt; pantryAdapter;
+    /**
+     * The pantry ListView
+     */
+    private ListView pantry;
+    /**
+     * An input text box
+     */
+    private EditText input, quantityInput, unitInput;
+    /**
+     * The binding for this fragment
+     */
+    private FragmentPantryBinding binding;
+
+    /**
+     * Create the PantryFragment
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate
+     *                           any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's
+     *                           UI should be attached to.  The fragment should not add the view itself,
+     *                           but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
+     * @return PantryFragment
+     */
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        /* Attach this fragment to the DashboardActivity and access its parent view */
+<span class="fc" id="L81">        PantryViewModel pantryViewModel = new ViewModelProvider(this).get(PantryViewModel.class);</span>
+<span class="fc" id="L82">        binding = FragmentPantryBinding.inflate(inflater, container, false);</span>
+<span class="fc" id="L83">        View root = binding.getRoot();</span>
+
+        /* Widgets */
+<span class="fc" id="L86">        FloatingActionButton addButton = root.findViewById(R.id.addToPantryBtn);</span>
+<span class="fc" id="L87">        pantry = (ListView) root.findViewById(R.id.pantryItems);</span>
+<span class="fc" id="L88">        input = root.findViewById(R.id.editTextAddPantry);</span>
+<span class="fc" id="L89">        quantityInput = root.findViewById(R.id.quantityTxt);</span>
+<span class="fc" id="L90">        unitInput = root.findViewById(R.id.unitTypesTxt);</span>
+
+        /* Store user ID for requests */
+<span class="fc" id="L93">        Bundle userData = requireActivity().getIntent().getExtras();</span>
+<span class="fc" id="L94">        String UID = userData.getString(&quot;UID&quot;).replaceAll(&quot;\&quot;&quot;, &quot;&quot;);</span>
+
+        /* Store the pantry */
+<span class="fc" id="L97">        ingredientsList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L98">        pantryAdapter = new ArrayAdapter&lt;&gt;(root.getContext(), android.R.layout.simple_list_item_1, ingredientsList);</span>
+<span class="fc" id="L99">        pantry.setAdapter(pantryAdapter);</span>
+
+        /* Pull the pantry version from the server to update the local array list */
+<span class="fc" id="L102">        getUserPantryString(UID);</span>
+
+        /* Add an item typed in the text box */
+<span class="fc" id="L105">        addButton.setOnClickListener(view -&gt; {</span>
+<span class="fc" id="L106">            String ingredient = input.getText().toString();</span>
+<span class="fc" id="L107">            String unitType = unitInput.getText().toString();</span>
+            int quantity;
+
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">            if (!quantityInput.getText().toString().isEmpty()) {</span>
+<span class="fc" id="L111">                quantity = Integer.parseInt(quantityInput.getText().toString());</span>
+            } else {
+<span class="nc" id="L113">                quantity = 0;</span>
+            }
+
+<span class="pc bpc" id="L116" title="3 of 6 branches missed.">            if (!ingredient.isEmpty() &amp;&amp; !unitType.isEmpty() &amp;&amp; quantity != 0) {</span>
+                try {
+<span class="fc" id="L118">                    addItem(view, UID, ingredient, quantity, unitType);</span>
+<span class="nc" id="L119">                } catch (JSONException e) {</span>
+<span class="nc" id="L120">                    throw new RuntimeException(e);</span>
+<span class="fc" id="L121">                }</span>
+            } else {
+<span class="nc" id="L123">                Toast.makeText(root.getContext(), &quot;One or more input fields blank&quot;, Toast.LENGTH_SHORT).show();</span>
+            }
+<span class="fc" id="L125">        });</span>
+
+        /* Listen for clicks on the pantry (i.e. delete items) */
+<span class="fc" id="L128">        setUpListViewListener(root, UID);</span>
+<span class="fc" id="L129">        return root;</span>
+    }
+
+    /**
+     * Handler for switching to a different Dashboard Fragment
+     */
+    @Override
+    public void onDestroyView() {
+<span class="fc" id="L137">        super.onDestroyView();</span>
+<span class="fc" id="L138">        binding = null;</span>
+<span class="fc" id="L139">    }</span>
+
+    /**
+     * Listens for events pertaining to the pantry
+     * If the user long presses an item in the list, the handler will remove the item from the server and local list
+     *
+     * @param root the current view
+     * @param UID  the UID of the current user pertaining to their unique pantry
+     */
+    private void setUpListViewListener(View root, String UID) {
+<span class="fc" id="L149">        pantry.setOnItemLongClickListener((adapterView, view, i, l) -&gt; {</span>
+            /* Update server and local list */
+<span class="nc" id="L151">            removeFromPantry(root, UID, ingredientsList.get(i), i);</span>
+
+<span class="nc" id="L153">            return true;</span>
+        });
+<span class="fc" id="L155">    }</span>
+
+    /**
+     * For a given UID and ingredient, sends req to add that ingredient to the Users pantry
+     * response is string of all items in the pantry of the user request returns
+     *
+     * @param view       the current view
+     * @param UID        the UID of the current user pertaining to their unique pantry
+     * @param ingredient the name of a given ingredient the user wants to add
+     * @param quantity   the quantity of the same item in the pantry
+     * @param unitsType  the type of amount (can, cup, tablespoon, etc.)
+     * @throws JSONException if the JSON is malformed
+     */
+    private void addItem(View view, String UID, String ingredient, int quantity, String unitsType) throws JSONException {
+        /* If the user inputted text, send it */
+<span class="fc" id="L170">        JsonArrayRequest addToPantryRequest = new JsonArrayRequest(Request.Method.PUT,</span>
+                Const.URL_PANTRY_ADDITEM + &quot;?UID=&quot; + UID + &quot;&amp;ingredientName=&quot; + ingredient + &quot;&amp;quantity=&quot; + quantity + &quot;&amp;unitsType=&quot; + unitsType, null,
+                response -&gt; {
+<span class="fc" id="L173">                    ingredientsList.add(ingredient + &quot; - &quot; + quantity + &quot; - &quot; + unitsType);</span>
+<span class="fc" id="L174">                    pantryAdapter.notifyDataSetChanged();</span>
+
+                    /* Clear the input fields */
+<span class="fc" id="L177">                    input.setText(&quot;&quot;);</span>
+<span class="fc" id="L178">                    quantityInput.setText(&quot;&quot;);</span>
+<span class="fc" id="L179">                    unitInput.setText(&quot;&quot;);</span>
+
+                    /* Notify the user */
+<span class="fc" id="L182">                    Toast.makeText(view.getContext(), &quot;Item added&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="fc" id="L183">                }, error -&gt; {</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">            if (error.networkResponse.statusCode == 403) {</span>
+<span class="nc" id="L185">                Toast.makeText(view.getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();</span>
+            } else {
+<span class="nc" id="L187">                Toast.makeText(view.getContext(), &quot;An unexpected error occurred. Please try again.&quot;, Toast.LENGTH_LONG).show();</span>
+            }
+<span class="nc" id="L189">        });</span>
+
+<span class="fc" id="L191">        AppController.getInstance().addToRequestQueue(addToPantryRequest, tag_pantry_req);</span>
+<span class="fc" id="L192">    }</span>
+
+    /**
+     * Get the pantry as an array of ingredients as strings from the server
+     *
+     * @param UID the UID of the current user pertaining to their unique pantry
+     */
+    private void getUserPantryString(String UID) {
+<span class="fc" id="L200">        JsonArrayRequest pantryStringRequest = new JsonArrayRequest(</span>
+                Request.Method.GET, Const.URL_PANTRY_GETPANTRYITEMS + &quot;?UID=&quot; + UID, null,
+                response -&gt; {
+                    try {
+<span class="fc bfc" id="L204" title="All 2 branches covered.">                        for (int i = 0; i &lt; response.length(); i++) {</span>
+<span class="fc" id="L205">                            String item = response.getString(i);</span>
+<span class="fc" id="L206">                            ingredientsList.add(item); // Add to ArrayList</span>
+                        }
+<span class="nc" id="L208">                    } catch (JSONException e) {</span>
+<span class="nc" id="L209">                        throw new RuntimeException(e);</span>
+<span class="fc" id="L210">                    }</span>
+
+<span class="fc" id="L212">                    pantryAdapter.notifyDataSetChanged(); // Update the ListView</span>
+<span class="fc" id="L213">                }, error -&gt; {</span>
+<span class="nc" id="L214">        });</span>
+
+<span class="fc" id="L216">        AppController.getInstance().addToRequestQueue(pantryStringRequest, tag_pantry_req);</span>
+<span class="fc" id="L217">    }</span>
+
+    /**
+     * Remove a requested ingredient from the pantry on the server and locally
+     *
+     * @param view       the current view
+     * @param UID        the UID of the current user pertaining to their unique pantry
+     * @param ingredient the name of the specified ingredient
+     * @param index      the index of the ingredients list of the removed item, for use to remove from ArrayList after successful request
+     */
+    private void removeFromPantry(View view, String UID, String ingredient, int index) {
+<span class="nc" id="L228">        StringRequest pantryRemoveRequest = new StringRequest(</span>
+            Request.Method.DELETE, Const.URL_PANTRY_REMOVEITEM + &quot;?UID=&quot; + UID + &quot;&amp;ingredientName=&quot; + ingredient,
+            response -&gt; {
+<span class="nc" id="L231">                ingredientsList.remove(index);</span>
+<span class="nc" id="L232">                pantryAdapter.notifyDataSetChanged();</span>
+
+                /* Clear the input fields */
+<span class="nc" id="L235">                input.setText(&quot;&quot;);</span>
+<span class="nc" id="L236">                quantityInput.setText(&quot;&quot;);</span>
+<span class="nc" id="L237">                unitInput.setText(&quot;&quot;);</span>
+
+                /* Notify the user */
+<span class="nc" id="L240">                Toast.makeText(view.getContext(), &quot;Item removed&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L241">            }, error -&gt; {</span>
+                /* No permission */
+<span class="nc bnc" id="L243" title="All 2 branches missed.">                if (error.networkResponse.statusCode == 403) {</span>
+<span class="nc" id="L244">                    Toast.makeText(view.getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();</span>
+                } else {
+<span class="nc" id="L246">                    Toast.makeText(view.getContext(), &quot;An unexpected error occurred. Please try again.&quot;, Toast.LENGTH_LONG).show();</span>
+                }
+<span class="nc" id="L248">        });</span>
+
+<span class="nc" id="L250">        AppController.getInstance().addToRequestQueue(pantryRemoveRequest, tag_pantry_req);</span>
+<span class="nc" id="L251">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 7.4.2</div></body></html>
