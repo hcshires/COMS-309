@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -51,40 +52,49 @@ import edu.iastate.cs309.hb6.foodtime.utils.Const;
  */
 public class HomeFragment extends Fragment {
 
-    /** Fragment Binding */
-    private FragmentHomeBinding binding;
-
-    /** Map of meals for the entire week */
-    private HashMap<String, HashMap<String, Object>> meals;
-
-    /** List of recipes for the entire week */
-    private ArrayList<String> recipes;
-
-    /** Map of recipe details */
-    private HashMap recipe;
-
-    /** List of meals for a given day */
-    private ArrayList<String> dayMealsLabels;
-
-    /** Adapter for ListView of meals for a given day */
-    private ArrayAdapter<String> dayMealsAdapter;
-
-    /** Tag for logging */
+    /**
+     * Tag for logging
+     */
     private final String TAG = HomeFragment.class.getSimpleName();
-
-    /** Tag for requests */
+    /**
+     * Tag for requests
+     */
     private final String tag_home_req = "home_req";
+    /**
+     * Fragment Binding
+     */
+    private FragmentHomeBinding binding;
+    /**
+     * Map of meals for the entire week
+     */
+    private HashMap<String, HashMap<String, Object>> meals;
+    /**
+     * List of recipes for the entire week
+     */
+    private ArrayList<String> recipes;
+    /**
+     * Map of recipe details
+     */
+    private HashMap recipe;
+    /**
+     * List of meals for a given day
+     */
+    private ArrayList<String> dayMealsLabels;
+    /**
+     * Adapter for ListView of meals for a given day
+     */
+    private ArrayAdapter<String> dayMealsAdapter;
 
     /**
      * HomeFragment View
-     * @param inflater The LayoutInflater object that can be used to inflate
-     * any views in the fragment,
-     * @param container If non-null, this is the parent view that the fragment's
-     * UI should be attached to.  The fragment should not add the view itself,
-     * but this can be used to generate the LayoutParams of the view.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed
-     * from a previous saved state as given here.
      *
+     * @param inflater           The LayoutInflater object that can be used to inflate
+     *                           any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's
+     *                           UI should be attached to.  The fragment should not add the view itself,
+     *                           but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
      * @return HomeFragment
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -181,6 +191,7 @@ public class HomeFragment extends Fragment {
                 }
             });
 
+            // Add Meal AlertDialog components
             builder.setTitle("Add a Meal")
                     .setView(recipeSelect)
                     .setCancelable(true)
@@ -219,7 +230,7 @@ public class HomeFragment extends Fragment {
     /**
      * Convert CalendarUtil day of week integer to English day string
      *
-     * @param dayOfWeek - day of week represented as an int
+     * @param dayOfWeek day of week represented as an int
      * @return day of week represented as a string in English
      */
     private String toDayString(int dayOfWeek) {
@@ -247,10 +258,9 @@ public class HomeFragment extends Fragment {
      * Populate the list of meals onto the calendar based on the selected day of the week
      * Add meals to the ListView array list based on the selected day in the calendar
      *
-     * @param root - the root view
-     * @param UID - the ID of the user to get meals for
-     * @param day - the day of the week as an integer per the java.util.Calendar class
-     *
+     * @param root the root view
+     * @param UID  the ID of the user to get meals for
+     * @param day  the day of the week as an integer per the java.util.Calendar class
      */
     private void setMealsToCalendar(View root, String UID, int day) {
         // List Label
@@ -273,8 +283,8 @@ public class HomeFragment extends Fragment {
     /**
      * Get a recipe from the user's cookbook based on the name
      *
-     * @param UID - the user
-     * @param mealName - the name of the recipe to get
+     * @param UID      the user
+     * @param mealName the name of the recipe to get
      */
     private void getRecipeFromBook(String UID, String mealName) {
         JsonObjectRequest getRecipeReq = new JsonObjectRequest(Request.Method.GET, Const.URL_RECIPES_GETRECIPE + "?UID=" + UID + "&mealName=" + mealName, null, response -> {
@@ -293,7 +303,7 @@ public class HomeFragment extends Fragment {
     /**
      * Get the labels of each recipe in the user's cookbook to populate the add item options
      *
-     * @param UID - the ID of the current user
+     * @param UID the ID of the current user
      */
     private void getRecipeLabels(String UID) {
         JsonArrayRequest recipeLabelsReq = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_GETLABELS + "?UID=" + UID, null, response -> {
@@ -308,8 +318,8 @@ public class HomeFragment extends Fragment {
     /**
      * Get the list of meals planned for a given day
      *
-     * @param UID - the ID of the current user
-     * @param day - the day to get meals for
+     * @param UID the ID of the current user
+     * @param day the day to get meals for
      */
     private void getMealsByDay(String UID, String day) {
         JsonObjectRequest getMealByDayReq = new JsonObjectRequest(Request.Method.GET, Const.URL_MEALS_GET_BYDAY + "?UID=" + UID + "&day=" + day, null, response -> {
@@ -325,15 +335,20 @@ public class HomeFragment extends Fragment {
     /**
      * Add a meal to a given day in the calendar
      *
-     * @param UID - the user to add a meal to their calendar
-     * @param day - the given day of the week to add the meal to
-     * @param meal - the meal to add
+     * @param UID  the user to add a meal to their calendar
+     * @param day  the given day of the week to add the meal to
+     * @param meal the meal to add
      */
     private void addMeal(String UID, String day, HashMap<String, Object> meal) {
         JsonObjectRequest addMealReq = new JsonObjectRequest(Request.Method.PUT, Const.URL_MEALS_ADD + "?UID=" + UID + "&day=" + day, new JSONObject(meal), response -> {
             Toast.makeText(getContext(), "Meal added", Toast.LENGTH_SHORT).show();
         }, error -> {
-            // Toast.makeText(getContext(), "Failed to add meal", Toast.LENGTH_SHORT).show();
+            VolleyLog.d(TAG, error);
+            if (error.networkResponse.statusCode == 403) {
+                Toast.makeText(getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(), "Error adding meal", Toast.LENGTH_SHORT).show();
+            }
         });
 
         AppController.getInstance().addToRequestQueue(addMealReq, tag_home_req);
@@ -342,16 +357,22 @@ public class HomeFragment extends Fragment {
     /**
      * Remove a meal from a given day in the calendar
      *
-     * @param UID - the user to remove a meal from their calendar
-     * @param day - the given day of the week to remove the meal from
-     * @param mealName - the name of the meal
-     * @param removeAll - whether to disregard mealName and remove all meals or not
+     * @param UID       the user to remove a meal from their calendar
+     * @param day       the given day of the week to remove the meal from
+     * @param mealName  the name of the meal
+     * @param removeAll whether to disregard mealName and remove all meals or not
      */
     private void removeMeal(String UID, String day, String mealName, String removeAll) {
         JsonObjectRequest removeMealReq = new JsonObjectRequest(Request.Method.DELETE,
                 Const.URL_MEALS_REMOVE + "?UID=" + UID + "&day=" + day + "&mealName=" + mealName + "&removeAll=" + removeAll, null, response -> {
             Toast.makeText(getContext(), "Meal removed", Toast.LENGTH_SHORT).show();
         }, error -> {
+            VolleyLog.d(TAG, error);
+            if (error.networkResponse.statusCode == 403) {
+                Toast.makeText(getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(), "Error removing meal", Toast.LENGTH_SHORT).show();
+            }
         });
 
         AppController.getInstance().addToRequestQueue(removeMealReq, tag_home_req);

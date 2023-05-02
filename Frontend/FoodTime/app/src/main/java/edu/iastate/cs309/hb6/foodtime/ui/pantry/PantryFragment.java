@@ -142,8 +142,8 @@ public class PantryFragment extends Fragment {
      * Listens for events pertaining to the pantry
      * If the user long presses an item in the list, the handler will remove the item from the server and local list
      *
-     * @param root - the current view
-     * @param UID  - the UID of the current user pertaining to their unique pantry
+     * @param root the current view
+     * @param UID  the UID of the current user pertaining to their unique pantry
      */
     private void setUpListViewListener(View root, String UID) {
         pantry.setOnItemLongClickListener((adapterView, view, i, l) -> {
@@ -158,12 +158,12 @@ public class PantryFragment extends Fragment {
      * For a given UID and ingredient, sends req to add that ingredient to the Users pantry
      * response is string of all items in the pantry of the user request returns
      *
-     * @param view       - the current view
-     * @param UID        - the UID of the current user pertaining to their unique pantry
-     * @param ingredient - the name of a given ingredient the user wants to add
-     * @param quantity   - the quantity of the same item in the pantry
-     * @param unitsType  - the type of amount (can, cup, tablespoon, etc.)
-     * @throws JSONException - if the JSON is malformed
+     * @param view       the current view
+     * @param UID        the UID of the current user pertaining to their unique pantry
+     * @param ingredient the name of a given ingredient the user wants to add
+     * @param quantity   the quantity of the same item in the pantry
+     * @param unitsType  the type of amount (can, cup, tablespoon, etc.)
+     * @throws JSONException if the JSON is malformed
      */
     private void addItem(View view, String UID, String ingredient, int quantity, String unitsType) throws JSONException {
         /* If the user inputted text, send it */
@@ -186,7 +186,7 @@ public class PantryFragment extends Fragment {
     /**
      * Get the pantry as an array of ingredients as strings from the server
      *
-     * @param UID - the UID of the current user pertaining to their unique pantry
+     * @param UID the UID of the current user pertaining to their unique pantry
      */
     private void getUserPantryString(String UID) {
         JsonArrayRequest pantryStringRequest = new JsonArrayRequest(
@@ -211,10 +211,10 @@ public class PantryFragment extends Fragment {
     /**
      * Remove a requested ingredient from the pantry on the server and locally
      *
-     * @param view       - the current view
-     * @param UID        - the UID of the current user pertaining to their unique pantry
-     * @param ingredient - the name of the specified ingredient
-     * @param index      - the index of the ingredients list of the removed item, for use to remove from ArrayList after successful request
+     * @param view       the current view
+     * @param UID        the UID of the current user pertaining to their unique pantry
+     * @param ingredient the name of the specified ingredient
+     * @param index      the index of the ingredients list of the removed item, for use to remove from ArrayList after successful request
      */
     private void removeFromPantry(View view, String UID, String ingredient, int index) {
         StringRequest pantryRemoveRequest = new StringRequest(
