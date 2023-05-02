@@ -9,11 +9,11 @@
 
 package edu.iastate.cs309.hb6.foodtime;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * The main activity of the app. This is the activity that is launched when the app is opened.
@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * This method is called when the activity is created. It sets the content view to the main activity layout.
+     *
      * @param savedInstanceState The saved instance state.
      */
     @Override
