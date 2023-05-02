@@ -19,23 +19,6 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "users")
 public class User {
-
-    public AccessLevel getAccessLevel() {
-        return accessLevel;
-    }
-
-    public void setAccessLevel(AccessLevel accessLevel) {
-        this.accessLevel = accessLevel;
-    }
-
-    public User getParentUser() {
-        return parentUser;
-    }
-
-    public void setParentUser(User parentUser) {
-        this.parentUser = parentUser;
-    }
-
     public enum AccessLevel {
         CHILD,
         PARENT
@@ -149,5 +132,21 @@ public class User {
 
     public void setRecipeLabels(ArrayList<String> recipeLabels) {
         this.recipeLabels = recipeLabels;
+    }
+
+    public AccessLevel getAccessLevel() {
+        return accessLevel;
+    }
+
+    public void setAccessLevel(AccessLevel accessLevel) {
+        this.accessLevel = accessLevel;
+    }
+
+    public User getParentUser() {
+        return parentUser;
+    }
+
+    public void setParentUser(User parentUser) {
+        this.parentUser = parentUser;
     }
 }

@@ -8,7 +8,9 @@ import androidx.lifecycle.ViewModel;
  */
 public class CookBookViewModel extends ViewModel {
 
-    /** The text to be displayed */
+    /**
+     * The text to be displayed
+     */
     private final MutableLiveData<String> mText;
 
     /**
