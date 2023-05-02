@@ -1,5 +1,6 @@
 package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -26,6 +27,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     /** Recipes to populate cards to be used by RecyclerView */
     private final ArrayList<String> recipes;
+    private String UID;
 
 
     /**
@@ -34,9 +36,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
      * @param context - The current context.
      * @param recipes - The data (recipes from database) to populate cards to be used by RecyclerView.
      */
-    public CardAdapter(Context context, ArrayList<String> recipes) {
+    public CardAdapter(Context context, ArrayList<String> recipes, String UID) {
         this.context = context;
         this.recipes = recipes;
+        this.UID = UID;
     }
 
     /**
@@ -94,6 +97,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
         /** The title of the recipe */
         private final TextView recipeTitle;
+        private final String UID;
 
         /**
          * CardViewHolder
@@ -104,11 +108,14 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         public CardViewHolder(View itemView) {
             super(itemView);
             recipeTitle = itemView.findViewById((R.id.recipeTitle));
+            UID = "3b1bbf93-1f02-4492-aca8-57aa7be65138";
+
 
             // Create intent to ViewRecipeActivity when card is clicked
             itemView.setOnClickListener(view -> {
                 Intent viewRecipeIntent = new Intent(view.getContext(), ViewRecipeActivity.class);
                 viewRecipeIntent.putExtra("RecipeTitle", recipeTitle.getText().toString());
+                viewRecipeIntent.putExtra("UID", UID);
                 Toast.makeText(view.getContext(), recipeTitle.getText().toString(), Toast.LENGTH_LONG).show();
                 view.getContext().startActivity(viewRecipeIntent);
             });

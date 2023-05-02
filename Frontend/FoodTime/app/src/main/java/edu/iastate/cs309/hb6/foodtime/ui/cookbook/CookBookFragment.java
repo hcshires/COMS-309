@@ -83,7 +83,7 @@ public class CookBookFragment extends Fragment {
         recipeCards.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
         // Adapter
-        adapter = new CardAdapter(root.getContext(), recipes);
+        adapter = new CardAdapter(root.getContext(), recipes, UID);
 
         /* Initialize Recipes */
         getUserRecipes(UID);

@@ -14,10 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
 import edu.iastate.cs309.hb6.foodtime.R;
+import edu.iastate.cs309.hb6.foodtime.utils.AppController;
+import edu.iastate.cs309.hb6.foodtime.utils.Const;
 
 public class DirectionsFragment extends Fragment {
 
@@ -28,6 +36,9 @@ public class DirectionsFragment extends Fragment {
     private RecyclerView recyclerView;
     private DirectionsAdaper adapter;
     private ArrayList<String> directions = new ArrayList<>();
+    private  String UID;
+    private final String tag_directions_req = "directions_req";
+
 
     public DirectionsFragment() {
         // Required empty public constructor
@@ -44,24 +55,35 @@ public class DirectionsFragment extends Fragment {
 
         Intent intent = requireActivity().getIntent();
         Bundle usrData = intent.getExtras();
+        UID = usrData.getString("UID");
         recipeTitle.setText(usrData.getString("RecipeTitle"));
 
         /* Recycler View Adapter and Manager */
+        getDirections(UID, recipeTitle.getText().toString());
         adapter = new DirectionsAdaper(root.getContext(), directions);
-
-        directions.add(0, "This is the first direction");
-        directions.add(1, "This is the second direction");
-        directions.add(2, "This is the third direction");
-        directions.add(3, "This is the fourth direction");
-        directions.add(4, "This is the fifth direction");
-        directions.add(5, "This is the sixth direction");
-        directions.add(6, "This is the seventh direction");
-
-
-        recyclerView.setAdapter(adapter);
 
 
         return root;
+    }
+
+    private void getDirections(String UID, String mealName) {
+        JsonArrayRequest getDirectionsReq = new JsonArrayRequest(Request.Method.GET, Const.URL_DIRECTIONS_GETDIRECTIONS + "?UID=" + UID + "&mealName=" + mealName, null, response -> {
+            try {
+                for (int i = 0; i <= 9; i++) {
+                    String direction = response.getString(i);
+                    directions.add(i, direction);
+                }
+                Log.d(TAG, "Request Sent");
+                recyclerView.setAdapter(adapter);
+
+
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        },error -> {
+            Log.d(TAG, "Request Not Sent");
+        });
+        AppController.getInstance().addToRequestQueue(getDirectionsReq, tag_directions_req);
     }
 
     @Override

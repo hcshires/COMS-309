@@ -17,9 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 import edu.iastate.cs309.hb6.foodtime.R;
+import edu.iastate.cs309.hb6.foodtime.utils.Const;
 
 
 public class IngredientsFragment extends Fragment {
@@ -28,7 +35,7 @@ public class IngredientsFragment extends Fragment {
 
     private TextView recipeTitle;
     private RecyclerView recyclerView;
-    private String tester;
+    private String UID;
 
     private View root;
     private IngredientsAdapter adapter;
@@ -62,28 +69,22 @@ public class IngredientsFragment extends Fragment {
         /*Set Recipe Title*/
         Intent intent = requireActivity().getIntent();
         Bundle usrData = intent.getExtras();
-        tester = usrData.getString("RecipeTitle");
-        recipeTitle.setText(tester);
+        UID = usrData.getString("UID");
+        recipeTitle.setText(usrData.getString("RecipeTitle"));
 
         /* Recycler View Adapter and Manager */
         adapter = new IngredientsAdapter(root.getContext(), ingredients);
 
-        ingredients.add(0, "test 1");
-        ingredients.add(1, "test 2");
-        ingredients.add(2, "test 3");
-        ingredients.add(3, "test 4");
-        ingredients.add(4, "test 5");
+        getIngredients(UID, recipeTitle.getText().toString(), root);
 
 
         recyclerView.setAdapter(adapter);
 
 
-//        getIngredients();
-
         return root;
     }
 
-    private void getIngredients() {
+    private void getIngredients(String UID, String mealName, View view) {
 
     }
 
