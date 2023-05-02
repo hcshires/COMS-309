@@ -5,6 +5,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import io.restassured.RestAssured;
@@ -19,9 +22,9 @@ import javax.json.JsonObject;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class TestingSystemTest {
     @LocalServerPort
     int port;
@@ -41,6 +44,7 @@ public class TestingSystemTest {
 
 
     @Test
+//    @Order(1)
     public void loginUserTest() throws JSONException {
         //JSONObject requestBody = new JSONObject()
 //            requestBody.put("username", "SystemTestUser@example.com");
@@ -71,7 +75,9 @@ public class TestingSystemTest {
 
     }
 
+
     @Test
+//    @Order(2)
     public void addMealTest() throws JSONException {
         JsonObject mealBody = Json.createObjectBuilder()
                 .add("name", "Quesadillas")
@@ -105,7 +111,9 @@ public class TestingSystemTest {
         assertEquals(200, statusCode);
     }
 
+
     @Test
+//    @Order(3)
     public void getByDayTest() {
         Response response = RestAssured.given().
                 header("Content-Type", "application/json").
@@ -122,6 +130,7 @@ public class TestingSystemTest {
         assertNotNull(returnString);
     }
 
+//    @Order(4)
     @Test
     public void getAllForUserTest() {
         Response response = RestAssured.given().
@@ -135,6 +144,7 @@ public class TestingSystemTest {
         assertEquals(200, statusCode);
     }
 
+//    @Order(5)
     @Test
     public void removeMealTest() {
         Response response = RestAssured.given().
@@ -154,6 +164,7 @@ public class TestingSystemTest {
     //pantry and ingredient tests
     //Im going to assume these run in order
 
+//    @Order(6)
     @Test
     public void addToPantryTest(){
         //add an item to a given user's pantry
@@ -175,6 +186,7 @@ public class TestingSystemTest {
         assertEquals(200, response.getStatusCode());
     }
 
+//    @Order(7)
     @Test
     public void getPantryTest(){
         //return a user's whole pantry
@@ -192,6 +204,7 @@ public class TestingSystemTest {
         assertEquals(200, response.getStatusCode()); //check if successful
     }
 
+//    @Order(8)
     @Test
     public void changeQuantityTest(){
 
@@ -211,6 +224,7 @@ public class TestingSystemTest {
         assertEquals(200, response.getStatusCode());
     }
 
+//    @Order(9)
     @Test
     public void changeUnitTest(){
 
@@ -230,6 +244,7 @@ public class TestingSystemTest {
         assertEquals(200, response.getStatusCode());
     }
 
+//    @Order(10)
     @Test
     public void changeQuantTest(){
 
@@ -249,6 +264,7 @@ public class TestingSystemTest {
         assertEquals(true, response.getBody().asString().contains("6"));
     }
 
+//    @Order(11)
     @Test
     public void changeUnitTypeTest(){
 
@@ -268,6 +284,7 @@ public class TestingSystemTest {
         assertEquals(true, response.getBody().asString().contains("uncountable"));
     }
 
+//    @Order(12)
     @Test
     public void removeFromPantryTest(){
         //remove items by name from user's pantry
