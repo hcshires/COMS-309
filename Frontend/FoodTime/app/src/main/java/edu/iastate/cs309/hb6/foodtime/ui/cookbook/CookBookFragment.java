@@ -85,7 +85,7 @@ public class CookBookFragment extends Fragment {
 
         /* Widgets */
         FloatingActionButton addRecipe = root.findViewById(R.id.addRecipeBtn);
-        recipeCards = root.findViewById(R.id.recyclerList);
+        recipeCards = root.findViewById(R.id.cookbookItems);
 
         // Set layout manager to position items
         recipeCards.setLayoutManager(new LinearLayoutManager(root.getContext()));

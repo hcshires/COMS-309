@@ -83,8 +83,8 @@ public class PantryFragment extends Fragment {
         View root = binding.getRoot();
 
         /* Widgets */
-        FloatingActionButton addButton = root.findViewById(R.id.addButton);
-        pantry = root.findViewById(R.id.pantryItems);
+        FloatingActionButton addButton = root.findViewById(R.id.addToPantryBtn);
+        pantry = (ListView) root.findViewById(R.id.pantryItems);
         input = root.findViewById(R.id.editTextAddPantry);
         quantityInput = root.findViewById(R.id.quantityTxt);
         unitInput = root.findViewById(R.id.unitTypesTxt);

@@ -7,6 +7,16 @@ public class Const {
     /**
      * Server URL
      **/
+
+    /**
+     * Parent User Testing credentials, username[0], password[1], uid[2]
+     */
+    public static final String[] CRED_PARENT_USER = {"wm@test.com", "test", "3ccd98d9-9951-4a17-98e6-b368fce2a4de"};
+
+    /* Meals */
+    /**
+     * Server URL
+     **/
     private static final String URL_SERVER = "http://coms-309-011.class.las.iastate.edu:8080";
     // URL_SERVER = "http://localhost:8080"; // for local testing
 

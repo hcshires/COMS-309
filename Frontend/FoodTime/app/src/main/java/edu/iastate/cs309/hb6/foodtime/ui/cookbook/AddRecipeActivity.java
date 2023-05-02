@@ -148,8 +148,6 @@ public class AddRecipeActivity extends AppCompatActivity {
             ingredientHash5.put("quantityType", type5.getText().toString());
             ingredientsHashList.add(ingredientHash5);
 
-            /* Turn recipe title and day to string */
-
             /* Make JSON Obj */
             recipe.put("ingredients", ingredientsHashList);
             recipe.put("name", recipeTitle.getText().toString());
@@ -187,6 +185,8 @@ public class AddRecipeActivity extends AppCompatActivity {
 
                 if (error.networkResponse.statusCode == 403) {
                     Toast.makeText(view.getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();
+                } else if (error.networkResponse.statusCode == 409) {
+                Toast.makeText(this, "A recipe with that name is already in your cookbook.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(view.getContext(), "An Error Occurred.", Toast.LENGTH_LONG).show();
                 }

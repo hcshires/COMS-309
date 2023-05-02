@@ -31,7 +31,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     private final ArrayList<String> recipes;
     private String UID;
 
-
     /**
      * CardAdapter
      *

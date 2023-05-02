@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngredientsFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">edu.iastate.cs309.hb6.foodtime.ui.cookbook</a> &gt; <span class="el_source">IngredientsFragment.java</span></div><h1>IngredientsFragment.java</h1><pre class="source lang-java linenums">package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
+import android.content.Intent;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import edu.iastate.cs309.hb6.foodtime.R;
+import edu.iastate.cs309.hb6.foodtime.utils.AppController;
+import edu.iastate.cs309.hb6.foodtime.utils.Const;
+
+
+public class IngredientsFragment extends Fragment {
+
+<span class="fc" id="L44">    private static final String TAG = IngredientsFragment.class.getSimpleName();</span>
+
+    private TextView recipeTitle;
+    private RecyclerView recyclerView;
+    private String UID;
+
+    private View root;
+    private IngredientsAdapter adapter;
+
+<span class="fc" id="L53">    private ArrayList&lt;Object&gt; ingredients = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L54">    private ArrayList&lt;Object&gt; quantity = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L55">    private ArrayList&lt;Object&gt; type = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L56">    private ArrayList&lt;HashMap&lt;Object, Object&gt;&gt; jsons = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L57">    private HashMap&lt;Object, Object&gt; hash1  = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L58">    private HashMap&lt;Object, Object&gt; hash2  = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L59">    private HashMap&lt;Object, Object&gt; hash3  = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L60">    private HashMap&lt;Object, Object&gt; hash4  = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L61">    private HashMap&lt;Object, Object&gt; hash5  = new HashMap&lt;&gt;();</span>
+
+
+
+
+//    private HashMap&lt;String, String&gt; hashMap = new HashMap&lt;&gt;();
+
+
+<span class="fc" id="L69">    public IngredientsFragment() {</span>
+        // Required empty public constructor
+<span class="fc" id="L71">    }</span>
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+<span class="fc" id="L78">        root = inflater.inflate(R.layout.fragment_ingredients, container, false);</span>
+
+        // Inflate the layout for this fragment
+<span class="fc" id="L81">        Log.d(TAG, &quot;Ingredients Fragment was created&quot;);</span>
+
+
+
+        /* Widgets */
+<span class="fc" id="L86">        recipeTitle = root.findViewById(R.id.recipeTitle);</span>
+<span class="fc" id="L87">        recyclerView = root.findViewById(R.id.rvIngredients);</span>
+<span class="fc" id="L88">        recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));</span>
+
+        /*Set Recipe Title*/
+<span class="fc" id="L91">        Intent intent = requireActivity().getIntent();</span>
+<span class="fc" id="L92">        Bundle usrData = intent.getExtras();</span>
+//        UID = usrData.getString(&quot;UID&quot;);
+<span class="fc" id="L94">        UID = &quot;28002a17-e105-4ae3-9e07-765fd1b2ae3a&quot;;</span>
+<span class="fc" id="L95">        recipeTitle.setText(usrData.getString(&quot;RecipeTitle&quot;));</span>
+
+        /* Recycler View Adapter and Manager */
+<span class="fc" id="L98">        adapter = new IngredientsAdapter(root.getContext(), ingredients, quantity, type);</span>
+<span class="fc" id="L99">        getIngredients(UID, recipeTitle.getText().toString(), root);</span>
+
+<span class="fc" id="L101">        return root;</span>
+    }
+
+    private void getIngredients(String UID, String mealName, View view) {
+<span class="fc" id="L105">        JsonArrayRequest getIngredientsReq = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_COMPARE + &quot;?UID=&quot; + UID + &quot;&amp;mealName=&quot; + mealName, null, response -&gt; {</span>
+<span class="nc" id="L106">            formatResponse(response);</span>
+<span class="nc" id="L107">            recyclerView.setAdapter(adapter);</span>
+<span class="nc" id="L108">            Log.d(TAG, &quot;Request Sent&quot;);</span>
+<span class="nc" id="L109">        }, error -&gt; {</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">            if (error.networkResponse.statusCode == 418) {</span>
+                try {
+<span class="nc" id="L112">                    String body = new String(error.networkResponse.data,&quot;UTF-8&quot;);</span>
+<span class="nc" id="L113">                    JSONArray response = new JSONArray(body);</span>
+<span class="nc" id="L114">                    formatResponse(response);</span>
+<span class="nc" id="L115">                    recyclerView.setAdapter(adapter);</span>
+<span class="nc" id="L116">                } catch (UnsupportedEncodingException | JSONException e) {</span>
+<span class="nc" id="L117">                    throw new RuntimeException(e);</span>
+<span class="nc" id="L118">                }</span>
+            }
+<span class="fc" id="L120">            Log.d(TAG, &quot;Request NOT Sent&quot;);</span>
+<span class="fc" id="L121">        });</span>
+<span class="fc" id="L122">        AppController.getInstance().addToRequestQueue(getIngredientsReq, &quot;tag_directoins&quot;);</span>
+<span class="fc" id="L123">    }</span>
+
+    /**
+     * @param view               The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+<span class="fc" id="L132">        super.onViewCreated(view, savedInstanceState);</span>
+
+
+<span class="fc" id="L135">    }</span>
+
+    public void formatResponse(JSONArray response){
+
+<span class="nc" id="L139">        jsons.addAll(new Gson().fromJson(String.valueOf(response), ArrayList.class));</span>
+
+<span class="nc" id="L141">        hash1.putAll(jsons.get(0));</span>
+<span class="nc" id="L142">        Object ingredient1 = hash1.get(&quot;name&quot;);</span>
+<span class="nc" id="L143">        Object quantity1 = hash1.get(&quot;quantity&quot;);</span>
+<span class="nc" id="L144">        Object type1 = hash1.get(&quot;quantityType&quot;);</span>
+<span class="nc" id="L145">        ingredients.add(ingredient1);</span>
+<span class="nc" id="L146">        quantity.add(quantity1);</span>
+<span class="nc" id="L147">        type.add(type1);</span>
+
+<span class="nc" id="L149">        hash2.putAll(jsons.get(1));</span>
+<span class="nc" id="L150">        Object ingredient2 = hash2.get(&quot;name&quot;);</span>
+<span class="nc" id="L151">        Object quantity2 = hash2.get(&quot;quantity&quot;);</span>
+<span class="nc" id="L152">        Object type2 = hash2.get(&quot;quantityType&quot;);</span>
+<span class="nc" id="L153">        ingredients.add(ingredient2);</span>
+<span class="nc" id="L154">        quantity.add(quantity2);</span>
+<span class="nc" id="L155">        type.add(type2);</span>
+
+<span class="nc" id="L157">        hash3.putAll(jsons.get(2));</span>
+<span class="nc" id="L158">        Object ingredient3 = hash3.get(&quot;name&quot;);</span>
+<span class="nc" id="L159">        Object quantity3 = hash3.get(&quot;quantity&quot;);</span>
+<span class="nc" id="L160">        Object type3 = hash3.get(&quot;quantityType&quot;);</span>
+<span class="nc" id="L161">        ingredients.add(ingredient3);</span>
+<span class="nc" id="L162">        quantity.add(quantity3);</span>
+<span class="nc" id="L163">        type.add(type3);</span>
+
+<span class="nc" id="L165">        hash4.putAll(jsons.get(3));</span>
+<span class="nc" id="L166">        Object ingredient4 = hash4.get(&quot;name&quot;);</span>
+<span class="nc" id="L167">        Object quantity4 = hash4.get(&quot;quantity&quot;);</span>
+<span class="nc" id="L168">        Object type4 = hash4.get(&quot;quantityType&quot;);</span>
+<span class="nc" id="L169">        ingredients.add(ingredient4);</span>
+<span class="nc" id="L170">        quantity.add(quantity4);</span>
+<span class="nc" id="L171">        type.add(type4);</span>
+
+<span class="nc" id="L173">        hash5.putAll(jsons.get(4));</span>
+<span class="nc" id="L174">        Object ingredient5 = hash5.get(&quot;name&quot;);</span>
+<span class="nc" id="L175">        Object quantity5 = hash5.get(&quot;quantity&quot;);</span>
+<span class="nc" id="L176">        Object type5 = hash5.get(&quot;quantityType&quot;);</span>
+<span class="nc" id="L177">        ingredients.add(ingredient5);</span>
+<span class="nc" id="L178">        quantity.add(quantity5);</span>
+<span class="nc" id="L179">        type.add(type5);</span>
+
+<span class="nc" id="L181">        Log.d(TAG, ingredients.toString());</span>
+<span class="nc" id="L182">        Log.d(TAG, quantity.toString());</span>
+<span class="nc" id="L183">        Log.d(TAG, type.toString());</span>
+<span class="nc" id="L184">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 7.4.2</div></body></html>

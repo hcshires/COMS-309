@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AddDirectionActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">edu.iastate.cs309.hb6.foodtime.ui.cookbook</a> &gt; <span class="el_source">AddDirectionActivity.java</span></div><h1>AddDirectionActivity.java</h1><pre class="source lang-java linenums">package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
+import android.nfc.Tag;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.iastate.cs309.hb6.foodtime.DashboardActivity;
+import edu.iastate.cs309.hb6.foodtime.R;
+import edu.iastate.cs309.hb6.foodtime.utils.AppController;
+import edu.iastate.cs309.hb6.foodtime.utils.Const;
+
+<span class="fc" id="L34">public class AddDirectionActivity extends AppCompatActivity {</span>
+    private EditText recipeTitle;
+    private RecyclerView recyclerView;
+    private AddDirectionsAdapter adapter;
+<span class="fc" id="L38">    private int numberOfCVs = 0;</span>
+    private Button btnAdd;
+    private String UID;
+<span class="fc" id="L41">    private List&lt;Direction&gt; directionList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L42">    private ArrayList&lt;String&gt; inputs = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L43">    private final String TAG = AddDirectionActivity.class.getSimpleName();</span>
+<span class="fc" id="L44">    private final String tag_directions_req = &quot;directions_req&quot;;</span>
+    private JSONArray dircObj;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L48">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L49">        setContentView(R.layout.activity_add_direction);</span>
+
+
+        /*Widgets*/
+<span class="fc" id="L53">        recipeTitle = findViewById(R.id.edtRecipeTitle);</span>
+<span class="fc" id="L54">        recyclerView = findViewById(R.id.rvDirections);</span>
+<span class="fc" id="L55">        btnAdd = findViewById(R.id.btnAdd);</span>
+
+        // Set layout manager
+<span class="fc" id="L58">        recyclerView.setLayoutManager(new LinearLayoutManager(AddDirectionActivity.this));</span>
+
+        /*Get Extras*/
+<span class="fc" id="L61">        Intent addRecipeIntent = getIntent();</span>
+<span class="fc" id="L62">        Bundle usrData = addRecipeIntent.getExtras();</span>
+<span class="fc" id="L63">        recipeTitle.setText(usrData.getString(&quot;RecipeTitle&quot;));</span>
+<span class="fc" id="L64">        UID = usrData.getString(&quot;UID&quot;);</span>
+
+        /*Attach adapter to RV*/
+<span class="pc" id="L67">        adapter = new AddDirectionsAdapter(AddDirectionActivity.this, directionList, (position, charSeq) -&gt; inputs.add(position, charSeq));</span>
+<span class="fc" id="L68">        recyclerView.setAdapter(adapter);</span>
+
+
+
+        /*OnClick Listener*/
+<span class="fc" id="L73">        Intent addDirectionsIntent = new Intent(AddDirectionActivity.this, DashboardActivity.class);</span>
+<span class="fc" id="L74">        btnAdd.setOnClickListener(view -&gt; {</span>
+<span class="fc" id="L75">            addDirectionsIntent.putExtra(&quot;UID&quot;, UID);</span>
+<span class="fc" id="L76">            Log.d(TAG, inputs.toString());</span>
+<span class="fc" id="L77">            dircObj = new JSONArray(inputs);</span>
+<span class="fc" id="L78">            addIngredientRequest(UID, recipeTitle.getText().toString(), view);</span>
+<span class="fc" id="L79">            startActivity(addDirectionsIntent);</span>
+
+<span class="fc" id="L81">        });</span>
+
+<span class="fc" id="L83">    }</span>
+
+    private void addIngredientRequest(String UID, String mealName, View view) {
+<span class="fc" id="L86">        JsonArrayRequest addDirectionReq = new JsonArrayRequest(Request.Method.PUT, Const.URL_DIRECTIONS_SETDIRECTIONS + &quot;?UID=&quot; + UID + &quot;&amp;mealName=&quot; + mealName, dircObj, response -&gt; {</span>
+<span class="fc" id="L87">                Log.d(TAG, &quot;Request Sent&quot;);</span>
+<span class="fc" id="L88">                Toast.makeText(view.getContext(), &quot;Meal added&quot;, Toast.LENGTH_LONG).show();</span>
+<span class="fc" id="L89">        }, error -&gt; {</span>
+<span class="nc" id="L90">            Toast.makeText(view.getContext(), &quot;An unexpected error occurred&quot;, Toast.LENGTH_LONG).show();</span>
+<span class="nc" id="L91">            Log.d(TAG, &quot;Request NOT Sent&quot;);</span>
+<span class="nc" id="L92">        });</span>
+<span class="fc" id="L93">        AppController.getInstance().addToRequestQueue(addDirectionReq, tag_directions_req);</span>
+
+<span class="fc" id="L95">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 7.4.2</div></body></html>

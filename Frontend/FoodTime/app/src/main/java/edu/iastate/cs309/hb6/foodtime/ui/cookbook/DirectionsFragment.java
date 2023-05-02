@@ -76,7 +76,6 @@ public class DirectionsFragment extends Fragment {
                 Log.d(TAG, "Request Sent");
                 recyclerView.setAdapter(adapter);
 
-
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
