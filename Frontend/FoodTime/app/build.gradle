@@ -60,6 +60,7 @@ dependencies {
         }
     }
 
+    implementation files('libs/java_websocket.jar')
 
     /* API Libraries */
     implementation 'com.android.volley:volley:1.2.1'

@@ -1,0 +1,146 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UserPreferencesController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">edu.iastate.cs309.hb6.FoodTime.Preferences</a>
+</div>
+
+<h1>Coverage Summary for Class: UserPreferencesController (edu.iastate.cs309.hb6.FoodTime.Preferences)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserPreferencesController</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">UserPreferencesController$$EnhancerBySpringCGLIB$$7caf4658</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package edu.iastate.cs309.hb6.FoodTime.Preferences;
+&nbsp;
+&nbsp;import edu.iastate.cs309.hb6.FoodTime.Login.UserRepository;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.web.bind.annotation.PutMapping;
+&nbsp;import org.springframework.web.bind.annotation.RequestBody;
+&nbsp;import org.springframework.web.bind.annotation.ResponseBody;
+&nbsp;import org.springframework.web.bind.annotation.RestController;
+&nbsp;
+&nbsp;@RestController
+<b class="fc">&nbsp;public class UserPreferencesController {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    UserRepository userDB;
+&nbsp;
+&nbsp;    @PutMapping(&quot;/preferences/update&quot;)
+&nbsp;    @ResponseBody
+&nbsp;    @Transactional
+&nbsp;    public ResponseEntity&lt;Object&gt; updatePreferences(@RequestBody UserPreferences prefs) {
+<b class="nc">&nbsp;        if (userDB.existsById(prefs.getUID())) {</b>
+<b class="nc">&nbsp;            UserPreferences prefsToUpdate = userDB.findByUID(prefs.getUID()).getUserPreferences();</b>
+&nbsp;            //User preferences update without a .save() since method is transactional
+<b class="nc">&nbsp;            prefsToUpdate.update(prefs);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(prefsToUpdate, HttpStatus.OK);</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(null, HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 13:19</div>
+</div>
+</body>
+</html>

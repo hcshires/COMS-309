@@ -1,62 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/HomeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.calendar.HomeFragment">
+    tools:context=".ui.calendar.HomeFragment"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
-        android:layout_height="346dp"
-        android:firstDayOfWeek="@android:integer/config_longAnimTime"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:firstDayOfWeek="@android:integer/config_longAnimTime" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addMealBtn"
+    <TextView
+        android:id="@+id/mealsLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/baseline_add_24"
-        app:backgroundTint="@color/colorTertiary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.915"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.869" />
+        android:layout_margin="20dp"
+        android:fontFamily="@font/capriola"
+        android:text="Day"
+        android:textAlignment="center"
+        android:textColor="@color/colorTertiary"
+        android:textSize="16sp" />
+
+    <ListView
+        android:id="@+id/dayMealsList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </ListView>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="236dp"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/addMealBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/mealsLbl"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/chatBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/capriola"
-            android:text="Day"
-            android:textAlignment="center"
-            android:textColor="@color/colorTertiary"
-            android:textSize="16sp" />
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="25dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@android:drawable/stat_notify_chat"
+            app:backgroundTint="@color/colorTertiary" />
 
-        <ListView
-            android:id="@+id/dayMealsList"
-            android:layout_width="match_parent"
-            android:layout_height="168dp" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addMealBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="25dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/baseline_add_24"
+            app:backgroundTint="@color/colorTertiary" />
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

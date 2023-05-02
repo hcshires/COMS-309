@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/usernameChatTxt"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Friend E-mail"
+        android:textSize="20dp" />
+
+    <Spinner
+        android:id="@+id/recipeChatSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp" />
+
+    <TextView
+        android:id="@+id/convoTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Conversation will appear here:\n"
+        android:textIsSelectable="true"
+        android:textSize="20dp"
+        android:scrollbars = "vertical" />
+
+    <Button
+        android:id="@+id/sendMsgBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send" />
+</LinearLayout>

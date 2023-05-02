@@ -1,0 +1,481 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MealController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">edu.iastate.cs309.hb6.FoodTime.Meal</a>
+</div>
+
+<h1>Coverage Summary for Class: MealController (edu.iastate.cs309.hb6.FoodTime.Meal)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MealController</td>
+<td class="coverageStat">
+  <span class="percent">
+    43.8%
+  </span>
+  <span class="absValue">
+    (7/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    18.8%
+  </span>
+  <span class="absValue">
+    (27/144)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">MealController$$EnhancerBySpringCGLIB$$2540813d</td>
+  </tr>
+  <tr>
+    <td class="name">MealController$$EnhancerBySpringCGLIB$$2540813d$$FastClassBySpringCGLIB$$e6f62e9a</td>
+  </tr>
+  <tr>
+    <td class="name">MealController$$FastClassBySpringCGLIB$$9e9df268</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    43.8%
+  </span>
+  <span class="absValue">
+    (7/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    18.8%
+  </span>
+  <span class="absValue">
+    (27/144)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package edu.iastate.cs309.hb6.FoodTime.Meal;
+&nbsp;
+&nbsp;import edu.iastate.cs309.hb6.FoodTime.Login.User;
+&nbsp;import edu.iastate.cs309.hb6.FoodTime.Login.UserRepository;
+&nbsp;import edu.iastate.cs309.hb6.FoodTime.Pantry.Ingredient;
+&nbsp;import edu.iastate.cs309.hb6.FoodTime.Pantry.PantryRepository;
+&nbsp;import org.apache.coyote.Response;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.lang.UsesSunHttpServer;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;@RestController
+&nbsp;
+<b class="fc">&nbsp;public class MealController {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    UserRepository userDB;
+&nbsp;    @Autowired
+&nbsp;    private PantryRepository pantryRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    RecipeRepository recipeDB;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private MealRepository mealRepository;
+&nbsp;
+&nbsp;    @PutMapping(&quot;/meals/add&quot;)
+&nbsp;    @Transactional
+&nbsp;    @ResponseBody
+&nbsp;    public ResponseEntity&lt;Object&gt; addMeal(@RequestParam String UID, @RequestParam String day, @RequestBody Meal meal) {
+<b class="fc">&nbsp;        if (userDB.findByUID(UID).getAccessLevel().equals(User.AccessLevel.PARENT)) {</b>
+<b class="fc">&nbsp;            HashMap&lt;String, Meal&gt; mealsForDay = getUserMealsForDay(UID, day);</b>
+<b class="fc">&nbsp;            mealsForDay.put(meal.getName(), meal);</b>
+&nbsp;
+&nbsp;            //Also add the meal to the recipe book if it doesn&#39;t already exist
+<b class="fc">&nbsp;            Map&lt;String, Recipe&gt; recipes = userDB.findByUID(UID).getUserRecipes();</b>
+<b class="fc">&nbsp;            Recipe recipeToAdd = new Recipe(meal);</b>
+<b class="fc">&nbsp;            recipes.put(recipeToAdd.getName(), recipeToAdd);</b>
+<b class="fc">&nbsp;            if (!userDB.findByUID(UID).getRecipeLabels().contains(meal.getName())) {</b>
+<b class="nc">&nbsp;                userDB.findByUID(UID).getRecipeLabels().add(meal.getName());</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(mealsForDay + day.toLowerCase(), HttpStatus.OK);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (userDB.findByUID(UID).getAccessLevel().equals(User.AccessLevel.CHILD)) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User does not have permission to add a meal.&quot;, HttpStatus.FORBIDDEN);</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User requesting to add meal does not have valid AccessType set.&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(&quot;/meals/remove&quot;)
+&nbsp;    @Transactional
+&nbsp;    public ResponseEntity&lt;Object&gt; removeMeal(@RequestParam String UID, @RequestParam String day, @RequestParam String mealName, @RequestParam boolean removeAll) {
+<b class="fc">&nbsp;        HashMap&lt;String, Meal&gt; mealsForDay = getUserMealsForDay(UID, day);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (userDB.findByUID(UID).getAccessLevel().equals(User.AccessLevel.PARENT)) {</b>
+&nbsp;            //Remove just one meal for a day
+<b class="fc">&nbsp;            if (mealsForDay.remove(mealName) == null &amp;&amp; !removeAll) {</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(String.format(&quot;Meal not found on day %s for user %s&quot;, day.toLowerCase(), UID), HttpStatus.NOT_FOUND);</b>
+&nbsp;            }
+&nbsp;            //Clear out all of user&#39;s meals for a day
+<b class="fc">&nbsp;            else if (removeAll) {</b>
+<b class="nc">&nbsp;                MealList mealsForUser = userDB.findByUID(UID).getUserMeals();</b>
+<b class="nc">&nbsp;                HashMap&lt;String, Meal&gt; emptyList = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;                mealsForUser.setMealsForDay(day.toLowerCase(), emptyList);</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(null, HttpStatus.OK);</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return new ResponseEntity&lt;&gt;(null, HttpStatus.OK);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        else if (userDB.findByUID(UID).getAccessLevel().equals(User.AccessLevel.CHILD)) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User does not have permission to remove a meal.&quot;, HttpStatus.FORBIDDEN);</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User requesting to remove meal does not have valid AccessType set.&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(&quot;/meals/update&quot;)
+&nbsp;    @Transactional
+&nbsp;    public ResponseEntity&lt;Object&gt; updateMeal(@RequestParam String UID, @RequestParam String day, @RequestParam String mealName, @RequestBody Meal newMeal) {
+<b class="fc">&nbsp;        HashMap&lt;String, Meal&gt; mealsForDay = getUserMealsForDay(UID, day);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (userDB.findByUID(UID).getAccessLevel().equals(User.AccessLevel.PARENT)) {</b>
+&nbsp;            //We will just replace one meal of a given day for a given user
+<b class="fc">&nbsp;            if (mealsForDay.containsKey(mealName)) {</b>
+<b class="fc">&nbsp;                mealsForDay.replace(mealName, newMeal);</b>
+<b class="fc">&nbsp;                return new ResponseEntity&lt;&gt;(mealsForDay.get(mealName), HttpStatus.OK);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(String.format(&quot;Meal not found on day %s for user %s&quot;, day, UID), HttpStatus.NOT_FOUND);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        else if (userDB.findByUID(UID).getAccessLevel().equals(User.AccessLevel.CHILD)) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User does not have permission to update a meal.&quot;, HttpStatus.FORBIDDEN);</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User requesting to update meal does not have valid AccessType set.&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;meals/get/by-day&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; returnMealsForDay(@RequestParam String UID, @RequestParam String day) {
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(getUserMealsForDay(UID, day), HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;meals/get/all&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; returnAllMeals(@RequestParam String UID) {
+<b class="fc">&nbsp;        User user = userDB.findByUID(UID);</b>
+<b class="fc">&nbsp;        if (user.getAccessLevel().equals(User.AccessLevel.PARENT)) {</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(user.getUserMeals(), HttpStatus.OK);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (userDB.findByUID(UID).getAccessLevel().equals(User.AccessLevel.PARENT)) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(user.getParentUser().getUserMeals(), HttpStatus.OK);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else return new ResponseEntity&lt;&gt;(&quot;User does not have valid AccessType set.&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;recipe/compareIngredients&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; pantryHasIngredientsForMeal(@RequestParam String UID, @RequestParam String mealName) {
+<b class="nc">&nbsp;        System.out.println(&quot;doing stuff&quot;);</b>
+<b class="nc">&nbsp;        if (!userDB.existsById(UID)) { //ensure user exists cause you can never be too careful</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;user does not exist&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if(!userDB.findByUID(UID).getUserRecipes().containsKey(mealName)){</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;meal does not exist&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        User user = userDB.findByUID(UID);</b>
+&nbsp;
+&nbsp;        ArrayList&lt;Ingredient&gt; userPantry;
+&nbsp;        ArrayList&lt;Ingredient&gt; meal;
+&nbsp;
+<b class="nc">&nbsp;        if (user.getAccessLevel().equals(User.AccessLevel.PARENT)) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;ded&quot;);</b>
+<b class="nc">&nbsp;            userPantry = pantryRepository.findByUID(UID).getIngredientList();</b>
+&nbsp;            //uses a MAP to store a user&#39;s recipes. because why not.
+<b class="nc">&nbsp;            System.out.println(userPantry);</b>
+<b class="nc">&nbsp;            meal = user.getUserRecipes().get(mealName).getIngredients();</b>
+<b class="nc">&nbsp;            System.out.println(meal);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (user.getAccessLevel().equals(User.AccessLevel.CHILD)) {</b>
+<b class="nc">&nbsp;            userPantry = pantryRepository.findByUID(user.getParentUser().getUID().toString()).getIngredientList();</b>
+&nbsp;            //uses a MAP to store a user&#39;s recipes. because why not.
+<b class="nc">&nbsp;            meal = user.getUserRecipes().get(mealName).getIngredients();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else return new ResponseEntity&lt;&gt;(&quot;Invalid AccessType is set for user.&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; userPantry.size(); i++){</b>
+<b class="nc">&nbsp;            for (int j = 0; j &lt; meal.size(); j++){</b>
+&nbsp;
+&nbsp;                //if ingredient name and quantity type match,
+<b class="nc">&nbsp;                if (meal.get(j).getName().equals(userPantry.get(i).getName()) &amp;&amp;</b>
+<b class="nc">&nbsp;                        meal.get(j).getQuantityType().equals(userPantry.get(i).getQuantityType())){ //if names match</b>
+&nbsp;
+&nbsp;                    //if meal requires more ingredient than what the pantry has, save the difference between the two values in that ingredient in meal
+<b class="nc">&nbsp;                    if (meal.get(j).getQuantity() &gt; userPantry.get(i).getQuantity()){</b>
+&nbsp;
+<b class="nc">&nbsp;                        int diff =  userPantry.get(i).getQuantity() - meal.get(j).getQuantity(); //should be negative</b>
+&nbsp;
+<b class="nc">&nbsp;                        meal.get(j).setQuantity(diff);</b>
+&nbsp;
+<b class="nc">&nbsp;                    }</b>
+&nbsp;                    else { //you have enough ingredients for that ingredient, remove that ingredient from meal
+&nbsp;                        //will return what&#39;s left of the meal object to tell front end what the pantry is missing
+&nbsp;                        //any ingredients remaining in the meal object either dont have enough quantity to make, have the wrong type, or dont exist in the pantry
+&nbsp;
+&nbsp;//                        meal.remove(meal.get(j).getName());
+<b class="nc">&nbsp;                          meal.remove(j);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (meal.isEmpty()){</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;can make meal&quot;, HttpStatus.OK);</b>
+&nbsp;        }
+&nbsp;        else {
+&nbsp;            //only things left in the meal object should be:
+&nbsp;            // unit type mismatches
+&nbsp;            // insufficient quantity of ingredients to make, in which the quantity value will be how much quantity is missing, should be negative
+&nbsp;            //ingredients that are requested but not in the pantry at all
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(meal, HttpStatus.I_AM_A_TEAPOT);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(&quot;recipes/add&quot;)
+&nbsp;    @Transactional
+&nbsp;    @ResponseBody
+&nbsp;    public ResponseEntity&lt;Object&gt; addRecipe(@RequestParam String UID, @RequestBody Meal mealToAdd) {
+<b class="nc">&nbsp;        User user = userDB.findByUID(UID);</b>
+&nbsp;        Map&lt;String, Recipe&gt; userRecipes;
+&nbsp;
+<b class="nc">&nbsp;        if (user.getAccessLevel().equals(User.AccessLevel.PARENT)) {</b>
+<b class="nc">&nbsp;            userRecipes = user.getUserRecipes();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (user.getAccessLevel().equals((User.AccessLevel.CHILD))) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Child user cannot add recipes to the recipe book&quot;, HttpStatus.FORBIDDEN);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else return new ResponseEntity&lt;&gt;(&quot;Invalid AccessType set for user.&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (!userRecipes.containsKey(mealToAdd.getName())) {</b>
+&nbsp;            //We create a new Recipe with user information here so that frontend does not
+&nbsp;            //have to worry about passing us a whole user object
+<b class="nc">&nbsp;            userRecipes.put(mealToAdd.getName(), new Recipe(mealToAdd));</b>
+<b class="nc">&nbsp;            user.getRecipeLabels().add(mealToAdd.getName());</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(userRecipes, HttpStatus.OK);</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(String.format(&quot;User %s already has %s in recipe book&quot;, UID, mealToAdd.getName()), HttpStatus.CONFLICT);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;recipes/get&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; getRecipe(@RequestParam String UID, @RequestParam String mealName) {
+<b class="nc">&nbsp;        User user = userDB.findByUID(UID);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (user.getAccessLevel().equals(User.AccessLevel.PARENT)) {</b>
+<b class="nc">&nbsp;            if (user.getUserRecipes().containsKey(mealName)) {</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(user.getUserRecipes().get(mealName), HttpStatus.OK);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(String.format(&quot;Recipe for %s not found in database for UID %s&quot;, mealName, UID), HttpStatus.NOT_FOUND);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        else if (user.getAccessLevel().equals(User.AccessLevel.CHILD)) {</b>
+<b class="nc">&nbsp;            if (user.getParentUser().getUserRecipes().containsKey(mealName)) {</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(user.getParentUser().getUserRecipes().get(mealName), HttpStatus.OK);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(String.format(&quot;Recipe for %s not found in database for UID %s&quot;, mealName, UID), HttpStatus.NOT_FOUND);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        else return new ResponseEntity&lt;&gt;(&quot;Invalid access type set for user.&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(&quot;recipes/remove&quot;)
+&nbsp;    @Transactional
+&nbsp;    public ResponseEntity&lt;Object&gt; removeRecipe(@RequestParam String UID, @RequestParam String recipeName) {
+<b class="nc">&nbsp;        User user = userDB.findByUID(UID);</b>
+&nbsp;        Map&lt;String, Recipe&gt; userRecipes;
+&nbsp;
+<b class="nc">&nbsp;        if (user.getAccessLevel().equals(User.AccessLevel.PARENT)) {</b>
+<b class="nc">&nbsp;            userRecipes = user.getUserRecipes();</b>
+<b class="nc">&nbsp;            if (userRecipes.containsKey(recipeName)) {</b>
+<b class="nc">&nbsp;                userRecipes.remove(recipeName);</b>
+<b class="nc">&nbsp;                user.getRecipeLabels().remove(recipeName);</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(null, HttpStatus.OK);</b>
+&nbsp;            }
+&nbsp;            else {
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(null, HttpStatus.NOT_FOUND);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        else if (user.getAccessLevel().equals(User.AccessLevel.CHILD)) {</b>
+<b class="nc">&nbsp;            userRecipes = user.getParentUser().getUserRecipes();</b>
+<b class="nc">&nbsp;            if (userRecipes.containsKey(recipeName)) {</b>
+<b class="nc">&nbsp;                userRecipes.remove(recipeName);</b>
+<b class="nc">&nbsp;                user.getParentUser().getRecipeLabels().remove(recipeName);</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(null, HttpStatus.OK);</b>
+&nbsp;            }
+&nbsp;            else {
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(null, HttpStatus.NOT_FOUND);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        else return new ResponseEntity&lt;&gt;(&quot;Invalid AccessType set for user.&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/recipes/get/labels&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; getRecipeLabels(@RequestParam String UID) {
+<b class="nc">&nbsp;        User user = userDB.findByUID(UID);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (user.getAccessLevel().equals(User.AccessLevel.PARENT)) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(user.getRecipeLabels(), HttpStatus.OK);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (user.getAccessLevel().equals(User.AccessLevel.CHILD)) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(user.getParentUser().getRecipeLabels(), HttpStatus.OK);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else return new ResponseEntity&lt;&gt;(&quot;Invalid AccessType set for user.&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private HashMap&lt;String, Meal&gt; getUserMealsForDay (String UID, String day) {
+<b class="fc">&nbsp;        User user = userDB.findByUID(UID);</b>
+<b class="fc">&nbsp;        if (user.getAccessLevel().equals(User.AccessLevel.PARENT)) {</b>
+<b class="fc">&nbsp;            MealList mealsForUser = user.getUserMeals();</b>
+<b class="fc">&nbsp;            return mealsForUser.getMealsForDay(day.toLowerCase());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (user.getAccessLevel().equals(User.AccessLevel.CHILD)) {</b>
+<b class="nc">&nbsp;            MealList parentMeals = user.getParentUser().getUserMeals();</b>
+<b class="nc">&nbsp;            return parentMeals.getMealsForDay(day.toLowerCase());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @GetMapping(&quot;/meals/getImageLink&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; getMealImageLink(@RequestParam String UID, @RequestParam String mealName){
+&nbsp;
+<b class="nc">&nbsp;        if (!userDB.existsById(UID)) { //ensure user exists cause you can never be too careful</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;user does not exist&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if(!userDB.findByUID(UID).getUserRecipes().containsKey(mealName)){</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;meal does not exist&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Meal meal = userDB.findByUID(UID).getUserRecipes().get(mealName);</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(meal.getLink(), HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(&quot;/meals/setImageLink&quot;)
+&nbsp;    @Transactional
+&nbsp;    public ResponseEntity&lt;Object&gt; setMealImageLink(@RequestParam String UID, @RequestParam String mealName, @RequestParam String newLink){
+&nbsp;
+<b class="nc">&nbsp;        if (!userDB.existsById(UID)) { //ensure user exists cause you can never be too careful</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;user does not exist&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if(!userDB.findByUID(UID).getUserRecipes().containsKey(mealName)) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;meal does not exist&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        userDB.findByUID(UID).getUserRecipes().get(mealName).setLink(newLink);</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(userDB.findByUID(UID).getUserRecipes().get(mealName).getLink(), HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(&quot;/meals/setDirections&quot;)
+&nbsp;    @Transactional
+&nbsp;    public ResponseEntity&lt;Object&gt; setMealDirections(@RequestParam String UID, @RequestParam String mealName, @RequestBody ArrayList&lt;String&gt; directions){
+&nbsp;
+<b class="nc">&nbsp;        if (!userDB.existsById(UID)) { //ensure user exists cause you can never be too careful</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;user does not exist&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if(!userDB.findByUID(UID).getUserRecipes().containsKey(mealName)) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;meal does not exist&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        userDB.findByUID(UID).getUserRecipes().get(mealName).setDirections(directions);</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(userDB.findByUID(UID).getUserRecipes().get(mealName).getDirections(), HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/meals/getDirections&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; getMealDirections(@RequestParam String UID, @RequestParam String mealName){
+&nbsp;
+<b class="nc">&nbsp;        if (!userDB.existsById(UID)) { //ensure user exists cause you can never be too careful</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;user does not exist&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if(!userDB.findByUID(UID).getUserRecipes().containsKey(mealName)) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;meal does not exist&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(userDB.findByUID(UID).getUserRecipes().get(mealName).getDirections(), HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 13:19</div>
+</div>
+</body>
+</html>
