@@ -113,7 +113,41 @@ public class TestingSystemTest {
 
 
     @Test
-//    @Order(3)
+    public void updateMealTest() throws JSONException {
+        JsonObject mealBody = Json.createObjectBuilder()
+                .add("name", "Quesadillas")
+                .add("ingredients", Json.createArrayBuilder()
+                        .add(Json.createObjectBuilder()
+                                .add("name", "Beans")
+                                .add("quantity", "4000")
+                                .add ("quantityType", "cans"))
+                        .add(Json.createObjectBuilder()
+                                .add("name", "Black beans")
+                                .add("quantity", "69")
+                                .add ("quantityType", "cans"))
+                        .add(Json.createObjectBuilder()
+                                .add("name", "Sour cream")
+                                .add("quantity", "1")
+                                .add ("quantityType", "tub")))
+                .build();
+
+        Response response = RestAssured.given().
+                header("Content-Type", "application/json").
+                header("charset","utf-8").
+                param("UID", "6bc95713-067d-4f72-ab2b-0180f759daad").
+                param("day", "monday").
+                param("mealName", "Quesadillas").
+                body(mealBody.toString()).
+                when().
+                put("/meals/update");
+
+        String responseBody = response.getBody().asString();
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+        assertNotEquals(responseBody, "");
+    }
+
+    @Test
     public void getByDayTest() {
         Response response = RestAssured.given().
                 header("Content-Type", "application/json").
@@ -128,6 +162,7 @@ public class TestingSystemTest {
 
         String returnString = response.getBody().asString();
         assertNotNull(returnString);
+        assertNotEquals(returnString, "");
     }
 
 //    @Order(4)
@@ -142,6 +177,9 @@ public class TestingSystemTest {
 
         int statusCode = response.getStatusCode();
         assertEquals(200, statusCode);
+        String returnString = response.getBody().asString();
+        assertNotNull(returnString);
+        assertNotEquals(returnString, "");
     }
 
 //    @Order(5)
@@ -286,19 +324,53 @@ public class TestingSystemTest {
 
 //    @Order(12)
     @Test
-    public void removeFromPantryTest(){
+    public void removeFromPantryTest() {
         //remove items by name from user's pantry
         //Delete /pantry/removeFromPantry
         //Param String UID, Param String ingredientName
 
         Response response = RestAssured.given().
                 header("Content-Type", "application/json").
-                header("charset","utf-8").
+                header("charset", "utf-8").
                 param("UID", UID).
                 param("ingredientName", testIngredientName).
                 when().
                 delete("/pantry/removeFromPantry");
 
         assertEquals(200, response.getStatusCode()); //note that the ingredient does actually need to be present to be removed
+
+    }
+
+    @Test
+    public void addToPantryTestAnthony() {
+        Response response = RestAssured.given().
+                header("Content-Type", "application/json").
+                header("charset","utf-8").
+                param("UID", UID).
+                param("ingredientName", "Cereal").
+                param("quantity", 1).
+                param("unitsType", "box").
+                when().
+                put("/pantry/addToPantry");
+
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+        String returnString = response.getBody().asString();
+        assertNotNull(returnString);
+        assertNotEquals(returnString, "");
+    }
+
+    @Test
+    public void removeFromPantryTestAnthony() {
+        Response response = RestAssured.given().
+                header("Content-Type", "application/json").
+                header("charset","utf-8").
+                param("UID", UID).
+                param("ingredientName", "Cereal").
+                when().
+                delete("/pantry/removeFromPantry");
+
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
     }
 }
