@@ -8,7 +8,9 @@ import androidx.lifecycle.ViewModel;
  */
 public class HomeViewModel extends ViewModel {
 
-    /** The text to display */
+    /**
+     * The text to display
+     */
     private final MutableLiveData<String> mText;
 
     /**

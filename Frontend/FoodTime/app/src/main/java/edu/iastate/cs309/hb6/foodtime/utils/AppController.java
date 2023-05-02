@@ -12,24 +12,19 @@ import com.android.volley.toolbox.Volley;
  */
 public class AppController extends Application {
 
-    /** Controller tag used in outputs */
+    /**
+     * Controller tag used in outputs
+     */
     public static final String TAG = AppController.class
             .getSimpleName();
-
-    /** Volley Request Queue */
-    private RequestQueue mRequestQueue;
-
-    /** Singleton instance of the controller */
-    private static AppController mInstance;
-
     /**
-     * Extends Android application
+     * Singleton instance of the controller
      */
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        mInstance = this;
-    }
+    private static AppController mInstance;
+    /**
+     * Volley Request Queue
+     */
+    private RequestQueue mRequestQueue;
 
     /**
      * Get the universal controller instance across the app
@@ -38,6 +33,15 @@ public class AppController extends Application {
      */
     public static synchronized AppController getInstance() {
         return mInstance;
+    }
+
+    /**
+     * Extends Android application
+     */
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mInstance = this;
     }
 
     /**
@@ -57,9 +61,9 @@ public class AppController extends Application {
     /**
      * Add an HTTP request to the Volley queue
      *
-     * @param req - the request object
-     * @param tag - (optional) tag to include
-     * @param <T> - generic type of request (String, JSONObj, etc.)
+     * @param req the request object
+     * @param tag (optional) tag to include
+     * @param <T> generic type of request (String, JSONObj, etc.)
      */
     public <T> void addToRequestQueue(Request<T> req, String tag) {
         // set the default tag if tag is empty
@@ -70,8 +74,8 @@ public class AppController extends Application {
     /**
      * Add an HTTP request to the Volley queue (without a tag)
      *
-     * @param req - the request object
-     * @param <T> - generic type of request (String, JSONObj, etc.)
+     * @param req the request object
+     * @param <T> generic type of request (String, JSONObj, etc.)
      */
     public <T> void addToRequestQueue(Request<T> req) {
         req.setTag(TAG);
@@ -81,7 +85,7 @@ public class AppController extends Application {
     /**
      * Cancel all requests still on the queue
      *
-     * @param tag - Delete the requests that go with the tag
+     * @param tag Delete the requests that go with the tag
      */
     public void cancelPendingRequests(Object tag) {
         if (mRequestQueue != null) {

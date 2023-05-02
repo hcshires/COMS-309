@@ -15,4 +15,8 @@
     <string name="welcome_to_nfoodtime">Welcome to\nFoodTime!</string>
     <string name="helping_people_find_their_inner_chef">Helping people find their inner chef</string>
     <string name="add_meals_to_calendar">Add meals to calendar</string>
+    <string name="parent">Parent</string>
+    <string name="child">Child</string>
+    <string name="parent_username">Parent E-mail</string>
+    <string name="or">----------- OR -----------</string>
 </resources>

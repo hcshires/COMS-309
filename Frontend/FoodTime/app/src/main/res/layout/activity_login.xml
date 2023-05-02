@@ -10,15 +10,15 @@
     tools:context=".LoginActivity">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/loginTitle"
-        android:layout_width="361dp"
-        android:layout_height="44dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_vertical_margin"
         android:fontFamily="@font/capriola"
         android:text="@string/your_kitchen_awaits"
@@ -30,7 +30,7 @@
 
     <EditText
         android:id="@+id/email"
-        android:layout_width="215dp"
+        android:layout_width="225dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_vertical_margin"
         android:ems="10"
@@ -40,7 +40,7 @@
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="215dp"
+        android:layout_width="225dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_vertical_margin"
         android:ems="10"
@@ -48,61 +48,66 @@
         android:hint="@string/password"
         android:inputType="textPassword" />
 
+    <Button
+        android:id="@+id/loginBtn"
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="25dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:backgroundTint="@color/colorSecondary"
+        android:fontFamily="@font/capriola"
+        android:text="@string/login" />
+
+    <TextView
+        android:id="@+id/or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:backgroundTint="@color/colorSecondary"
+        android:fontFamily="@font/capriola"
+        android:text="@string/or"
+        android:textAlignment="center"
+        android:textSize="16sp" />
+
     <RadioGroup
-        android:id="@+id/userRole"
+        android:id="@+id/userLevelOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <RadioButton
             android:id="@+id/childRoleBtn"
-            android:layout_width="215dp"
+            android:layout_width="225dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/capriola"
-            android:text="Child"
+            android:text="@string/child"
             android:textColor="@color/colorSecondary" />
 
         <RadioButton
             android:id="@+id/parentRadioBtn"
-            android:layout_width="215dp"
+            android:layout_width="225dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/capriola"
-            android:text="Parent"
-            android:textColor="@color/colorSecondary" />
-
-        <RadioButton
-            android:id="@+id/adminRoleBtn"
-            android:layout_width="215dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/capriola"
-            android:text="Family Admin"
+            android:text="@string/parent"
             android:textColor="@color/colorSecondary" />
     </RadioGroup>
 
     <EditText
         android:id="@+id/parentUsername"
-        android:layout_width="215dp"
+        android:layout_width="225dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_vertical_margin"
         android:ems="10"
         android:fontFamily="@font/capriola"
-        android:hint="Parent Username"
+        android:hint="@string/parent_username"
         android:inputType="text" />
 
     <Button
         android:id="@+id/registerBtn"
-        android:layout_width="216dp"
-        android:layout_height="47dp"
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="@color/colorSecondary"
         android:fontFamily="@font/capriola"
         android:text="@string/create_an_account" />
-
-    <Button
-        android:id="@+id/loginBtn"
-        android:layout_width="216dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="28dp"
-        android:backgroundTint="@color/colorSecondary"
-        android:fontFamily="@font/capriola"
-        android:text="@string/login" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -17,12 +17,15 @@ import edu.iastate.cs309.hb6.foodtime.databinding.ActivityDashboardBinding;
  */
 public class DashboardActivity extends AppCompatActivity {
 
-    /** The binding for the DashboardActivity */
+    /**
+     * The binding for the DashboardActivity
+     */
     private ActivityDashboardBinding binding;
 
     /**
      * Create the DashboardActivity and manage its widgets
-     * @param savedInstanceState - the saved state of the activity
+     *
+     * @param savedInstanceState the saved state of the activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

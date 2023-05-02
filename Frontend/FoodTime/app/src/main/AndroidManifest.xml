@@ -16,6 +16,9 @@
         android:theme="@style/Theme.FoodTime"
         tools:targetApi="31">
         <activity
+            android:name=".ui.cookbook.AddDirectionActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.cookbook.ViewRecipeActivity"
             android:exported="false" />
         <activity
