@@ -25,6 +25,8 @@ import static org.hamcrest.CoreMatchers.allOf;
 
 import android.content.Intent;
 
+import java.util.Random;
+
 import edu.iastate.cs309.hb6.foodtime.utils.Const;
 
 /**
@@ -73,13 +75,12 @@ public class LoginTest {
 
     /**
      * Start the server and run this test
-     * TODO: Needs fix, issue #54 needs merged
      */
     @Test
     public void createUser(){
-        String testEmail = "child@hcshires.com";
+        String testEmail = new Random().nextInt() + "@COMS309.com";
         String testPass = "food";
-        String testParentUsername = "hcsgeek@gmail.com";
+        String testParentUsername = "SystemTestUser@COMS309.com";
 
         onView(withId(R.id.email)).perform(typeText(testEmail));                   // Enter email
         onView(withId(R.id.password)).perform(typeText(testPass), closeSoftKeyboard());                 // Enter password
