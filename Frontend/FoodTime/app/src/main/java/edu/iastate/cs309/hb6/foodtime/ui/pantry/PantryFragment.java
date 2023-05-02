@@ -116,9 +116,6 @@ public class PantryFragment extends Fragment {
             if (!ingredient.isEmpty() && !unitType.isEmpty() && quantity != 0) {
                 try {
                     addItem(view, UID, ingredient, quantity, unitType);
-                    input.setText("");
-                    quantityInput.setText("");
-                    unitInput.setText("");
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -175,6 +172,14 @@ public class PantryFragment extends Fragment {
                 response -> {
                     ingredientsList.add(ingredient + " - " + quantity + " - " + unitsType);
                     pantryAdapter.notifyDataSetChanged();
+
+                    /* Clear the input fields */
+                    input.setText("");
+                    quantityInput.setText("");
+                    unitInput.setText("");
+
+                    /* Notify the user */
+                    Toast.makeText(view.getContext(), "Item added", Toast.LENGTH_SHORT).show();
                 }, error -> {
             if (error.networkResponse.statusCode == 403) {
                 Toast.makeText(view.getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();
@@ -232,7 +237,7 @@ public class PantryFragment extends Fragment {
                 unitInput.setText("");
 
                 /* Notify the user */
-                Toast.makeText(view.getContext(), "Item Removed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), "Item removed", Toast.LENGTH_SHORT).show();
             }, error -> {
                 /* No permission */
                 if (error.networkResponse.statusCode == 403) {
