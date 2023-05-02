@@ -175,19 +175,21 @@ public class AddRecipeActivity extends AppCompatActivity {
      */
     private void addRecipeRequest(String UID, JSONObject mealObj, View view) {
         JsonObjectRequest addRecipeReq = new JsonObjectRequest(Request.Method.PUT, Const.URL_RECIPES_ADDRECIPE + "?UID=" + UID, mealObj,
-                response -> {
-                    Toast.makeText(view.getContext(), "Meal added", Toast.LENGTH_LONG).show();
-                    Intent addRecipeIntent = new Intent(AddRecipeActivity.this, AddDirectionActivity.class);
-                    addRecipeIntent.putExtra("UID", UID);
-                    addRecipeIntent.putExtra("RecipeTitle", recipeTitle.getText().toString());
-                    startActivity(addRecipeIntent);
-                }, error -> {
+            response -> {
+                Toast.makeText(view.getContext(), "Meal added", Toast.LENGTH_LONG).show();
 
-            Toast.makeText(view.getContext(), "An Error Occurred.", Toast.LENGTH_LONG).show();
-            Intent addRecipeIntent = new Intent(AddRecipeActivity.this, AddDirectionActivity.class);
-            addRecipeIntent.putExtra("UID", UID);
-            addRecipeIntent.putExtra("RecipeTitle", recipeTitle.getText().toString());
-            startActivity(addRecipeIntent);
+                Intent addRecipeIntent = new Intent(AddRecipeActivity.this, AddDirectionActivity.class);
+                addRecipeIntent.putExtra("UID", UID);
+                addRecipeIntent.putExtra("RecipeTitle", recipeTitle.getText().toString());
+                startActivity(addRecipeIntent);
+            }, error -> {
+                VolleyLog.d(TAG, error);
+
+                if (error.networkResponse.statusCode == 403) {
+                    Toast.makeText(view.getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(view.getContext(), "An Error Occurred.", Toast.LENGTH_LONG).show();
+                }
         });
 
         AppController.getInstance().addToRequestQueue(addRecipeReq, tag_recipe_req);
