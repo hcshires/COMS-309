@@ -91,7 +91,7 @@ public class IngredientsFragment extends Fragment {
         Intent intent = requireActivity().getIntent();
         Bundle usrData = intent.getExtras();
 //        UID = usrData.getString("UID");
-        UID = "2ef44fb4-d5da-4cbd-8b51-de78db31b4ac";
+        UID = "28002a17-e105-4ae3-9e07-765fd1b2ae3a";
         recipeTitle.setText(usrData.getString("RecipeTitle"));
 
         /* Recycler View Adapter and Manager */
