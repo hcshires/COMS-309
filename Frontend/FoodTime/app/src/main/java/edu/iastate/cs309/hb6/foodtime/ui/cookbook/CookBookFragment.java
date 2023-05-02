@@ -82,7 +82,6 @@ public class CookBookFragment extends Fragment {
         /* Store user ID for requests */
         Bundle userData = requireActivity().getIntent().getExtras();
         String UID = userData.getString("UID").replaceAll("\"", "");
-        String recipeTitle = userData.getString("RecipeTitle");
 
         /* Widgets */
         FloatingActionButton addRecipe = root.findViewById(R.id.addRecipeBtn);

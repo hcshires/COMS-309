@@ -152,7 +152,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
             /* Make JSON Obj */
             recipe.put("ingredients", ingredientsHashList);
-            recipe.put("name", recipeTitle);
+            recipe.put("name", recipeTitle.getText().toString());
             JSONObject mealObj = new JSONObject(recipe);
 
             Log.d(TAG, "JSON Body: " + mealObj);
