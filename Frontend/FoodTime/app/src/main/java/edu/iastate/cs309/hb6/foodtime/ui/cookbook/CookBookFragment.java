@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -33,40 +33,48 @@ import edu.iastate.cs309.hb6.foodtime.utils.Const;
  */
 public class CookBookFragment extends Fragment {
 
-    /** The binding for this fragment */
-    private FragmentCookbookBinding binding;
-
-    /** View to hold recipe cards */
-    private RecyclerView recipeCards;
-
-    /** Data set adapter for recipe cards */
-    private CardAdapter adapter;
-
-    /** List of recipes */
+    /**
+     * List of recipes
+     */
     private final ArrayList<String> recipes = new ArrayList<>();
-
-    /** Tag for logging */
+    /**
+     * Tag for logging
+     */
     private final String TAG = CookBookFragment.class.getSimpleName();
-
-    /** Tag for requests */
+    /**
+     * Tag for requests
+     */
     private final String tag_cookbook_req = "cookbook_req";
+    /**
+     * The binding for this fragment
+     */
+    private FragmentCookbookBinding binding;
+    /**
+     * View to hold recipe cards
+     */
+    private RecyclerView recipeCards;
+    /**
+     * Data set adapter for recipe cards
+     */
+    private CardAdapter adapter;
 
     /**
      * OnCreateView
-     * @param inflater The LayoutInflater object that can be used to inflate
-     * any views in the fragment,
-     * @param container If non-null, this is the parent view that the fragment's
-     * UI should be attached to.  The fragment should not add the view itself,
-     * but this can be used to generate the LayoutParams of the view.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed
-     * from a previous saved state as given here.
      *
+     * @param inflater           The LayoutInflater object that can be used to inflate
+     *                           any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's
+     *                           UI should be attached to.  The fragment should not add the view itself,
+     *                           but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
      * @return View
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         CookBookViewModel cookBookViewModel =
                 new ViewModelProvider(this).get(CookBookViewModel.class);
+
 
         binding = FragmentCookbookBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -82,12 +90,13 @@ public class CookBookFragment extends Fragment {
         // Set layout manager to position items
         recipeCards.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
+//        recipeCards
+
         // Adapter
-        adapter = new CardAdapter(root.getContext(), recipes);
+        adapter = new CardAdapter(root.getContext(), recipes, UID);
 
         /* Initialize Recipes */
         getUserRecipes(UID);
-        Log.d(TAG, "Recipes List: " + recipes);
 
         /* Go to AddRecipe when button clicked */
         addRecipe.setOnClickListener(view -> {
@@ -101,7 +110,8 @@ public class CookBookFragment extends Fragment {
 
     /**
      * Return an ArrayList of recipes for the user from the database
-     * @param UID - the given user ID for the user
+     *
+     * @param UID the given user ID for the user
      */
     private void getUserRecipes(String UID) {
         JsonArrayRequest getUserRecipes = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_GETLABELS + "?UID=" + UID, null, response -> {
@@ -110,7 +120,6 @@ public class CookBookFragment extends Fragment {
                     String item = response.getString(i);
                     recipes.add(item); // Add to ArrayList
                 }
-
                 /* Attach adapter to recycler view */
                 recipeCards.setAdapter(adapter);
             } catch (JSONException e) {
@@ -122,6 +131,14 @@ public class CookBookFragment extends Fragment {
 
         AppController.getInstance().addToRequestQueue(getUserRecipes, tag_cookbook_req);
     }
+
+//    public static void viewRecipe() {
+//        Intent viewRecipeIntent = new Intent(.getContext(), ViewRecipeActivity.class);
+//        viewRecipeIntent.putExtra("RecipeTitle", recipeTitle.getText().toString());
+//        viewRecipeIntent.putExtra("UID", UID);
+//        Toast.makeText(view.getContext(), recipeTitle.getText().toString(), Toast.LENGTH_LONG).show();
+//        view.getContext().startActivity(viewRecipeIntent);
+//    }
 
     /**
      * onDestroyView

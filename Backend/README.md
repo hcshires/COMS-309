@@ -9,4 +9,4 @@
 ### Server/Virtual Machine (VM) for backend
 
 1. SSH via `ssh netid@coms-309-011.class.las.iastate.edu`
-2. Run `java -jar /FoodTimeApplication/FoodTime.jar`
+2. Run `java -jar /target/FoodTime.jar`
