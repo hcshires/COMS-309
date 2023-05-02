@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -68,6 +69,7 @@ public class CookBookFragment extends Fragment {
         CookBookViewModel cookBookViewModel =
                 new ViewModelProvider(this).get(CookBookViewModel.class);
 
+
         binding = FragmentCookbookBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -81,6 +83,8 @@ public class CookBookFragment extends Fragment {
 
         // Set layout manager to position items
         recipeCards.setLayoutManager(new LinearLayoutManager(root.getContext()));
+
+//        recipeCards
 
         // Adapter
         adapter = new CardAdapter(root.getContext(), recipes, UID);
@@ -120,6 +124,14 @@ public class CookBookFragment extends Fragment {
 
         AppController.getInstance().addToRequestQueue(getUserRecipes, tag_cookbook_req);
     }
+
+//    public static void viewRecipe() {
+//        Intent viewRecipeIntent = new Intent(.getContext(), ViewRecipeActivity.class);
+//        viewRecipeIntent.putExtra("RecipeTitle", recipeTitle.getText().toString());
+//        viewRecipeIntent.putExtra("UID", UID);
+//        Toast.makeText(view.getContext(), recipeTitle.getText().toString(), Toast.LENGTH_LONG).show();
+//        view.getContext().startActivity(viewRecipeIntent);
+//    }
 
     /**
      * onDestroyView

@@ -42,6 +42,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         this.UID = UID;
     }
 
+    public String getUID() {
+        return UID;
+    }
+
     /**
      * View holder for Card View
      *
@@ -97,7 +101,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
         /** The title of the recipe */
         private final TextView recipeTitle;
-        private final String UID;
+//        private final String UID;
 
         /**
          * CardViewHolder
@@ -108,14 +112,14 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         public CardViewHolder(View itemView) {
             super(itemView);
             recipeTitle = itemView.findViewById((R.id.recipeTitle));
-            UID = "3b1bbf93-1f02-4492-aca8-57aa7be65138";
+
 
 
             // Create intent to ViewRecipeActivity when card is clicked
             itemView.setOnClickListener(view -> {
                 Intent viewRecipeIntent = new Intent(view.getContext(), ViewRecipeActivity.class);
                 viewRecipeIntent.putExtra("RecipeTitle", recipeTitle.getText().toString());
-                viewRecipeIntent.putExtra("UID", UID);
+//                viewRecipeIntent.putExtra("UID", UID);
                 Toast.makeText(view.getContext(), recipeTitle.getText().toString(), Toast.LENGTH_LONG).show();
                 view.getContext().startActivity(viewRecipeIntent);
             });

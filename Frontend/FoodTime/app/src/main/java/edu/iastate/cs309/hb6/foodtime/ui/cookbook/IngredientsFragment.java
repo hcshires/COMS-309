@@ -86,6 +86,7 @@ public class IngredientsFragment extends Fragment {
 
     private void getIngredients(String UID, String mealName, View view) {
 
+
     }
 
     /**
