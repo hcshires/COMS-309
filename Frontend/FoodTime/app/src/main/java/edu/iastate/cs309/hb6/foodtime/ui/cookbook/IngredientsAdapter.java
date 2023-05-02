@@ -66,7 +66,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
      */
     @Override
     public int getItemCount() {
-        return strings.size();
+        return 5;
     }
 
     /**
@@ -106,7 +106,6 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             edtIngredients = itemView.findViewById(R.id.edtIngredient);
             edtQuantity = itemView.findViewById(R.id.edtQuantity);
             edtType = itemView.findViewById(R.id.edtType);
-
 
         }
     }

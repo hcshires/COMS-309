@@ -56,13 +56,12 @@ public class DirectionsFragment extends Fragment {
         Intent intent = requireActivity().getIntent();
         Bundle usrData = intent.getExtras();
 //        UID = usrData.getString("UID");
-        UID = "3b1bbf93-1f02-4492-aca8-57aa7be65138";
+        UID = "2ef44fb4-d5da-4cbd-8b51-de78db31b4ac";
         recipeTitle.setText(usrData.getString("RecipeTitle"));
 
         /* Recycler View Adapter and Manager */
-        getDirections(UID, recipeTitle.getText().toString());
         adapter = new DirectionsAdaper(root.getContext(), directions);
-
+        getDirections(UID, recipeTitle.getText().toString());
 
         return root;
     }
@@ -90,6 +89,7 @@ public class DirectionsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
 
     }

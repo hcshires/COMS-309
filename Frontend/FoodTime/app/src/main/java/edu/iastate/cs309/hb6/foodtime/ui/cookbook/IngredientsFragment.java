@@ -28,7 +28,9 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -52,6 +54,14 @@ public class IngredientsFragment extends Fragment {
     private ArrayList<Object> quantity = new ArrayList<>();
     private ArrayList<Object> type = new ArrayList<>();
     private ArrayList<HashMap<Object, Object>> jsons = new ArrayList<>();
+    private HashMap<Object, Object> hash1  = new HashMap<>();
+    private HashMap<Object, Object> hash2  = new HashMap<>();
+    private HashMap<Object, Object> hash3  = new HashMap<>();
+    private HashMap<Object, Object> hash4  = new HashMap<>();
+    private HashMap<Object, Object> hash5  = new HashMap<>();
+
+
+
 
 //    private HashMap<String, String> hashMap = new HashMap<>();
 
@@ -81,29 +91,28 @@ public class IngredientsFragment extends Fragment {
         Intent intent = requireActivity().getIntent();
         Bundle usrData = intent.getExtras();
 //        UID = usrData.getString("UID");
-        UID = "3b1bbf93-1f02-4492-aca8-57aa7be65138";
-//        recipeTitle.setText(usrData.getString("RecipeTitle"));
-        recipeTitle.setText("Lasgna");
+        UID = "2ef44fb4-d5da-4cbd-8b51-de78db31b4ac";
+        recipeTitle.setText(usrData.getString("RecipeTitle"));
+
         /* Recycler View Adapter and Manager */
         adapter = new IngredientsAdapter(root.getContext(), ingredients, quantity, type);
         getIngredients(UID, recipeTitle.getText().toString(), root);
-
-        recyclerView.setAdapter(adapter);
-
 
         return root;
     }
 
     private void getIngredients(String UID, String mealName, View view) {
         JsonArrayRequest getIngredientsReq = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_COMPARE + "?UID=" + UID + "&mealName=" + mealName, null, response -> {
-            doStuff(response);
+            formatResponse(response);
+            recyclerView.setAdapter(adapter);
             Log.d(TAG, "Request Sent");
         }, error -> {
             if (error.networkResponse.statusCode == 418) {
                 try {
                     String body = new String(error.networkResponse.data,"UTF-8");
                     JSONArray response = new JSONArray(body);
-                    doStuff(response);
+                    formatResponse(response);
+                    recyclerView.setAdapter(adapter);
                 } catch (UnsupportedEncodingException | JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -125,27 +134,49 @@ public class IngredientsFragment extends Fragment {
 
     }
 
-    public void doStuff(JSONArray response){
-//                    for(int i = 0; i < response.length(); i++) {
-//                jsons.add(i, response.getJSONObject(i));
-//            }
+    public void formatResponse(JSONArray response){
+
         jsons.addAll(new Gson().fromJson(String.valueOf(response), ArrayList.class));
 
-//        HashMap<Object, Object> json1 = jsons.get(0);
-//        Object ingredient1 = json1.get("name:");
+        hash1.putAll(jsons.get(0));
+        Object ingredient1 = hash1.get("name");
+        Object quantity1 = hash1.get("quantity");
+        Object type1 = hash1.get("quantityType");
+        ingredients.add(ingredient1);
+        quantity.add(quantity1);
+        type.add(type1);
 
+        hash2.putAll(jsons.get(1));
+        Object ingredient2 = hash2.get("name");
+        Object quantity2 = hash2.get("quantity");
+        Object type2 = hash2.get("quantityType");
+        ingredients.add(ingredient2);
+        quantity.add(quantity2);
+        type.add(type2);
 
-//        ingredients.add(ingredient1);
-//        quantity.add(Objects.requireNonNull(jsons.get(0).get("quantity")).toString());
-//        type.add(Objects.requireNonNull(jsons.get(0).get("quantityType")).toString());
+        hash3.putAll(jsons.get(2));
+        Object ingredient3 = hash3.get("name");
+        Object quantity3 = hash3.get("quantity");
+        Object type3 = hash3.get("quantityType");
+        ingredients.add(ingredient3);
+        quantity.add(quantity3);
+        type.add(type3);
 
-//        ingredients.add(jsons.get(1).get("name").toString());
-//        quantity.add(jsons.get(1).get("quantity").toString());
-//        type.add(jsons.get(1).get("quantityType").toString());
-//
-//        ingredients.add(jsons.get(2).get("name").toString());
-//        quantity.add(jsons.get(2).get("quantity").toString());
-//        type.add(jsons.get(2).get("quantityType").toString());
+        hash4.putAll(jsons.get(3));
+        Object ingredient4 = hash4.get("name");
+        Object quantity4 = hash4.get("quantity");
+        Object type4 = hash4.get("quantityType");
+        ingredients.add(ingredient4);
+        quantity.add(quantity4);
+        type.add(type4);
+
+        hash5.putAll(jsons.get(4));
+        Object ingredient5 = hash5.get("name");
+        Object quantity5 = hash5.get("quantity");
+        Object type5 = hash5.get("quantityType");
+        ingredients.add(ingredient5);
+        quantity.add(quantity5);
+        type.add(type5);
 
         Log.d(TAG, ingredients.toString());
         Log.d(TAG, quantity.toString());
