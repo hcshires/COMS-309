@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         /* Disable parent username field if user is not a child */
         userLevels.setOnCheckedChangeListener((radioGroup, i) -> {
             RadioButton selectedLevel = findViewById(i);
-            // TODO Add to Const.java when 56 is merged
+            // TODO Add "Child" to Const.java when 56 is merged
             parentUsername.setEnabled(selectedLevel.getText().toString().equals("Child"));
         });
 
@@ -106,7 +106,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Email address is incorrectly formatted. Please enter a valid email.", Toast.LENGTH_SHORT).show();
             } else {
                 try {
-                    // Use the contents of the fields to create a user instead of logging in TODO: change to new activity
                     createUser();
                 } catch (JSONException e) {
                     throw new RuntimeException(e);

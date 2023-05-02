@@ -218,25 +218,25 @@ public class PantryFragment extends Fragment {
      */
     private void removeFromPantry(View view, String UID, String ingredient, int index) {
         StringRequest pantryRemoveRequest = new StringRequest(
-                Request.Method.DELETE, Const.URL_PANTRY_REMOVEITEM + "?UID=" + UID + "&ingredientName=" + ingredient,
-                response -> {
-                    ingredientsList.remove(index);
-                    pantryAdapter.notifyDataSetChanged();
+            Request.Method.DELETE, Const.URL_PANTRY_REMOVEITEM + "?UID=" + UID + "&ingredientName=" + ingredient,
+            response -> {
+                ingredientsList.remove(index);
+                pantryAdapter.notifyDataSetChanged();
 
-                    /* Clear the input fields */
-                    input.setText("");
-                    quantityInput.setText("");
-                    unitInput.setText("");
+                /* Clear the input fields */
+                input.setText("");
+                quantityInput.setText("");
+                unitInput.setText("");
 
-                    /* Notify the user */
-                    Toast.makeText(view.getContext(), "Item Removed", Toast.LENGTH_SHORT).show();
-                }, error -> {
-            /* No permission */
-            if (error.networkResponse.statusCode == 403) {
-                Toast.makeText(view.getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(view.getContext(), "An unexpected error occurred. Please try again.", Toast.LENGTH_LONG).show();
-            }
+                /* Notify the user */
+                Toast.makeText(view.getContext(), "Item Removed", Toast.LENGTH_SHORT).show();
+            }, error -> {
+                /* No permission */
+                if (error.networkResponse.statusCode == 403) {
+                    Toast.makeText(view.getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(view.getContext(), "An unexpected error occurred. Please try again.", Toast.LENGTH_LONG).show();
+                }
         });
 
         AppController.getInstance().addToRequestQueue(pantryRemoveRequest, tag_pantry_req);

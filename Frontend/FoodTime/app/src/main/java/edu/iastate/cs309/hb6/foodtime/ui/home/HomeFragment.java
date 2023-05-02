@@ -1,7 +1,9 @@
 package edu.iastate.cs309.hb6.foodtime.ui.home;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +45,7 @@ import java.util.Map;
 
 import edu.iastate.cs309.hb6.foodtime.R;
 import edu.iastate.cs309.hb6.foodtime.databinding.FragmentHomeBinding;
+import edu.iastate.cs309.hb6.foodtime.ui.cookbook.AddRecipeActivity;
 import edu.iastate.cs309.hb6.foodtime.utils.AppController;
 import edu.iastate.cs309.hb6.foodtime.utils.Const;
 
@@ -64,6 +67,12 @@ public class HomeFragment extends Fragment {
      * Fragment Binding
      */
     private FragmentHomeBinding binding;
+
+    /** Root Fragment View */
+    private View root;
+
+    /** Calendar */
+    private Calendar calUtil;
     /**
      * Map of meals for the entire week
      */
@@ -71,11 +80,11 @@ public class HomeFragment extends Fragment {
     /**
      * List of recipes for the entire week
      */
-    private ArrayList<String> recipes;
+    private ArrayList<String> cookbook;
     /**
      * Map of recipe details
      */
-    private HashMap recipe;
+    private HashMap addRecipe;
     /**
      * List of meals for a given day
      */
@@ -104,7 +113,7 @@ public class HomeFragment extends Fragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        root = binding.getRoot();
 
         /* User Fields */
         // User ID
@@ -112,16 +121,17 @@ public class HomeFragment extends Fragment {
         final String UID = userData.getString("UID").replaceAll("\"", "");
 
         /* Meals */
+        addRecipe = new HashMap<>();
+        cookbook = new ArrayList<>();
         meals = new HashMap<>();
-        recipes = new ArrayList<>();
-        recipe = new HashMap<>();
 
+        // Get Cookbook
         getRecipeLabels(UID);
 
         /* Widgets */
         // Calendar View - Constrain to week-by-week with current week
         CalendarView calendar = root.findViewById(R.id.calendarView);
-        Calendar calUtil = Calendar.getInstance();
+        calUtil = Calendar.getInstance();
 
         // Get current Sunday-Saturday week
         final DayOfWeek firstDayOfWeek = WeekFields.of(Locale.US).getFirstDayOfWeek();
@@ -141,21 +151,22 @@ public class HomeFragment extends Fragment {
         dayMealsAdapter = new ArrayAdapter<>(root.getContext(), android.R.layout.simple_list_item_1, dayMealsLabels);
         dayMealsList.setAdapter(dayMealsAdapter);
 
+        // TODO: Navigate to recipe corresponding to meal
         dayMealsList.setOnItemClickListener((adapterView, view, i, l) -> {
-            // TODO: Navigate to recipe corresponding to meal
             // Intent recipeIntent = new Intent(DashboardActivity.this, RecipeActivity.class);
             // startActivity(recipeIntent);
         });
 
         dayMealsList.setOnItemLongClickListener(((adapterView, view, i, l) -> {
-            removeMeal(UID, toDayString(calUtil.get(Calendar.DAY_OF_WEEK)), dayMealsList.getItemAtPosition(i).toString(), "false");
+            removeMeal(UID, toDayString(calUtil.get(Calendar.DAY_OF_WEEK)), dayMealsList.getItemAtPosition(i).toString(), false);
             dayMealsLabels.remove(i);
             dayMealsAdapter.notifyDataSetChanged();
+
             return true;
         }));
 
         // Initialize calendar meals for current day
-        setMealsToCalendar(root, UID, calUtil.get(Calendar.DAY_OF_WEEK));
+        getMealsByDay(UID, calUtil.get(Calendar.DAY_OF_WEEK));
 
         // Re-render list of meals based on day of week selected by user
         calendar.setOnDateChangeListener((calendarView, year, month, dayOfMonth) -> {
@@ -163,7 +174,7 @@ public class HomeFragment extends Fragment {
             calUtil.set(year, month, dayOfMonth);
 
             // Add meals for a given day to the calendar list
-            setMealsToCalendar(root, UID, calUtil.get(Calendar.DAY_OF_WEEK));
+            getMealsByDay(UID, calUtil.get(Calendar.DAY_OF_WEEK));
         });
 
         // Add Meal button
@@ -175,7 +186,7 @@ public class HomeFragment extends Fragment {
 
             // Add Spinner to Dialog to select any existing recipes to plan
             Spinner recipeSelect = mView.findViewById(R.id.spinner);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, recipes); // Use cook book recipe labels
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, cookbook); // Use cook book recipe labels
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             recipeSelect.setAdapter(adapter);
 
@@ -196,14 +207,17 @@ public class HomeFragment extends Fragment {
                     .setView(recipeSelect)
                     .setCancelable(true)
                     .setNeutralButton("Create New Recipe", (dialogInterface, i) -> {
-                        // TODO: Navigate to add recipe
+                        // Go to AddRecipeActivity
+                        Intent recipeIntent = new Intent(getActivity(), AddRecipeActivity.class);
+                        recipeIntent.putExtra("UID", UID);
+                        startActivity(recipeIntent);
                     })
                     .setPositiveButton("Add", (dialog, id) -> {
                         // Get the recipe corresponding to the name in the cookbook and add it as a meal in the calendar
                         String day = toDayString(calUtil.get(Calendar.DAY_OF_WEEK));
                         String recipeName = recipeSelect.getSelectedItem().toString();
-                        getRecipeFromBook(UID, recipeName);
-                        addMeal(UID, day, recipe);
+
+                        getRecipeFromBook(UID, day, recipeName); // Get recipe to HashMap and eventually add it to the calendar
                     })
                     .setNegativeButton("Cancel", (dialogInterface, i) -> {
                         dialogInterface.dismiss();
@@ -255,44 +269,22 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     * Populate the list of meals onto the calendar based on the selected day of the week
-     * Add meals to the ListView array list based on the selected day in the calendar
-     *
-     * @param root the root view
-     * @param UID  the ID of the user to get meals for
-     * @param day  the day of the week as an integer per the java.util.Calendar class
-     */
-    private void setMealsToCalendar(View root, String UID, int day) {
-        // List Label
-        TextView listLabel = root.findViewById(R.id.mealsLbl);
-
-        // Convert day int to string
-        String dayString = toDayString(day);
-
-        dayMealsLabels.clear();
-        getMealsByDay(UID, dayString);
-
-        for (Map.Entry<String, HashMap<String, Object>> entry : meals.entrySet()) {
-            dayMealsLabels.add(entry.getKey());
-        }
-
-        listLabel.setText(dayString.toUpperCase());
-        dayMealsAdapter.notifyDataSetChanged();
-    }
-
-    /**
      * Get a recipe from the user's cookbook based on the name
+     * Later, callback addMeal() to add it to the calendar
      *
      * @param UID      the user
+     * @param day      the day of the week to add the meal to
      * @param mealName the name of the recipe to get
      */
-    private void getRecipeFromBook(String UID, String mealName) {
+    private void getRecipeFromBook(String UID, String day, String mealName) {
         JsonObjectRequest getRecipeReq = new JsonObjectRequest(Request.Method.GET, Const.URL_RECIPES_GETRECIPE + "?UID=" + UID + "&mealName=" + mealName, null, response -> {
             try {
-                recipe.putAll(new ObjectMapper().readValue(String.valueOf(response), HashMap.class));
+                addRecipe.putAll(new ObjectMapper().readValue(String.valueOf(response), HashMap.class));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
+            addMeal(UID, day, addRecipe); // Add recipe as meal from HashMap
         }, error -> {
             VolleyLog.d(TAG, error);
         });
@@ -307,7 +299,7 @@ public class HomeFragment extends Fragment {
      */
     private void getRecipeLabels(String UID) {
         JsonArrayRequest recipeLabelsReq = new JsonArrayRequest(Request.Method.GET, Const.URL_RECIPES_GETLABELS + "?UID=" + UID, null, response -> {
-            recipes.addAll(new Gson().fromJson(String.valueOf(response), ArrayList.class));
+            cookbook.addAll(new Gson().fromJson(String.valueOf(response), ArrayList.class));
         }, error -> {
             VolleyLog.d(TAG, error);
         });
@@ -316,15 +308,30 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     * Get the list of meals planned for a given day
+     * Populate the list of meals onto the calendar based on the selected day of the week
+     * Add meals to the ListView array list based on the selected day in the calendar
      *
-     * @param UID the ID of the current user
-     * @param day the day to get meals for
+     * @param UID      the ID of the user to get meals for
+     * @param day      the day of the week as an integer per the java.util.Calendar class
      */
-    private void getMealsByDay(String UID, String day) {
-        JsonObjectRequest getMealByDayReq = new JsonObjectRequest(Request.Method.GET, Const.URL_MEALS_GET_BYDAY + "?UID=" + UID + "&day=" + day, null, response -> {
+    private void getMealsByDay(String UID, int day) {
+        // List Label
+        TextView listLabel = root.findViewById(R.id.mealsLbl);
+
+        // Convert day int to string
+        String dayString = toDayString(day);
+        dayMealsLabels.clear();
+
+        JsonObjectRequest getMealByDayReq = new JsonObjectRequest(Request.Method.GET, Const.URL_MEALS_GET_BYDAY + "?UID=" + UID + "&day=" + dayString, null, response -> {
             meals.clear();
             meals.putAll(new Gson().fromJson(String.valueOf(response), HashMap.class));
+
+            for (Map.Entry<String, HashMap<String, Object>> entry : meals.entrySet()) {
+                dayMealsLabels.add(entry.getKey());
+            }
+
+            listLabel.setText(dayString.toUpperCase());
+            dayMealsAdapter.notifyDataSetChanged();
         }, error -> {
             VolleyLog.d(TAG, error);
         });
@@ -340,7 +347,9 @@ public class HomeFragment extends Fragment {
      * @param meal the meal to add
      */
     private void addMeal(String UID, String day, HashMap<String, Object> meal) {
+        Log.d(TAG, "add: " + day);
         JsonObjectRequest addMealReq = new JsonObjectRequest(Request.Method.PUT, Const.URL_MEALS_ADD + "?UID=" + UID + "&day=" + day, new JSONObject(meal), response -> {
+            getMealsByDay(UID, calUtil.get(Calendar.DAY_OF_WEEK));
             Toast.makeText(getContext(), "Meal added", Toast.LENGTH_SHORT).show();
         }, error -> {
             VolleyLog.d(TAG, error);
@@ -362,17 +371,18 @@ public class HomeFragment extends Fragment {
      * @param mealName  the name of the meal
      * @param removeAll whether to disregard mealName and remove all meals or not
      */
-    private void removeMeal(String UID, String day, String mealName, String removeAll) {
-        JsonObjectRequest removeMealReq = new JsonObjectRequest(Request.Method.DELETE,
-                Const.URL_MEALS_REMOVE + "?UID=" + UID + "&day=" + day + "&mealName=" + mealName + "&removeAll=" + removeAll, null, response -> {
-            Toast.makeText(getContext(), "Meal removed", Toast.LENGTH_SHORT).show();
-        }, error -> {
-            VolleyLog.d(TAG, error);
-            if (error.networkResponse.statusCode == 403) {
-                Toast.makeText(getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getContext(), "Error removing meal", Toast.LENGTH_SHORT).show();
-            }
+    private void removeMeal(String UID, String day, String mealName, boolean removeAll) {
+        Log.d(TAG, "remove: " + day);
+        JsonObjectRequest removeMealReq = new JsonObjectRequest(Request.Method.DELETE, Const.URL_MEALS_REMOVE + "?UID=" + UID + "&day=" + day + "&mealName=" + mealName + "&removeAll=" + removeAll, null,
+            response -> {
+                Toast.makeText(getContext(), "Meal removed", Toast.LENGTH_SHORT).show();
+            }, error -> {
+                VolleyLog.d(TAG, error);
+                if (error.networkResponse != null && (error.networkResponse.statusCode == 403 || error.networkResponse.statusCode == 404)) {
+                    Toast.makeText(getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();
+                } else {
+                    // Toast.makeText(getContext(), "Error removing meal", Toast.LENGTH_SHORT).show();
+                }
         });
 
         AppController.getInstance().addToRequestQueue(removeMealReq, tag_home_req);
