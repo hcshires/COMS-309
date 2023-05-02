@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -74,6 +75,7 @@ public class CookBookFragment extends Fragment {
         CookBookViewModel cookBookViewModel =
                 new ViewModelProvider(this).get(CookBookViewModel.class);
 
+
         binding = FragmentCookbookBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -88,12 +90,13 @@ public class CookBookFragment extends Fragment {
         // Set layout manager to position items
         recipeCards.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
+//        recipeCards
+
         // Adapter
-        adapter = new CardAdapter(root.getContext(), recipes);
+        adapter = new CardAdapter(root.getContext(), recipes, UID);
 
         /* Initialize Recipes */
         getUserRecipes(UID);
-        Log.d(TAG, "Recipes List: " + recipes);
 
         /* Go to AddRecipe when button clicked */
         addRecipe.setOnClickListener(view -> {
@@ -117,7 +120,6 @@ public class CookBookFragment extends Fragment {
                     String item = response.getString(i);
                     recipes.add(item); // Add to ArrayList
                 }
-
                 /* Attach adapter to recycler view */
                 recipeCards.setAdapter(adapter);
             } catch (JSONException e) {
@@ -129,6 +131,14 @@ public class CookBookFragment extends Fragment {
 
         AppController.getInstance().addToRequestQueue(getUserRecipes, tag_cookbook_req);
     }
+
+//    public static void viewRecipe() {
+//        Intent viewRecipeIntent = new Intent(.getContext(), ViewRecipeActivity.class);
+//        viewRecipeIntent.putExtra("RecipeTitle", recipeTitle.getText().toString());
+//        viewRecipeIntent.putExtra("UID", UID);
+//        Toast.makeText(view.getContext(), recipeTitle.getText().toString(), Toast.LENGTH_LONG).show();
+//        view.getContext().startActivity(viewRecipeIntent);
+//    }
 
     /**
      * onDestroyView

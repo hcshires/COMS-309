@@ -152,7 +152,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
             /* Make JSON Obj */
             recipe.put("ingredients", ingredientsHashList);
-            recipe.put("name", recipeTitle);
+            recipe.put("name", recipeTitle.getText().toString());
             JSONObject mealObj = new JSONObject(recipe);
 
             Log.d(TAG, "JSON Body: " + mealObj);
@@ -177,8 +177,10 @@ public class AddRecipeActivity extends AppCompatActivity {
         JsonObjectRequest addRecipeReq = new JsonObjectRequest(Request.Method.PUT, Const.URL_RECIPES_ADDRECIPE + "?UID=" + UID, mealObj,
             response -> {
                 Toast.makeText(view.getContext(), "Meal added", Toast.LENGTH_LONG).show();
-                Intent addRecipeIntent = new Intent(AddRecipeActivity.this, DashboardActivity.class);
+
+                Intent addRecipeIntent = new Intent(AddRecipeActivity.this, AddDirectionActivity.class);
                 addRecipeIntent.putExtra("UID", UID);
+                addRecipeIntent.putExtra("RecipeTitle", recipeTitle.getText().toString());
                 startActivity(addRecipeIntent);
             }, error -> {
                 VolleyLog.d(TAG, error);

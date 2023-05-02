@@ -1,35 +1,71 @@
 package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
-import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import edu.iastate.cs309.hb6.foodtime.R;
 
-/**
- * ViewRecipeActivity
- * <p>
- * Displays the recipe information for a recipe that the user has selected.
- */
 public class ViewRecipeActivity extends AppCompatActivity {
 
-    /**
-     * Create an instance of the ViewRecipeActivity
-     *
-     * @param savedInstanceState The saved instance state
-     */
+    private final String TAG = AddRecipeActivity.class.getSimpleName();
+    private final String tag_viewrecipe_req = "recipe_req";
+    private TabLayout ingDricTab;
+    private ViewPager2 viewRecipeVP;
+    private PagerAdapter pagerAdapter;
+
+    private String recipeTitle;
+    private Bundle usrData;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
 
+        Intent intent = getIntent();
+        usrData = intent.getExtras();
+        recipeTitle = usrData.getString("RecipeTitle");
+
         /* Widgets */
-//        TextView recipeTitle = findViewById(R.id.recipeTitle);
-//        ListView ingredientsLV = findViewById(R.id.ingredientsList);
-//
-//        TabLayout ingDircTab = findViewById(R.id.viewRecipeTabLayout);
-//        ViewPager viewRicipeVP = findViewById(R.id.viewRecipeViewPager);
-//
-//        recipeTitle.setText(recipe_title_from_intent);
+        ingDricTab = findViewById(R.id.ingDirTabs);
+        viewRecipeVP = findViewById(R.id.viewRecipeViewPager);
+
+        /*Create the tabs*/
+        ingDricTab.addTab(ingDricTab.newTab().setText("Ingredients"));
+        ingDricTab.addTab(ingDricTab.newTab().setText("Directions"));
+
+        /* Set the Adapter*/
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getLifecycle());
+        viewRecipeVP.setAdapter(pagerAdapter);
+
+        ingDricTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewRecipeVP.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+
     }
 }
