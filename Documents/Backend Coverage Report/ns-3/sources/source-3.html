@@ -1,0 +1,229 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MealList</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">edu.iastate.cs309.hb6.FoodTime.Meal</a>
+</div>
+
+<h1>Coverage Summary for Class: MealList (edu.iastate.cs309.hb6.FoodTime.Meal)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MealList</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (9/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    28.6%
+  </span>
+  <span class="absValue">
+    (10/35)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">MealList$HibernateProxy$N5t3YPDo</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (9/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    28.6%
+  </span>
+  <span class="absValue">
+    (10/35)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package edu.iastate.cs309.hb6.FoodTime.Meal;
+&nbsp;
+&nbsp;import edu.iastate.cs309.hb6.FoodTime.Login.User;
+&nbsp;import org.hibernate.annotations.Type;
+&nbsp;import javax.persistence.*;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.UUID;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;weekly_meal_list&quot;)
+&nbsp;public class MealList {
+&nbsp;
+&nbsp;    @Id
+&nbsp;    @Column(unique = true)
+&nbsp;    private String UID;
+&nbsp;
+&nbsp;    @OneToOne(mappedBy = &quot;userMealsWeekly&quot;)
+&nbsp;    private User user;
+&nbsp;
+&nbsp;    //Each hash map will contain a number of meals that the user wishes to make on that day
+&nbsp;    @Column (name = &quot;sunday&quot;, columnDefinition = &quot;json&quot;)
+&nbsp;    @Type(type = &quot;io.hypersistence.utils.hibernate.type.json.JsonStringType&quot;)
+&nbsp;    private HashMap&lt;String, Meal&gt; sunday;
+&nbsp;    @Column (name = &quot;monday&quot;, columnDefinition = &quot;json&quot;)
+&nbsp;    @Type(type = &quot;io.hypersistence.utils.hibernate.type.json.JsonStringType&quot;)
+&nbsp;    private HashMap&lt;String, Meal&gt; monday;
+&nbsp;    @Column (name = &quot;tuesday&quot;, columnDefinition = &quot;json&quot;)
+&nbsp;    @Type(type = &quot;io.hypersistence.utils.hibernate.type.json.JsonStringType&quot;)
+&nbsp;    private HashMap&lt;String, Meal&gt; tuesday;
+&nbsp;    @Column (name = &quot;wednesday&quot;, columnDefinition = &quot;json&quot;)
+&nbsp;    @Type(type = &quot;io.hypersistence.utils.hibernate.type.json.JsonStringType&quot;)
+&nbsp;    private HashMap&lt;String, Meal&gt; wednesday;
+&nbsp;    @Column (name = &quot;thursday&quot;, columnDefinition = &quot;json&quot;)
+&nbsp;    @Type(type = &quot;io.hypersistence.utils.hibernate.type.json.JsonStringType&quot;)
+&nbsp;    private HashMap&lt;String, Meal&gt; thursday;
+&nbsp;    @Column (name = &quot;friday&quot;, columnDefinition = &quot;json&quot;)
+&nbsp;    @Type(type = &quot;io.hypersistence.utils.hibernate.type.json.JsonStringType&quot;)
+&nbsp;    private HashMap&lt;String, Meal&gt; friday;
+&nbsp;    @Column (name = &quot;saturday&quot;, columnDefinition = &quot;json&quot;)
+&nbsp;    @Type(type = &quot;io.hypersistence.utils.hibernate.type.json.JsonStringType&quot;)
+&nbsp;    private HashMap&lt;String, Meal&gt; saturday;
+&nbsp;
+<b class="fc">&nbsp;    public MealList () {</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    public MealList (UUID UID) {</b>
+<b class="nc">&nbsp;        this.UID = UID.toString();</b>
+<b class="nc">&nbsp;        sunday = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        monday = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        tuesday = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        wednesday = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        thursday = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        friday = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        saturday = new HashMap&lt;&gt;();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public HashMap&lt;String, Meal&gt; getMealsForDay(String day) {
+<b class="fc">&nbsp;        switch (day) {</b>
+<b class="nc">&nbsp;            case &quot;sunday&quot;: return sunday;</b>
+<b class="fc">&nbsp;            case &quot;monday&quot;: return monday;</b>
+<b class="nc">&nbsp;            case &quot;tuesday&quot;: return tuesday;</b>
+<b class="nc">&nbsp;            case &quot;wednesday&quot;: return wednesday;</b>
+<b class="nc">&nbsp;            case &quot;thursday&quot;: return thursday;</b>
+<b class="nc">&nbsp;            case &quot;friday&quot;: return friday;</b>
+<b class="nc">&nbsp;            case &quot;saturday&quot;: return saturday;</b>
+<b class="nc">&nbsp;            default: return null;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setMealsForDay(String day, HashMap&lt;String, Meal&gt; newList) {
+<b class="nc">&nbsp;        switch (day) {</b>
+<b class="nc">&nbsp;            case &quot;sunday&quot;: sunday = newList;</b>
+<b class="nc">&nbsp;            case &quot;monday&quot;: monday = newList;</b>
+<b class="nc">&nbsp;            case &quot;tuesday&quot;: tuesday = newList;</b>
+<b class="nc">&nbsp;            case &quot;wednesday&quot;: wednesday = newList;</b>
+<b class="nc">&nbsp;            case &quot;thursday&quot;: thursday = newList;</b>
+<b class="nc">&nbsp;            case &quot;friday&quot;: friday = newList;</b>
+<b class="nc">&nbsp;            case &quot;saturday&quot;: saturday = newList;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public HashMap&lt;String, Meal&gt; getSunday() {
+<b class="fc">&nbsp;        return sunday;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public HashMap&lt;String, Meal&gt; getMonday() {
+<b class="fc">&nbsp;        return monday;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public HashMap&lt;String, Meal&gt; getTuesday() {
+<b class="fc">&nbsp;        return tuesday;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public HashMap&lt;String, Meal&gt; getWednesday() {
+<b class="fc">&nbsp;        return wednesday;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public HashMap&lt;String, Meal&gt; getThursday() {
+<b class="fc">&nbsp;        return thursday;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public HashMap&lt;String, Meal&gt; getFriday() {
+<b class="fc">&nbsp;        return friday;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public HashMap&lt;String, Meal&gt; getSaturday() {
+<b class="fc">&nbsp;        return saturday;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUser(User user) {
+<b class="nc">&nbsp;        this.user = user;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 13:19</div>
+</div>
+</body>
+</html>

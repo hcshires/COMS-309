@@ -1,0 +1,284 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > User</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">edu.iastate.cs309.hb6.FoodTime.Login</a>
+</div>
+
+<h1>Coverage Summary for Class: User (edu.iastate.cs309.hb6.FoodTime.Login)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">User</td>
+<td class="coverageStat">
+  <span class="percent">
+    36.4%
+  </span>
+  <span class="absValue">
+    (8/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    30.8%
+  </span>
+  <span class="absValue">
+    (8/26)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">User$AccessLevel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">User$HibernateProxy$eI4tMSSD</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    39.1%
+  </span>
+  <span class="absValue">
+    (9/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    37.9%
+  </span>
+  <span class="absValue">
+    (11/29)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package edu.iastate.cs309.hb6.FoodTime.Login;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.annotation.JsonBackReference;
+&nbsp;import com.fasterxml.jackson.annotation.JsonCreator;
+&nbsp;
+&nbsp;import javax.persistence.*;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.annotation.JsonIgnore;
+&nbsp;import com.fasterxml.jackson.annotation.JsonManagedReference;
+&nbsp;import edu.iastate.cs309.hb6.FoodTime.Meal.Meal;
+&nbsp;import edu.iastate.cs309.hb6.FoodTime.Meal.MealList;
+&nbsp;import edu.iastate.cs309.hb6.FoodTime.Meal.Recipe;
+&nbsp;import edu.iastate.cs309.hb6.FoodTime.Pantry.*;
+&nbsp;import edu.iastate.cs309.hb6.FoodTime.Preferences.UserPreferences;
+&nbsp;import org.hibernate.annotations.Type;
+&nbsp;
+&nbsp;
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;users&quot;)
+&nbsp;public class User {
+<b class="fc">&nbsp;    public enum AccessLevel {</b>
+<b class="fc">&nbsp;        CHILD,</b>
+<b class="fc">&nbsp;        PARENT</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Column (unique = true)
+&nbsp;    private String username;
+&nbsp;
+&nbsp;    @Column
+&nbsp;    private String password;
+&nbsp;
+&nbsp;    @Column
+&nbsp;    private AccessLevel accessLevel;
+&nbsp;
+&nbsp;    //This is a string because UUIDs do not play super nicely in the DB
+&nbsp;    @Id
+&nbsp;    @Column (unique = true)
+&nbsp;    private String UID;
+&nbsp;
+&nbsp;    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+&nbsp;    private UserPreferences userPreferences;
+&nbsp;
+&nbsp;    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+&nbsp;    private Pantry userPantry;
+&nbsp;
+&nbsp;    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+&nbsp;    private MealList userMealsWeekly;
+&nbsp;
+&nbsp;    @OneToOne(fetch = FetchType.EAGER)
+&nbsp;    private User parentUser;
+&nbsp;
+&nbsp;    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+&nbsp;    @JoinColumn(name = &quot;recipe_book_uid&quot;)
+&nbsp;    private Map&lt;String, Recipe&gt; userRecipes;
+&nbsp;
+&nbsp;    @Column(name = &quot;recipe_labels&quot;)
+&nbsp;    @Type(type = &quot;io.hypersistence.utils.hibernate.type.json.JsonStringType&quot;)
+&nbsp;    private ArrayList&lt;String&gt; recipeLabels;
+&nbsp;
+<b class="fc">&nbsp;    public User () {</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @JsonCreator
+<b class="nc">&nbsp;    public User (String username, String password, AccessLevel accessLevel) {</b>
+<b class="nc">&nbsp;        this.username = username;</b>
+<b class="nc">&nbsp;        this.password = password;</b>
+<b class="nc">&nbsp;        this.accessLevel = accessLevel;</b>
+<b class="nc">&nbsp;        userRecipes = new HashMap&lt;&gt;();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void assignUID() {
+<b class="nc">&nbsp;        UID = UUID.randomUUID().toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getUsername() {
+<b class="nc">&nbsp;        return username;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUsername(String username) {
+<b class="nc">&nbsp;        this.username = username;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getPassword() {
+<b class="fc">&nbsp;        return password;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setPassword(String password) {
+<b class="nc">&nbsp;        this.password = password;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public UUID getUID() {
+<b class="fc">&nbsp;        return java.util.UUID.fromString(UID);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUserPreferences(UserPreferences userPreferences) {
+<b class="nc">&nbsp;        this.userPreferences = userPreferences;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUserPantry(Pantry userPantry) {
+<b class="nc">&nbsp;        this.userPantry = userPantry;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUserMeals(MealList userMeals) {
+<b class="nc">&nbsp;        this.userMealsWeekly = userMeals;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public UserPreferences getUserPreferences() {
+<b class="nc">&nbsp;        return userPreferences;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Pantry getUserPantry() {
+<b class="fc">&nbsp;        return userPantry;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public MealList getUserMeals() {
+<b class="fc">&nbsp;        return userMealsWeekly;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;String, Recipe&gt; getUserRecipes() {
+<b class="fc">&nbsp;        return userRecipes;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUserRecipes(Map&lt;String, Recipe&gt; userRecipes) {
+<b class="nc">&nbsp;        this.userRecipes = userRecipes;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;String&gt; getRecipeLabels() {
+<b class="fc">&nbsp;        return recipeLabels;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setRecipeLabels(ArrayList&lt;String&gt; recipeLabels) {
+<b class="nc">&nbsp;        this.recipeLabels = recipeLabels;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public AccessLevel getAccessLevel() {
+<b class="fc">&nbsp;        return accessLevel;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setAccessLevel(AccessLevel accessLevel) {
+<b class="nc">&nbsp;        this.accessLevel = accessLevel;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public User getParentUser() {
+<b class="nc">&nbsp;        return parentUser;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setParentUser(User parentUser) {
+<b class="nc">&nbsp;        this.parentUser = parentUser;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 13:19</div>
+</div>
+</body>
+</html>
