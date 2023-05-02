@@ -13,16 +13,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import edu.iastate.cs309.hb6.foodtime.R;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.CardViewHolder> {
     private final Context context;
-    private final ArrayList<String> strings;
+    private final ArrayList<Object> strings;
+    private final ArrayList<Object> quantity;
+    private final ArrayList<Object> types;
 
-    public IngredientsAdapter(Context context, ArrayList<String> strings) {
+    public IngredientsAdapter(Context context, ArrayList<Object> strings, ArrayList<Object> quantity, ArrayList<Object> types) {
         this.context = context;
         this.strings = strings;
+        this.quantity = quantity;
+        this.types = types;
+
     }
 
     /**
@@ -46,7 +53,11 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
         EditText ingredientTitle = holder.edtIngredients;
-        ingredientTitle.setText(strings.get(position));
+        ingredientTitle.setText(strings.get(position).toString());
+        EditText quantityTitle = holder.edtQuantity;
+        quantityTitle.setText(quantity.get(position).toString());
+        EditText typeTitle = holder.edtType;
+        typeTitle.setText(types.get(position).toString());
 
     }
 

@@ -55,7 +55,8 @@ public class DirectionsFragment extends Fragment {
 
         Intent intent = requireActivity().getIntent();
         Bundle usrData = intent.getExtras();
-        UID = usrData.getString("UID");
+//        UID = usrData.getString("UID");
+        UID = "3b1bbf93-1f02-4492-aca8-57aa7be65138";
         recipeTitle.setText(usrData.getString("RecipeTitle"));
 
         /* Recycler View Adapter and Manager */

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -76,6 +77,7 @@ public class CookBookFragment extends Fragment {
         /* Store user ID for requests */
         Bundle userData = requireActivity().getIntent().getExtras();
         String UID = userData.getString("UID").replaceAll("\"", "");
+        String recipeTitle = userData.getString("RecipeTitle");
 
         /* Widgets */
         FloatingActionButton addRecipe = root.findViewById(R.id.addRecipeBtn);

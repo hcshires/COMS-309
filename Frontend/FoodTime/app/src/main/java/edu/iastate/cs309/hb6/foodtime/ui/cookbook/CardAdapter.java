@@ -113,15 +113,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             super(itemView);
             recipeTitle = itemView.findViewById((R.id.recipeTitle));
 
-
-
-            // Create intent to ViewRecipeActivity when card is clicked
             itemView.setOnClickListener(view -> {
-                Intent viewRecipeIntent = new Intent(view.getContext(), ViewRecipeActivity.class);
+                Intent viewRecipeIntent = new Intent(itemView.getContext(), ViewRecipeActivity.class);
                 viewRecipeIntent.putExtra("RecipeTitle", recipeTitle.getText().toString());
-//                viewRecipeIntent.putExtra("UID", UID);
-                Toast.makeText(view.getContext(), recipeTitle.getText().toString(), Toast.LENGTH_LONG).show();
-                view.getContext().startActivity(viewRecipeIntent);
+//            viewRecipeIntent.putExtra("UID", UID);
+                Toast.makeText(itemView.getContext(), recipeTitle.getText().toString(), Toast.LENGTH_LONG).show();
+                itemView.getContext().startActivity(viewRecipeIntent);
+
             });
         }
     }
