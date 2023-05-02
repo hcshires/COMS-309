@@ -2,14 +2,12 @@ package edu.iastate.cs309.hb6.foodtime.ui.cookbook;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -21,18 +19,22 @@ import edu.iastate.cs309.hb6.foodtime.R;
  */
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
 
-    /** The current context */
+    /**
+     * The current context
+     */
     private final Context context;
 
-    /** Recipes to populate cards to be used by RecyclerView */
+    /**
+     * Recipes to populate cards to be used by RecyclerView
+     */
     private final ArrayList<String> recipes;
 
 
     /**
      * CardAdapter
      *
-     * @param context - The current context.
-     * @param recipes - The data (recipes from database) to populate cards to be used by RecyclerView.
+     * @param context The current context.
+     * @param recipes The data (recipes from database) to populate cards to be used by RecyclerView.
      */
     public CardAdapter(Context context, ArrayList<String> recipes) {
         this.context = context;
@@ -69,6 +71,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     /**
      * Get the number of recipes (items) in the Cookbook
+     *
      * @return The total number of items in the data set held by the adapter (Cookbook).
      */
     @Override
@@ -78,7 +81,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     /**
      * onAttachedToRecyclerView
-     * @param recyclerView - The RecyclerView instance which is currently connected to this adapter.
+     *
+     * @param recyclerView The RecyclerView instance which is currently connected to this adapter.
      */
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -92,14 +96,16 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
      */
     public static class CardViewHolder extends RecyclerView.ViewHolder {
 
-        /** The title of the recipe */
+        /**
+         * The title of the recipe
+         */
         private final TextView recipeTitle;
 
         /**
          * CardViewHolder
          * Set properties of the CardView, such as handling ViewRecipeActivity intent when clicked
          *
-         * @param itemView - The CardView
+         * @param itemView The CardView
          */
         public CardViewHolder(View itemView) {
             super(itemView);

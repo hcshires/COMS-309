@@ -11,10 +11,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,39 +29,57 @@ import edu.iastate.cs309.hb6.foodtime.utils.Const;
  * Add a recipe to the user's Cookbook and save to the database
  */
 public class AddRecipeActivity extends AppCompatActivity {
-    /** Hash map for each ingredient containing name, quantity, and quantity type */
+    /**
+     * Hash map for each ingredient containing name, quantity, and quantity type
+     */
     private final HashMap<String, Object> ingredientHash1 = new HashMap<>(6);
 
-    /** Hash map for each ingredient containing name, quantity, and quantity type */
+    /**
+     * Hash map for each ingredient containing name, quantity, and quantity type
+     */
     private final HashMap<String, Object> ingredientHash2 = new HashMap<>(6);
 
-    /** Hash map for each ingredient containing name, quantity, and quantity type */
+    /**
+     * Hash map for each ingredient containing name, quantity, and quantity type
+     */
     private final HashMap<String, Object> ingredientHash3 = new HashMap<>(6);
 
-    /** Hash map for each ingredient containing name, quantity, and quantity type */
+    /**
+     * Hash map for each ingredient containing name, quantity, and quantity type
+     */
     private final HashMap<String, Object> ingredientHash4 = new HashMap<>(6);
 
-    /** Hash map for each ingredient containing name, quantity, and quantity type */
+    /**
+     * Hash map for each ingredient containing name, quantity, and quantity type
+     */
     private final HashMap<String, Object> ingredientHash5 = new HashMap<>(6);
 
-    /** List of ingredients */
+    /**
+     * List of ingredients
+     */
     private final ArrayList<HashMap<String, Object>> ingredientsHashList = new ArrayList<>(6);
 
-    /** Hash map for the recipe containing the ingredients and the recipe title */
+    /**
+     * Hash map for the recipe containing the ingredients and the recipe title
+     */
     private final HashMap<String, Object> recipe = new HashMap<>(3);
-
-    /** UI input for recipe title, ingredients, and directions */
-    private EditText recipeTitle, ingredient1, ingredient2, ingredient3, ingredient4, ingredient5, qt1, qt2, qt3, qt4, qt5, type1, type2, type3, type4, type5, dayInput;
-
-    /** Tag for logging */
+    /**
+     * Tag for logging
+     */
     private final String TAG = AddRecipeActivity.class.getSimpleName();
-
-    /** Tag for request */
+    /**
+     * Tag for request
+     */
     private final String tag_recipe_req = "recipe_req";
+    /**
+     * UI input for recipe title, ingredients, and directions
+     */
+    private EditText recipeTitle, ingredient1, ingredient2, ingredient3, ingredient4, ingredient5, qt1, qt2, qt3, qt4, qt5, type1, type2, type3, type4, type5, dayInput;
 
     /**
      * Create an AddRecipeActivity instance
-     * @param savedInstanceState - Bundle
+     *
+     * @param savedInstanceState The saved instance state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,8 +149,6 @@ public class AddRecipeActivity extends AppCompatActivity {
             ingredientsHashList.add(ingredientHash5);
 
             /* Turn recipe title and day to string */
-            String recipeTitle = this.recipeTitle.getText().toString();
-            String dayIn = dayInput.getText().toString();
 
             /* Make JSON Obj */
             recipe.put("ingredients", ingredientsHashList);
@@ -150,9 +168,10 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     /**
      * Send an HTTP request to database to add a recipe
-     * @param UID - The user's ID
-     * @param mealObj  - The meal to add as a recipe
-     * @param view - Parent view
+     *
+     * @param UID     The user's ID
+     * @param mealObj The meal to add as a recipe
+     * @param view    Parent view
      */
     private void addRecipeRequest(String UID, JSONObject mealObj, View view) {
         JsonObjectRequest addRecipeReq = new JsonObjectRequest(Request.Method.PUT, Const.URL_RECIPES_ADDRECIPE + "?UID=" + UID, mealObj,
@@ -162,7 +181,13 @@ public class AddRecipeActivity extends AppCompatActivity {
                     addRecipeIntent.putExtra("UID", UID);
                     startActivity(addRecipeIntent);
                 }, error -> {
-            Toast.makeText(view.getContext(), "An Error Occurred.", Toast.LENGTH_LONG).show();
+            VolleyLog.d(TAG, error);
+
+            if (error.networkResponse.statusCode == 403) {
+                Toast.makeText(view.getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(view.getContext(), "An Error Occurred.", Toast.LENGTH_LONG).show();
+            }
         });
 
         AppController.getInstance().addToRequestQueue(addRecipeReq, tag_recipe_req);

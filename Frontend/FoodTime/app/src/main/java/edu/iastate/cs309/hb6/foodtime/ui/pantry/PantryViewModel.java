@@ -8,7 +8,9 @@ import androidx.lifecycle.ViewModel;
  */
 public class PantryViewModel extends ViewModel {
 
-    /** The text for the pantry view model */
+    /**
+     * The text for the pantry view model
+     */
     private final MutableLiveData<String> mText;
 
     /**
