@@ -10,6 +10,11 @@ public class Const {
     private static final String URL_SERVER = "http://coms-309-011.class.las.iastate.edu:8080";
     // URL_SERVER = "http://localhost:8080"; // for local testing
 
+    /**
+     * Websocket URL
+     */
+    private static final String URL_WEBSOCKET = "ws://coms-309-011.class.las.iastate.edu:8080/websocket";
+
     /* Meals */
 
     /**
@@ -86,5 +91,10 @@ public class Const {
     // NOT USED // public static final String URL_DELETE_USER = URL_SERVER + "/users/delete";
     // NOT USED // static final String URL_RESET_PWD = URL_SERVER + "/users/reset-password";
 
+    /* Websockets */
 
+    /**
+     * Chat Websocket
+     */
+    public static final String URL_WEBSOCKET_CHAT = URL_WEBSOCKET + "/send-meal/";
 }

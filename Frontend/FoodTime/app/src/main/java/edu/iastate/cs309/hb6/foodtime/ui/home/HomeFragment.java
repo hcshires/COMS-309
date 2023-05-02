@@ -7,9 +7,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,9 +30,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -68,10 +77,14 @@ public class HomeFragment extends Fragment {
      */
     private FragmentHomeBinding binding;
 
-    /** Root Fragment View */
+    /**
+     * Root Fragment View
+     */
     private View root;
 
-    /** Calendar */
+    /**
+     * Calendar
+     */
     private Calendar calUtil;
     /**
      * Map of meals for the entire week
@@ -93,6 +106,16 @@ public class HomeFragment extends Fragment {
      * Adapter for ListView of meals for a given day
      */
     private ArrayAdapter<String> dayMealsAdapter;
+
+    /**
+     * Websocket Client for chat features
+     */
+    private WebSocketClient cc;
+
+    EditText usernameChatTxt;
+    Spinner recipeChatSpinner;
+    Button sendMsgBtn;
+    TextView convoTxt;
 
     /**
      * HomeFragment View
@@ -227,6 +250,63 @@ public class HomeFragment extends Fragment {
             AlertDialog alert = builder.create();
             alert.show();
         });
+
+        // Websocket Chat Button
+        FloatingActionButton chatBtn = root.findViewById(R.id.chatBtn);
+        chatBtn.setOnClickListener(view -> {
+            // Add Meal AlertDialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            View mView = getLayoutInflater().inflate(R.layout.dialog_chat, null);
+
+            // Add components
+            usernameChatTxt = mView.findViewById(R.id.usernameChatTxt);
+            convoTxt = mView.findViewById(R.id.convoTxt);
+            sendMsgBtn = mView.findViewById(R.id.sendMsgBtn);
+
+            recipeChatSpinner = mView.findViewById(R.id.recipeChatSpinner);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, cookbook); // Use cook book recipe labels
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            recipeChatSpinner.setAdapter(adapter);
+
+            recipeChatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
+            // Initialize chat
+            connectChat(UID);
+
+            // Send message to chat
+            sendMsgBtn.setOnClickListener(v -> {
+                usernameChatTxt.onEditorAction(EditorInfo.IME_ACTION_DONE); // Close keyboard
+
+                // Compile message [dest_username,recipe]
+                String message = usernameChatTxt.getText().toString() + "," + recipeChatSpinner.getSelectedItem().toString();
+                sendChatMessage(message);
+                usernameChatTxt.setText("");
+            });
+
+            // Add Meal AlertDialog components
+            builder.setTitle("FoodTime Chat - Share recipes with friends!")
+                    .setView(recipeChatSpinner)
+                    .setCancelable(true)
+                    .setPositiveButton("Close Chat", (dialog, id) -> {
+                        disconnectChat();
+                        dialog.dismiss();
+                    });
+
+            builder.setView(mView);
+            AlertDialog alert = builder.create();
+            alert.show();
+        });
+
         /* End Widgets */
 
         return root;
@@ -311,8 +391,8 @@ public class HomeFragment extends Fragment {
      * Populate the list of meals onto the calendar based on the selected day of the week
      * Add meals to the ListView array list based on the selected day in the calendar
      *
-     * @param UID      the ID of the user to get meals for
-     * @param day      the day of the week as an integer per the java.util.Calendar class
+     * @param UID the ID of the user to get meals for
+     * @param day the day of the week as an integer per the java.util.Calendar class
      */
     private void getMealsByDay(String UID, int day) {
         // List Label
@@ -353,7 +433,7 @@ public class HomeFragment extends Fragment {
             Toast.makeText(getContext(), "Meal added", Toast.LENGTH_SHORT).show();
         }, error -> {
             VolleyLog.d(TAG, error);
-            if (error.networkResponse.statusCode == 403) {
+            if (error.networkResponse != null && error.networkResponse.statusCode == 403) {
                 Toast.makeText(getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(getContext(), "Error adding meal", Toast.LENGTH_SHORT).show();
@@ -374,17 +454,82 @@ public class HomeFragment extends Fragment {
     private void removeMeal(String UID, String day, String mealName, boolean removeAll) {
         Log.d(TAG, "remove: " + day);
         JsonObjectRequest removeMealReq = new JsonObjectRequest(Request.Method.DELETE, Const.URL_MEALS_REMOVE + "?UID=" + UID + "&day=" + day + "&mealName=" + mealName + "&removeAll=" + removeAll, null,
-            response -> {
-                Toast.makeText(getContext(), "Meal removed", Toast.LENGTH_SHORT).show();
-            }, error -> {
-                VolleyLog.d(TAG, error);
-                if (error.networkResponse != null && (error.networkResponse.statusCode == 403 || error.networkResponse.statusCode == 404)) {
-                    Toast.makeText(getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();
-                } else {
-                    // Toast.makeText(getContext(), "Error removing meal", Toast.LENGTH_SHORT).show();
-                }
+                response -> {
+                    Toast.makeText(getContext(), "Meal removed", Toast.LENGTH_SHORT).show();
+                }, error -> {
+            VolleyLog.d(TAG, error);
+            if (error.networkResponse != null && (error.networkResponse.statusCode == 403 || error.networkResponse.statusCode == 404)) {
+                Toast.makeText(getContext(), new String(error.networkResponse.data, StandardCharsets.UTF_8), Toast.LENGTH_LONG).show();
+            } else {
+                // Toast.makeText(getContext(), "Error removing meal", Toast.LENGTH_SHORT).show();
+            }
         });
 
         AppController.getInstance().addToRequestQueue(removeMealReq, tag_home_req);
+    }
+
+
+    /**
+     * Connect to the chat websocket, send messages, and return messaged received
+     * @param UID the ID of the current user
+     */
+    private void connectChat(String UID) {
+        Draft[] drafts = {
+                new Draft_6455()
+        };
+
+        // Connect to the chat websocket
+        String w = Const.URL_WEBSOCKET_CHAT + "/" + UID;
+
+        try {
+            Log.d(TAG + "Chat", "Trying socket");
+            cc = new WebSocketClient(new URI(w), (Draft) drafts[0]) {
+                @Override
+                public void onMessage(String message) {
+                    Log.d(TAG + "Chat", "run() returned: " + message);
+                    String s = convoTxt.getText().toString();
+                    convoTxt.setText(String.format("%s\nServer:%s", s, message));
+                }
+
+                @Override
+                public void onOpen(ServerHandshake handshake) {
+                    Log.d("OPEN", "run() returned: " + "is connecting");
+                }
+
+                @Override
+                public void onClose(int code, String reason, boolean remote) {
+                    Log.d("CLOSE", "onClose() returned: " + reason);
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Log.d("Exception:", e.toString());
+                }
+            };
+        } catch (URISyntaxException e) {
+            Log.d("Exception:", e.getMessage().toString());
+            e.printStackTrace();
+        }
+        cc.connect();
+    }
+
+    /**
+     * Close the chat connection
+     */
+    private void disconnectChat() {
+        cc.close();
+    }
+
+    /**
+     * Send a message to the chat
+     *
+     * @param message the message to send
+     */
+    private void sendChatMessage(String message) {
+        try {
+            cc.send(message);
+        } catch (Exception e) {
+            Log.d("ExceptionSendMessage:", e.getMessage());
+        }
     }
 }
